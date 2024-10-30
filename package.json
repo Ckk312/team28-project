@@ -1,0 +1,29 @@
+{
+  "name": "team28project",
+  "version": "1.0.0",
+  "description": "Create broadcast graphics for COP4331 and Esports at UCF",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ckk312/team28-project.git"
+  },
+  "keywords": [
+    "nodecg"
+  ],
+  "author": "Kier Pena (Ckk)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ckk312/team28-project/issues"
+  },
+  "homepage": "https://github.com/Ckk312/team28-project#readme",
+  "dependencies": {
+    "express": "^4.21.1",
+    "mongodb": "^6.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}

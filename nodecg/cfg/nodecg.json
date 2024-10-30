@@ -1,0 +1,15 @@
+{
+	"login": {
+		"enabled": true,
+		"sessionSecret": "g?F}Z'iXbVT->5l",
+		"local": {
+			"enabled": true,
+			"allowedUsers": [
+				{
+					"username": "RickL",
+					"password": "sha256:1465b63b5c8a685f15d246dc1a95f8465c1266e5c736183d67c94b1472908573"
+				}
+			]
+		}
+	}
+}
