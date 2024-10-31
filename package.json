@@ -20,10 +20,14 @@
   },
   "homepage": "https://github.com/Ckk312/team28-project#readme",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "mongodb": "^6.10.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.7"
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.8.4",
+    "nodemon": "^3.1.7",
+    "typescript": "^5.6.3"
   }
 }
