@@ -6,6 +6,8 @@ app.post('/api/register', async (req : Request, res : Response, next : Function)
 {
     // in: username, password
     // out: error
+
+    console.log("hello gang");
     
     const { username, password } = req.body;
     
@@ -14,8 +16,8 @@ app.post('/api/register', async (req : Request, res : Response, next : Function)
     
     try
     {
-        const database : Db = mdbclient.db('n/a');
-        database.collection('n/a').insertOne(newUser);
+        const database : Db = mdbclient.db('LargeProject');
+        database.collection('Users').insertOne(newUser);
     }
     catch(err)
     {

@@ -10,8 +10,8 @@ app.post('/api/login', async (req : Request, res : Response, next : Function) =>
     const { username, password } = req.body;
     let error : string = '';
     
-    const database : Db = mdbclient.db('n/a');
-    const result : any = await database.collection('n/a').find({ Username: username, Password: password }).toArray();
+    const database : Db = mdbclient.db('LargeProject');
+    const result : any = await database.collection('Users').find({ Username: username, Password: password }).toArray();
 
     let userid : number = result[0].userid|-1;
 
