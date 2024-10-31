@@ -2,7 +2,7 @@
   "name": "team28project",
   "version": "1.0.0",
   "description": "Create broadcast graphics for COP4331 and Esports at UCF",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
