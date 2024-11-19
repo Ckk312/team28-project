@@ -4,12 +4,12 @@ import { mdbclient } from './mongodb.js';
 
 export async function register (req : Request, res : Response, next : Function) : Promise<void>
 {
-    // in: username, password
+    // in: email, password
     // out: error
     
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     
-    const newUser : { Login: string, Password: string } = { Login: username, Password: password };
+    const newUser : { Login: string, Password: string } = { Login: email, Password: password };
     let error : string = '';
     
     try
