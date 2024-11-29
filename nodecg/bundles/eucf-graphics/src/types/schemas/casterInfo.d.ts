@@ -5,12 +5,14 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export interface ExampleReplicant {
-  firstName: string;
-  lastName: string;
+export interface CasterInfo {
+  username: string;
+  pronouns?: string;
   /**
-   * Age in years
+   * Social Media Handle(s)
    */
-  age: number;
-  hairColor?: "black" | "brown" | "blue";
+  handles?: {
+    twitter?: string;
+    [k: string]: unknown;
+  };
 }

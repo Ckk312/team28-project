@@ -1,3 +1,5 @@
 /* eslint-disable */
 // @ts-ignore
-export * from './exampleReplicant';
+export * from './breakFlavorText';
+export * from './matchInfo';
+export * from './casterInfo';

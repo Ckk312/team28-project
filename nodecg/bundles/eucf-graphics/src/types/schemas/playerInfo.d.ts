@@ -5,12 +5,12 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export interface ExampleReplicant {
-  firstName: string;
-  lastName: string;
+export interface PlayerInfo {
+  username: string;
+  role?: string;
   /**
    * Age in years
    */
-  age: number;
-  hairColor?: "black" | "brown" | "blue";
+  age?: number;
+  major?: string;
 }

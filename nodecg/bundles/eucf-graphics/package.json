@@ -76,6 +76,7 @@
     "@types/node": "^18.19.61",
     "concurrently": "*",
     "glob": "^10.2.7",
+    "json-schema-to-typescript": "^15.0.3",
     "nodemon": "*",
     "trash-cli": "*",
     "typescript": "^5.1.3"

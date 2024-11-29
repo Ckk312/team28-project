@@ -1,0 +1,26 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"teamName": {
+			"type": "string"
+		},
+		"numOfPlayers": {
+			"type": "number"
+		},
+		"players": {
+			"description": "Players on this team",
+			"type": "array",
+			"items": {
+                "$ref": "./playerInfo.json"
+            }
+		}
+	},
+	"additionalProperties": false,
+	"required": ["teamName", "players"],
+	"default": {
+        "teamName": "Example Team",
+        "numOfPlayers": 0,
+        "players": []
+	}
+}

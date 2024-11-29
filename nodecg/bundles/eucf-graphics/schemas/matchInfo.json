@@ -1,0 +1,48 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"gamePlayed": {
+            "description": "Game being played",
+			"type": "string"
+		},
+		"maps": {
+			"type": "array",
+            "items": {
+                "type": "string"
+            }
+		},
+        "teams": {
+            "type": "object",
+            "properties": {
+                "teamA": {
+                    "$ref": "./teamInfo.json"
+                },
+                "teamB": {
+                    "$ref": "./teamInfo.json"
+                }
+            }
+        },
+		"score": {
+			"description": "Score for each team",
+			"type": "object",
+			"properties": {
+                "teamAScore": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "teamBScore": {
+                    "type": "integer",
+                    "minimum": 0
+                }
+            },
+            "required": ["teamAScore", "teamBScore"],
+            "default": {
+                "teamAScore": 0,
+                "teamBScore": 0
+            }
+		}
+	},
+	"additionalProperties": false,
+	"required": ["gamePlayed"]
+}
