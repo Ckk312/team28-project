@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 import type { Db } from 'mongodb';
 import { mdbclient } from './mongodb.js';
 import crypto from 'crypto';
-import { sendMail } from '../util/mailer';
+import { sendMail } from './util/mailer.js';
 
 export async function forgotpass(req: Request, res: Response, next: Function) : Promise<void>
 {
