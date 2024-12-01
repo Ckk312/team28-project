@@ -1,7 +1,8 @@
+import type NodeCG from '@nodecg/types';
 import React, { useState } from 'react';
 import { MatchInfo } from '../../types/schemas';
 
-const matchInfoReplicant = nodecg.Replicant<MatchInfo>('matchInfo');
+const matchInfoReplicant = nodecg.Replicant<MatchInfo>('matchInfo') as unknown as NodeCG.ServerReplicantWithSchemaDefault<MatchInfo>;
 
 export function Panel() {
 	return (
@@ -16,7 +17,7 @@ export function Panel() {
 
 function TeamPlayers(props: any) {
 	const teamType = (props.team == 'A' || props.team == 'B') ? 0 : 1;
-	const team = matchInfoReplicant.value?.teams[teamType]!;
+	const team = matchInfoReplicant.value.teams[teamType]!;
 	let teamsPlayers = team.players;
 
 	const [playersList, setPlayersList] = useState(teamsPlayers);

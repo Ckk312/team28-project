@@ -1,3 +1,4 @@
+import type NodeCG from '@nodecg/types';
 import React, { useState } from 'react';
 import { BreakFlavorText, MatchInfo, TeamInfo } from '../types/schemas';
 
@@ -13,10 +14,10 @@ export function Index(props: any) {
 
 function BRB() {
 	const breakFlavorTextReplicant = nodecg.Replicant<BreakFlavorText>('breakFlavorText');
-	const [text, setText] = useState(breakFlavorTextReplicant.value);
+	const [text, setText] = useState(breakFlavorTextReplicant.value!);
 
 	breakFlavorTextReplicant.on('change', (newValue) => {
-		setText(newValue);
+		setText(newValue!);
 	});
 
 	return (
@@ -29,8 +30,8 @@ function BRB() {
 }
 
 function MapsTeams() {
-	const matchInfoReplicant = nodecg.Replicant<MatchInfo>('matchInfo')!; 
-	const [teams, setTeams] = useState(matchInfoReplicant.value?.teams!);
+	const matchInfoReplicant = nodecg.Replicant<MatchInfo>('matchInfo') as unknown as NodeCG.ServerReplicantWithSchemaDefault<MatchInfo>; 
+	const [teams, setTeams] = useState(matchInfoReplicant.value.teams);
 
 	let change: boolean = false;
 	matchInfoReplicant.on('change', (newValue: MatchInfo | undefined, oldValue: MatchInfo | undefined) => {
