@@ -10,4 +10,6 @@ export * from './matchInfo';
 // @ts-ignore
 export * from './playerInfo';
 // @ts-ignore
+export * from './scene';
+// @ts-ignore
 export * from './teamInfo';

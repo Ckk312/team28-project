@@ -34,6 +34,13 @@
         "width": 2,
         "file": "teamInfo.html",
         "headerColor": "#525F78"
+      },
+      {
+        "name": "sceneSelect",
+        "title": "Scene Select",
+        "width": 2,
+        "file": "scene.html",
+        "headerColor": "#525F78"
       }
     ],
     "graphics": [
