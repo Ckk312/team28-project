@@ -6,13 +6,13 @@
  */
 
 export interface CasterInfo {
-  username: string;
-  pronouns?: string;
-  /**
-   * Social Media Handle(s)
-   */
-  handles?: {
-    twitter?: string;
-    [k: string]: unknown;
-  };
+	username: string;
+	pronouns?: string;
+	/**
+	 * Social Media Handle(s)
+	 */
+	handles?: {
+		twitter?: string;
+		[k: string]: unknown;
+	};
 }
