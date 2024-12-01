@@ -1,6 +1,6 @@
 import * as nodecgApiContext from './nodecg-api-context';
 import { ExampleReplicant } from '../types/schemas/exampleReplicant';
-import { TeamInfo, PlayerInfo, CasterInfo, MatchInfo, BreakFlavorText } from '../types/schemas';
+import { TeamInfo, PlayerInfo, CasterInfo, MatchInfo, BreakFlavorText, Scene } from '../types/schemas';
 
 const nodecg = nodecgApiContext.get();
 
@@ -13,3 +13,4 @@ nodecg.Replicant<PlayerInfo>('playerInfo');
 nodecg.Replicant<CasterInfo>('casterInfo');
 nodecg.Replicant<MatchInfo>('matchInfo');
 nodecg.Replicant<BreakFlavorText>('breakFlavorText');
+nodecg.Replicant<Scene>('scene');

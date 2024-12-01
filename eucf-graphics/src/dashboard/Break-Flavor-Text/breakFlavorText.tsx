@@ -1,7 +1,7 @@
-import React, { FormEventHandler, useState } from 'react';
-import { BreakFlavorText } from '../../types/schemas';
+import React, { useState } from 'react';
+import * as nodecgApiContext from '../../extension/nodecg-api-context';
 
-const flavorTextReplicant = nodecg.Replicant<BreakFlavorText>('breakFlavorText');
+const nodecg = nodecgApiContext.get();
 
 export function Panel() {
 	return (
@@ -20,7 +20,7 @@ function FlavorTextSubmit() {
 
 	function handleSubmit (e: React.FormEvent<HTMLFormElement>) : void{
 		e.preventDefault();
-		flavorTextReplicant.value = term;
+		nodecg.sendMessage('updateFlavorText', term);
 	}
 
 	return (

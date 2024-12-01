@@ -1,6 +1,7 @@
 import type NodeCG from '@nodecg/types';
 import React, { useState } from 'react';
 import { BreakFlavorText, MatchInfo, TeamInfo } from '../types/schemas';
+import * as nodecgApiContext from '../extension/nodecg-api-context';
 
 export function Index(props: any) {
 	if (props.scene == 0) {
@@ -13,6 +14,7 @@ export function Index(props: any) {
 }
 
 function BRB() {
+	const nodecg = nodecgApiContext.get();
 	const breakFlavorTextReplicant = nodecg.Replicant<BreakFlavorText>('breakFlavorText');
 	const [text, setText] = useState(breakFlavorTextReplicant.value!);
 
@@ -30,6 +32,7 @@ function BRB() {
 }
 
 function MapsTeams() {
+	const nodecg = nodecgApiContext.get();
 	const matchInfoReplicant = nodecg.Replicant<MatchInfo>('matchInfo') as unknown as NodeCG.ServerReplicantWithSchemaDefault<MatchInfo>; 
 	const [teams, setTeams] = useState(matchInfoReplicant.value.teams);
 

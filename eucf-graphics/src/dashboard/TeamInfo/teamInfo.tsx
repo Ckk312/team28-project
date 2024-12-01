@@ -1,7 +1,9 @@
 import type NodeCG from '@nodecg/types';
 import React, { useState } from 'react';
 import { MatchInfo } from '../../types/schemas';
+import * as nodecgApiContext from '../../extension/nodecg-api-context';
 
+const nodecg = nodecgApiContext.get();
 const matchInfoReplicant = nodecg.Replicant<MatchInfo>('matchInfo') as unknown as NodeCG.ServerReplicantWithSchemaDefault<MatchInfo>;
 
 export function Panel() {

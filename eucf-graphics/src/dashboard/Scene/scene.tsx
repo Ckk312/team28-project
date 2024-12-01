@@ -1,7 +1,7 @@
 import React from 'react';
-import { Scene } from '../../types/schemas/scene';
+import * as nodecgApiContext from '../../extension/nodecg-api-context';
 
-const SceneReplicant = nodecg.Replicant<Scene>('scene');
+const nodecg = nodecgApiContext.get();
 
 export function Panel() {
 	return (
@@ -16,16 +16,12 @@ export function Panel() {
 }
 
 function SceneSelect() {
-	const handleClick = (scene : number) => {
-		SceneReplicant.value = scene;
-	};
-	
 	return (
 		<>
 			<div>
-				<button onClick={() => handleClick(1)}>Break</button>
-				<button onClick={() => handleClick(2)}>Team Info</button>
-				<button onClick={() => handleClick(3)}>Match</button>
+				<button onClick={() => nodecg.sendMessage('switchScene', 0)}>Break</button>
+				<button onClick={() => nodecg.sendMessage('switchScene', 1)}>Team Info</button>
+				<button onClick={() => nodecg.sendMessage('switchScene', 2)}>Match</button>
 			</div>
 		</>
 	);
