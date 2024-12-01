@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import { Index } from './Index';
-import { BreakFlavorText } from '../types/schemas';
+import { Scene } from '../types/schemas/scene';
 
-const breakFlavorText = nodecg.Replicant<BreakFlavorText>('breakFlavorText');
+const scene = nodecg.Replicant<Scene>('scene');
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
-root.render(<Index />);
+root.render(<Index scene={scene}/>);
