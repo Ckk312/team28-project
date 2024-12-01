@@ -6,39 +6,39 @@
  */
 
 export interface MatchInfo {
-	/**
-	 * Game being played
-	 */
-	gamePlayed: string;
-	maps?: string[];
-	teams?: {
-		teamA?: TeamInfo;
-		teamB?: TeamInfo;
-		[k: string]: unknown;
-	};
-	/**
-	 * Score for each team
-	 */
-	score?: {
-		teamAScore: number;
-		teamBScore: number;
-		[k: string]: unknown;
-	};
+  /**
+   * Game being played
+   */
+  gamePlayed: string;
+  maps?: string[];
+  /**
+   * @minItems 2
+   * @maxItems 2
+   */
+  teams: [TeamInfo, TeamInfo];
+  /**
+   * Score for each team
+   */
+  score: {
+    teamAScore: number;
+    teamBScore: number;
+    [k: string]: unknown;
+  };
 }
 export interface TeamInfo {
-	teamName: string;
-	numOfPlayers?: number;
-	/**
-	 * Players on this team
-	 */
-	players: PlayerInfo[];
+  teamName: string;
+  numOfPlayers?: number;
+  /**
+   * Players on this team
+   */
+  players: PlayerInfo[];
 }
 export interface PlayerInfo {
-	username: string;
-	role?: string;
-	/**
-	 * Age in years
-	 */
-	age?: number;
-	major?: string;
+  username: string;
+  role?: string;
+  /**
+   * Age in years
+   */
+  age?: number;
+  major?: string;
 }

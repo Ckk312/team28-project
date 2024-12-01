@@ -6,11 +6,11 @@
  */
 
 export interface PlayerInfo {
-	username: string;
-	role?: string;
-	/**
-	 * Age in years
-	 */
-	age?: number;
-	major?: string;
+  username: string;
+  role?: string;
+  /**
+   * Age in years
+   */
+  age?: number;
+  major?: string;
 }

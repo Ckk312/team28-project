@@ -6,19 +6,19 @@
  */
 
 export interface TeamInfo {
-	teamName: string;
-	numOfPlayers?: number;
-	/**
-	 * Players on this team
-	 */
-	players: PlayerInfo[];
+  teamName: string;
+  numOfPlayers?: number;
+  /**
+   * Players on this team
+   */
+  players: PlayerInfo[];
 }
 export interface PlayerInfo {
-	username: string;
-	role?: string;
-	/**
-	 * Age in years
-	 */
-	age?: number;
-	major?: string;
+  username: string;
+  role?: string;
+  /**
+   * Age in years
+   */
+  age?: number;
+  major?: string;
 }

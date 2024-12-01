@@ -13,15 +13,13 @@
             }
 		},
         "teams": {
-            "type": "object",
-            "properties": {
-                "teamA": {
-                    "$ref": "./teamInfo.json"
-                },
-                "teamB": {
-                    "$ref": "./teamInfo.json"
-                }
-            }
+            "type": "array",
+            "items": {
+                "$ref": "./teamInfo.json"
+            },
+            "minItems": 2,
+            "maxItems": 2,
+            "additionalItems": false
         },
 		"score": {
 			"description": "Score for each team",
@@ -44,5 +42,5 @@
 		}
 	},
 	"additionalProperties": false,
-	"required": ["gamePlayed"]
+	"required": ["gamePlayed", "teams", "score"]
 }
