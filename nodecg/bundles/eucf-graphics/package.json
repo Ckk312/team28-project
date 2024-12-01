@@ -27,6 +27,13 @@
         "width": 2,
         "file": "breakFlavorText.html",
         "headerColor": "#525F78"
+      },
+      {
+        "name": "teamInfoText",
+        "title": "Team Info",
+        "width": 2,
+        "file": "teamInfo.html",
+        "headerColor": "#525F78"
       }
     ],
     "graphics": [

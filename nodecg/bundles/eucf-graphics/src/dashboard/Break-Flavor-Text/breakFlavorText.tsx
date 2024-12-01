@@ -15,7 +15,7 @@ export function Panel() {
 	);
 }
 
-export function FlavorTextSubmit() {
+function FlavorTextSubmit() {
 	const [term, setTerm] = useState('');
 
 	function handleSubmit (e: React.FormEvent<HTMLFormElement>) : void{
@@ -30,10 +30,10 @@ export function FlavorTextSubmit() {
 					<input 
 						id="flavor-text-submit"
 						type="text"
-						name="flavor-text"
 						placeholder={ term }
-						value={term}
-						onChange={ (e) => setTerm(e.target.value) } />
+						value={ term }
+						onChange={ (e) => setTerm(e.target.value) }
+					/>
 				</label>
 				<input type="submit" />
 			</form>
