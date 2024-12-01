@@ -14,9 +14,10 @@
 		},
         "teams": {
             "type": "array",
-            "items": {
-                "$ref": "./teamInfo.json"
-            },
+            "items": [
+                { "$ref": "./teamInfo.json" },
+                { "$ref": "./teamInfo.json" }
+            ],
             "minItems": 2,
             "maxItems": 2,
             "additionalItems": false

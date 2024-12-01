@@ -1,15 +1,27 @@
 import type NodeCG from '@nodecg/types';
 import React, { useState } from 'react';
-import { BreakFlavorText, MatchInfo, TeamInfo } from '../types/schemas';
+import { BreakFlavorText, MatchInfo, TeamInfo, Scene } from '../types/schemas';
 
-export function Index(props: any) {
-	if (props.scene == 0) {
-		return <BRB />
-	}
+export function Index() {
+	const sceneReplicant = nodecg.Replicant<Scene>('scene');
+	const [scene, setScene] = useState(sceneReplicant.value);
 
-	else if (props.scene == 1) {
-		return <MapsTeams />
-	}
+	sceneReplicant.on('change', (newValue) => {
+		setScene(newValue);
+	});
+
+	return(
+		<>
+			<div id="index-root">
+				<BRB />
+				<MapsTeams />
+				<div id="third-option">
+					{ scene == 0 && <BRB />}
+					{ scene == 1 && <MapsTeams />}
+				</div>
+			</div>
+		</>
+	)
 }
 
 function BRB() {

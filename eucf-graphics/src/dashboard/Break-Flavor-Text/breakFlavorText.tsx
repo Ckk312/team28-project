@@ -30,7 +30,6 @@ function FlavorTextSubmit() {
 					<input 
 						id="flavor-text-submit"
 						type="text"
-						placeholder={ term }
 						value={ term }
 						onChange={ (e) => setTerm(e.target.value) }
 					/>
