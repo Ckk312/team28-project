@@ -13,19 +13,20 @@ export async function forgotpass(req: Request, res: Response, next: Function) : 
     let error : string = '';
 
     const database: Db = mdbclient.db('LargeProject');
-    const result: any = await database.collection('Users').find({ Login: email }).toArray();
+    let result: any = await database.collection('Users').findOne({ Login: email });
 
-    if (result[0])
+    if (result)
     {
         const token = crypto.randomBytes(20).toString('hex');
-        result[0].ResetToken = token;
-        result[0].TokenExpiry = Date.now() + 3600000;
+        const tokenExpiration = Date.now() + 3600000;
+        database.collection('Users').updateOne({ Login: email }, { $set: { ResetToken: token, TokenExpiry: tokenExpiration } });
 
         const url : string = `http://localhost:5000/resetpass/${token}`;
 
         await sendMail(email, 'Password Reset', `Click the link to reset your password: ${url}`);
 
         res.status(200).json('Email sent with details to reset your password');
+        return;
     } else 
     {
         error = 'Bad request';
