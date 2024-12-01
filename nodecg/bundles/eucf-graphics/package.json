@@ -22,10 +22,10 @@
     "compatibleRange": "^2.0.0",
     "dashboardPanels": [
       {
-        "name": "panel",
-        "title": "Panel",
+        "name": "breakFlavorText",
+        "title": "Break Flavor Text",
         "width": 2,
-        "file": "panel.html",
+        "file": "breakFlavorText.html",
         "headerColor": "#525F78"
       }
     ],
