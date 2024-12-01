@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import type { Db } from 'mongodb';
 import { mdbclient } from './mongodb.js';
+import Fuse from 'fuse.js';
 
 export async function searchplayers(req: Request, res: Response, next: Function) : Promise<void>
 {
@@ -11,7 +12,10 @@ export async function searchplayers(req: Request, res: Response, next: Function)
     let error : string = '';
 
     const database: Db = mdbclient.db('LargeProject');
-    const result: any = await database.collection('All Teams').find({ TeamAffiliation: query, Username: query, Game: query, UserID: userId }).toArray();
+    const list: any = await database.collection('All Teams').find().toArray();
+    const keys = { keys: ["TeamAffiliation", "Username", "Game"] };
+    const fuse = new Fuse(list, keys);
+    const result = fuse.search(query);
 
     res.status(200).json({ result: result, error: error });
 }

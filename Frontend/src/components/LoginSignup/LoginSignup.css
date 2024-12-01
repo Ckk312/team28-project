@@ -1,0 +1,142 @@
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fdf5e6;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  /* Container styles */
+  .container {
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+  }
+  
+  /* Info button styles */
+  .info-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 8px 12px;
+    background-color: #d4af37; /* Gold */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, background-color 0.3s ease;
+  }
+  
+  .info-btn:hover {
+    background-color: #b89630;
+    transform: scale(1.1);
+  }
+  
+  .info-btn:active {
+    transform: scale(1);
+  }
+  
+  /* Form styles */
+  .form-container {
+    padding: 20px;
+  }
+  
+  h2 {
+    color: #d4af37; /* Gold */
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: #d4af37; /* Gold */
+  }
+  
+  /* Button styles */
+  .btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #d4af37; /* Gold */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .btn:hover {
+    background-color: #b89630;
+  }
+  
+  .btn-secondary {
+    margin-top: 10px;
+    background: none;
+    color: #d4af37;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  .toggle-btn {
+    background: none;
+    color: #d4af37;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: bold;
+  }
+  
+  /* Hover effects */
+  .toggle-btn:hover,
+  .btn-secondary:hover {
+    color: #b89630;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 480px) {
+    .container {
+      padding: 10px;
+    }
+  
+    h2 {
+      font-size: 24px;
+    }
+  }
+  
