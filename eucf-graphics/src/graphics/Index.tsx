@@ -5,6 +5,7 @@ import * as nodecgApiContext from '../extension/nodecg-api-context';
 import { BreakFlavorText, MatchInfo, TeamInfo, Scene } from '../types/schemas';
 
 export function Index() {
+	const nodecg = nodecgApiContext.get();
 	const sceneReplicant = nodecg.Replicant<Scene>('scene');
 	const [scene, setScene] = useState(sceneReplicant.value);
 
