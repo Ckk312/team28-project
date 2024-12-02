@@ -140,3 +140,28 @@ body {
     }
   }
   
+  /* Info Button Styles */
+.info-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 8px 12px;
+  background-color: #d4af37; /* Gold */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.info-btn:hover {
+  background-color: #b89630; /* Darker Gold */
+  transform: scale(1.1);
+}
+
+.info-btn:active {
+  transform: scale(1);
+}
