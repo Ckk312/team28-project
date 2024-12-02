@@ -43,5 +43,26 @@
 		}
 	},
 	"additionalProperties": false,
-	"required": ["gamePlayed", "teams", "score"]
+	"required": ["gamePlayed", "teams", "score"],
+    "default": {
+        "gamePlayed": "Apex Legends",
+        "teams": [
+            {
+                "teamName": "Example Team 1",
+                "players": [
+                    { "username": "Example Player" }
+                ]
+            },
+            {
+                "teamName": "Example Team 2",
+                "players": [
+                    { "username": "Example Player" }
+                ]
+            }
+        ],
+        "score": {
+            "teamAScore": 0,
+            "teamBScore": 0
+        }
+    }
 }
