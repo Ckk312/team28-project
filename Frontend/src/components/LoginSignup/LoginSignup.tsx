@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import for navigation
 import './LoginSignup.css';
 
 const LoginSignup: React.FC = () => {
@@ -11,6 +12,7 @@ const LoginSignup: React.FC = () => {
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const navigate = useNavigate(); // Navigation hook
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -37,7 +39,7 @@ const LoginSignup: React.FC = () => {
             password: formData.password,
           };
 
-      const response = await fetch((url + endpoint), {
+      const response = await fetch(`${url}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -46,6 +48,7 @@ const LoginSignup: React.FC = () => {
       const data = await response.json();
       if (response.ok) {
         setMessage(isLogin ? 'Login Successful!' : 'Registration Successful!');
+        if (isLogin) navigate('/landing'); // Navigate to landing page after login
       } else {
         setMessage(data.message || 'Something went wrong. Please try again.');
       }
