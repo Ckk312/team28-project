@@ -1,0 +1,64 @@
+/* Container */
+.landing-container {
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Top Bar */
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .home-btn,
+  .auth-btn {
+    background-color: #555;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .home-btn:hover,
+  .auth-btn:hover {
+    background-color: #777;
+  }
+  
+  .project-name {
+    font-size: 20px;
+  }
+  
+  /* Main Content */
+  .main-content {
+    margin-top: 50px;
+  }
+  
+  h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  
+  p {
+    font-size: 18px;
+    margin-bottom: 30px;
+  }
+  
+  .start-btn {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .start-btn:hover {
+    background-color: #45a049;
+  }
+  
