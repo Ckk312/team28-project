@@ -1,11 +1,8 @@
 import type NodeCG from '@nodecg/types';
 import React, { useState } from 'react';
-<<<<<<< HEAD
-import { BreakFlavorText, MatchInfo, TeamInfo } from '../types/schemas';
+
 import * as nodecgApiContext from '../extension/nodecg-api-context';
-=======
 import { BreakFlavorText, MatchInfo, TeamInfo, Scene } from '../types/schemas';
->>>>>>> 7252a698cec56172558da4c5208641c6e754c110
 
 export function Index() {
 	const sceneReplicant = nodecg.Replicant<Scene>('scene');
