@@ -23,20 +23,21 @@ const LoginSignup: React.FC = () => {
     setMessage('');
 
     try {
+      const url = 'http://ckk312.xyz:5000';
       const endpoint = isLogin ? '/api/login' : '/api/register';
       const body = isLogin
         ? {
-            username: formData.username,
+            email: formData.username,
             password: formData.password,
           }
         : {
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            username: formData.username,
+            firstname: formData.firstName,
+            lastname: formData.lastName,
+            email: formData.username,
             password: formData.password,
           };
 
-      const response = await fetch(endpoint, {
+      const response = await fetch((url + endpoint), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
