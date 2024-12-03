@@ -8,11 +8,19 @@ export function Index() {
 	return(
 		<>
 			<div id="index-root">
-				{ scene == 0 && <BRB />}
-				{ scene == 1 && <MapsTeams />}
+				<ChooseScene scene={scene} />
 			</div>
 		</>
-	)
+	);
+}
+
+function ChooseScene(props: any) {
+	if (props.scene === 0) {
+		return <BRB />;
+	}
+	else if (props.scene === 1) {
+		return <MapsTeams />;
+	}
 }
 
 function BRB() {
@@ -28,7 +36,7 @@ function BRB() {
 }
 
 function MapsTeams() {
-	let [match] = useReplicant('matchInfo');
+	let [match] = useReplicant<MatchInfo>('matchInfo');
 
 	return (
 		<>
@@ -39,7 +47,7 @@ function MapsTeams() {
 					</div>
 					<div className="player-list-box">
 					<ul className="player-list">
-						{ (match as unknown as MatchInfo | undefined)?.teams[0].players.map((player) => {
+						{ match?.teams[0].players.map((player) => {
 							return (
 								<>
 									<p className="player-text">{ player.username }</p>

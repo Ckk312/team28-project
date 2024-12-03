@@ -1,34 +1,42 @@
 import * as nodecgApiContext from './nodecg-api-context';
-import { MatchInfo, TeamInfo } from '../types/schemas';
+import { MatchInfo, PlayerInfo, TeamInfo } from '../types/schemas';
 
 const nodecg = nodecgApiContext.get();
-const match : any = nodecg.Replicant<MatchInfo>('matchInfo');
+const match = nodecg.Replicant<MatchInfo>('matchInfo');
 
 nodecg.listenFor('updateGame', (game : string) => {
-        match.gamePlayed = game;
+        match!.value!.gamePlayed = game;
 });
 
 nodecg.listenFor('addMap', (map : string) => {
-        match.maps.push(map);
+        match!.value!.maps!.push(map);
 });
 
 nodecg.listenFor('removeMap', (map : string) => {
-        const mapIndex = match.maps.indexOf(map);
+        const mapIndex = match?.value?.maps?.indexOf(map);
 
-        if (mapIndex === -1)
+        if (mapIndex === -1 || mapIndex === undefined)
             return;
         
-        match.maps = match.maps.filter((element : string, index : number) => { index !== mapIndex });
+        match!.value!.maps = match!.value!.maps!.filter((element : string, index : number) => { index !== mapIndex });
 });
 
-nodecg.listenFor('updateScore', (newScore : object) => {
-        match.score = newScore;
+nodecg.listenFor('updateScore', (newScore : { teamAScore: number, teamBScore: number, [k: string]: unknown }) => {
+        match!.value!.score = newScore;
 });
 
 nodecg.listenFor('updateMatchTeamA', (team : TeamInfo) => {
-        match.teams.teamA = team;
+        match!.value!.teams[0] = team;
 });
 
 nodecg.listenFor('updateMatchTeamB', (team : TeamInfo) => {
-        match.teams.teamB = team;
+        match!.value!.teams[1] = team;
+});
+
+nodecg.listenFor('addPlayerA', (player: PlayerInfo) => {
+        match!.value!.teams[0].players.push(player);
+});
+
+nodecg.listenFor('addPlayerB', (player: PlayerInfo) => {
+        match!.value!.teams[1].players.push(player);
 });
