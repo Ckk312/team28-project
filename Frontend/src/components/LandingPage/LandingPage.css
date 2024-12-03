@@ -1,0 +1,88 @@
+/* Container */
+.landing-container {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Top Bar */
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%; /* Ensures the top bar spans the full width */
+  height: 60px; /* Fixed height for the top bar */
+  background-color: #333;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px; /* Adds some horizontal padding */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Optional shadow for depth */
+  z-index: 1000; /* Keeps the top bar above other content */
+}
+
+.home-btn,
+.auth-btn {
+  background-color: #555;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.home-btn:hover,
+.auth-btn:hover {
+  background-color: #777;
+}
+
+.auth-btn {
+  margin-right: 40px; /* Moves the button slightly to the left */
+}
+
+.project-name {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin: 0 auto;
+}
+
+
+/* Main Content */
+.main-content {
+  margin-top: 80px; /* Adds space to avoid overlapping with the fixed top bar */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 60px); /* Makes the main content fill the rest of the page */
+}
+
+h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 18px;
+  margin-bottom: 30px;
+  text-align: center;
+  max-width: 600px;
+}
+
+.start-btn {
+  background-color: #4CAF50; /* Green */
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.start-btn:hover {
+  background-color: #45a049;
+}

@@ -3,6 +3,7 @@ import { register } from './register.js';
 import { login } from './login.js';
 import { forgotpass } from './forgotpass.js';
 import { searchplayers } from './searchplayers.js';
+import { resetpass } from './resetpass.js';
 
 const app : Express = express();
 
@@ -24,6 +25,7 @@ app.use((req, res, next) =>
 app.post('/api/register', register);
 app.post('/api/login', login);
 app.post('/api/forgotpass', forgotpass);
+app.post('/api/resetpass', resetpass);
 app.post('/api/searchplayers', searchplayers);
 
 
