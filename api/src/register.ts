@@ -9,8 +9,8 @@ export async function register (req : Request, res : Response, next : Function) 
     
     const { email, password, firstname, lastname } = req.body;
     
-    const newUser : { Login: string, Password: string, FirstName: string, LastName: string, ResetToken: string, TokenExpiry: number, UserID: number } = 
-                    { Login: email, Password: password, FirstName: firstname, LastName: lastname, ResetToken: '', TokenExpiry: Date.now(), UserID: Date.now() };
+    const newUser : { Login: string, EmailVerified: boolean, Password: string, FirstName: string, LastName: string, ResetToken: string, TokenExpiry: number, UserID: number } = 
+                    { Login: email, EmailVerified: false, Password: password, FirstName: firstname, LastName: lastname, ResetToken: '', TokenExpiry: Date.now(), UserID: Date.now() };
     let error : string = '';
     
     try
