@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:email_validator/email_validator.dart';
@@ -45,8 +46,8 @@ class LoginPageState extends State<LoginPage> {
     if (_userLoginController.text.isEmpty || _passwordLoginController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-            content: Text('Username and password cannot be empty'),
-            backgroundColor: Colors.redAccent,
+          content: Text('Username and password cannot be empty'),
+          backgroundColor: Colors.redAccent,
         ),
       );
       return;
@@ -78,8 +79,8 @@ class LoginPageState extends State<LoginPage> {
         else {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-                content: Text('Login failed: Incorrect username or password'),
-                backgroundColor: Colors.redAccent,
+              content: Text('Login failed: Incorrect username or password'),
+              backgroundColor: Colors.redAccent,
             ),
           );
         }
@@ -87,17 +88,17 @@ class LoginPageState extends State<LoginPage> {
       else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text('Server error: ${response.statusCode}'),
-              backgroundColor: Colors.redAccent,
+            content: Text('Server error: ${response.statusCode}'),
+            backgroundColor: Colors.redAccent,
           ),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+          SnackBar(
             content: Text('Network error: $e'),
             backgroundColor: Colors.redAccent,
-        )
+          )
       );
     }
   }
@@ -105,95 +106,107 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Align the image to move it higher
-                Image.asset(
-                  'assets/Esports-Logo.png',
-                  width: 250,
-                  height: 250,
-                ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Align the image to move it higher
+                    Image.asset(
+                      'assets/Esports-Logo.png',
+                      width: 250,
+                      height: 250,
+                    ),
 
-                const SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
-                // Username Field
-                TextFormField(
-                  controller: _userLoginController,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  // Validate email when the form is submitted
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    } else if (!EmailValidator.validate(value)) {
-                      return 'Please enter a valid email';
-                    }
-                    return null;
-                  },
-                ),
+                    // Username Field
+                    TextFormField(
+                      controller: _userLoginController,
+                      decoration: const InputDecoration(
+                        labelText: 'Email',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                      // Validate email when the form is submitted
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your email';
+                        } else if (!EmailValidator.validate(value)) {
+                          return 'Please enter a valid email';
+                        }
+                        return null;
+                      },
+                    ),
 
-                const SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
-                // Password Field
-                TextFormField(
-                  controller: _passwordLoginController,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  obscureText: true,
-                  inputFormatters: [
-                    PasswordTextInputFormatter()
+                    // Password Field
+                    TextFormField(
+                      controller: _passwordLoginController,
+                      decoration: const InputDecoration(
+                        labelText: 'Password',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                      obscureText: true,
+                      inputFormatters: [
+                        PasswordTextInputFormatter()
+                      ],
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // Login Button
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState?.validate() == true) {
+                          loginUser();
+                        }
+                      },
+                      child: const Text('Login'),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // Register Button
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const RegisterPage()),
+                        );
+                      },
+                      child: const Text('Register Here'),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // Forgot Button
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const ForgotPage()),
+                        );
+                      },
+                      child: const Text('Forgot Your Password?'),
+                    ),
                   ],
                 ),
-
-                const SizedBox(height: 20),
-
-                // Login Button
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState?.validate() == true) {
-                      loginUser();
-                    }
-                  },
-                  child: const Text('Login'),
-                ),
-
-                const SizedBox(height: 20),
-
-                // Register Button
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const RegisterPage()),
-                    );
-                  },
-                  child: const Text('Register Here'),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-    )
+        )
     );
   }
 }
-
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -212,8 +225,7 @@ class RegisterPageState extends State<RegisterPage> {
   final TextEditingController _confirmPasswordController = TextEditingController();
 
   // Regular expression for password validation
-  final passwordRegex = RegExp(
-      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+  final passwordRegex = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
 
   final apiURL = "http://www.ckk312.xyz:5000/api/register";
 
@@ -278,10 +290,10 @@ class RegisterPageState extends State<RegisterPage> {
             backgroundColor: Colors.redAccent,
           )
       );
+    }
   }
-}
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -425,6 +437,18 @@ class TitlePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Game Selection'),
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout), // Icon for the log out button
+            onPressed: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginPage())
+              );
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -436,7 +460,10 @@ class TitlePage extends StatelessWidget {
             // League of Legends
             GestureDetector(
               onTap: () {
-                // Navigate or perform action
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LeaguePlayersList())
+                );
               },
               child: Column(
                 children: [
@@ -464,7 +491,10 @@ class TitlePage extends StatelessWidget {
             // Rainbow Six
             GestureDetector(
               onTap: () {
-                // Navigate or perform action
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RainbowPlayersList())
+                );
               },
               child: Column(
                 children: [
@@ -491,7 +521,10 @@ class TitlePage extends StatelessWidget {
             // Overwatch
             GestureDetector(
               onTap: () {
-                // Navigate or perform action
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => OverwatchPlayersList())
+                );
               },
               child: Column(
                 children: [
@@ -518,7 +551,10 @@ class TitlePage extends StatelessWidget {
             // Valorant
             GestureDetector(
               onTap: () {
-                // Navigate or perform action
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ValorantPlayersList())
+                );
               },
               child: Column(
                 children: [
@@ -545,7 +581,10 @@ class TitlePage extends StatelessWidget {
             // Additional slots (add more images and logic as needed)
             GestureDetector(
               onTap: () {
-                // Navigate or perform action
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ApexPlayersList())
+                );
               },
               child: Column(
                 children: [
@@ -571,7 +610,10 @@ class TitlePage extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                // Navigate or perform action
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CODPlayersList())
+                );
               },
               child: Column(
                 children: [
@@ -597,7 +639,10 @@ class TitlePage extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                // Navigate or perform action
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SmashPlayersList())
+                );
               },
               child: Column(
                 children: [
@@ -623,7 +668,10 @@ class TitlePage extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                // Navigate or perform action
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SplatoonPlayersList())
+                );
               },
               child: Column(
                 children: [
@@ -654,6 +702,1272 @@ class TitlePage extends StatelessWidget {
   }
 }
 
+class ForgotPage extends StatefulWidget {
+  const ForgotPage({super.key});
+
+  @override
+  ForgotPageState createState() => ForgotPageState();
+}
+
+class ForgotPageState extends State<ForgotPage> {
+  final _formKey = GlobalKey<FormState>();
+
+  final TextEditingController _emailController = TextEditingController();
+
+  // Regular expression for password validation
+  final passwordRegex = RegExp(
+      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+
+  final apiURL = "http://www.ckk312.xyz:5000/api/forgotpass";
+
+  // Function to register user using API
+
+  void forgotUser() async {
+    if (!EmailValidator.validate(_emailController.text)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid email')),
+      );
+      return;
+    }
+
+    try {
+      final response = await http.post(
+        Uri.parse(apiURL),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode({
+          'email': _emailController.text,
+        }),
+      );
+
+      if (response.statusCode == 200){
+        final responseForgotData = jsonDecode(response.body);
+        // Navigate to the next screen if registration is successful
+        if(responseForgotData['error'] == "Email has been sent with details to reset your password"){
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Email has been sent with details to reset your password'),
+              backgroundColor: Colors.redAccent,
+            ),
+          );
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginPage()),
+          );
+        }
+        else{
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Email does not exist'),
+                backgroundColor: Colors.redAccent,
+              ),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Server error: ${response.statusCode}'),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+
+    } catch(e){
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Network error: $e'),
+            backgroundColor: Colors.redAccent,
+          )
+      );
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Form(
+          key: _formKey,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Email Field
+                TextFormField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                  validator: (value) {
+                    if (value == null || !EmailValidator.validate(value)) {
+                      return 'Please enter a valid email';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+
+                // Register Button
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      forgotUser();
+                    }
+                  },
+                  child: const Text('Reset Your Password'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ApexPlayersList extends StatefulWidget {
+  const ApexPlayersList({super.key});
+
+  @override
+  ApexPlayersListState createState() => ApexPlayersListState();
+}
+
+class ApexPlayersListState extends State<ApexPlayersList> {
+  List<String> mainTeamPlayers = [];
+  List<String> academyTeamPlayers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPlayers();
+  }
+
+  Future<void> fetchPlayers() async {
+    const String apiUrl = 'http://www.ckk312.xyz:5000/api/searchplayers';
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: jsonEncode({
+          'query': 'Apex Legends Knights',
+          'userId': 1,
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final decodedData = json.decode(response.body);
+        final List<dynamic> results = decodedData['result'];
+
+        setState(() {
+          // Filter players based on TeamAffiliation explicitly for League of Legends teams
+          mainTeamPlayers = results
+              .where((player) =>
+          player['item']['TeamAffiliation'] == 'Knights' &&
+              player['item']['Game'] == 'Apex Legends') // Add filtering for the correct game
+              .map<String>((player) => player['item']['Username'])
+              .toList();
+
+          academyTeamPlayers = results
+              .where((player) =>
+          player['item']['TeamAffiliation'] == 'Knights Academy' &&
+              player['item']['Game'] == 'Apex Legends') // Add filtering for the correct game
+              .map<String>((player) => player['item']['Username'])
+              .toList();
+        });
+      } else {
+        setState(() {
+          mainTeamPlayers = [];
+          academyTeamPlayers = [];
+        });
+      }
+    } catch (e) {
+      setState(() {
+        mainTeamPlayers = [];
+        academyTeamPlayers = [];
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Apex Legends'),
+      ),
+      body: mainTeamPlayers.isEmpty && academyTeamPlayers.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildTeamSection('Knights', mainTeamPlayers), // Top-left
+            const SizedBox(height: 75),
+            _buildTeamSection('Knights Academy', academyTeamPlayers), // Bottom-left
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Helper function to build the team section with a title and a list of players.
+  Widget _buildTeamSection(String teamName, List<String> players) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildTeamTitle(teamName),
+        _buildPlayerList(players),
+      ],
+    );
+  }
+
+  // Helper function to build the title for each team section.
+  Widget _buildTeamTitle(String teamName) {
+    return Text(
+      teamName,
+      style: const TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: CupertinoColors.systemYellow, // Adjust color if necessary
+      ),
+    );
+  }
+
+  // Helper function to create the list of players in the team.
+  Widget _buildPlayerList(List<String> players) {
+    return Wrap(
+      spacing: 8.0, // Horizontal space between items
+      runSpacing: 8.0, // Vertical space between items
+      children: players.map((player) {
+        return Chip(
+          label: Text(
+            player,
+            style: TextStyle(
+              color: CupertinoColors.systemYellow,
+              fontSize: 18,// Change player names to yellow
+            ),
+          ),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+          ),
+          side: BorderSide.none,
+          padding: EdgeInsets.zero,
+          elevation: 0,
+        );
+      }).toList(),
+    );
+  }
+}
+
+class LeaguePlayersList extends StatefulWidget {
+  const LeaguePlayersList({super.key});
+
+  @override
+  LeaguePlayersListState createState() => LeaguePlayersListState();
+}
+
+class LeaguePlayersListState extends State<LeaguePlayersList> {
+  List<String> mainTeamPlayers = [];
+  List<String> academyTeamPlayers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPlayers();
+  }
+
+  Future<void> fetchPlayers() async {
+    const String apiUrl = 'http://www.ckk312.xyz:5000/api/searchplayers';
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: jsonEncode({
+          'query': 'League of Legends Knights', // Ensure the query is correct
+          'userId': 1,
+        }),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        final decodedData = json.decode(response.body);
+        final List<dynamic> results = decodedData['result'];
+
+        setState(() {
+          // Filter players based on TeamAffiliation explicitly for League of Legends teams
+          mainTeamPlayers = results
+              .where((player) =>
+          player['item']['TeamAffiliation'] == 'Knights' &&
+              player['item']['Game'] == 'League of Legends') // Add filtering for the correct game
+              .map<String>((player) => player['item']['Username'])
+              .toList();
+
+          academyTeamPlayers = results
+              .where((player) =>
+          player['item']['TeamAffiliation'] == 'Knights Academy' &&
+              player['item']['Game'] == 'League of Legends') // Add filtering for the correct game
+              .map<String>((player) => player['item']['Username'])
+              .toList();
+        });
+      } else {
+        setState(() {
+          mainTeamPlayers = [];
+          academyTeamPlayers = [];
+        });
+      }
+    } catch (e) {
+      setState(() {
+        mainTeamPlayers = [];
+        academyTeamPlayers = [];
+      });
+    }
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('League of Legends'),
+      ),
+      body: mainTeamPlayers.isEmpty && academyTeamPlayers.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildTeamSection('Knights', mainTeamPlayers), // Top-left
+            const SizedBox(height: 75),
+            _buildTeamSection('Knights Academy', academyTeamPlayers), // Bottom-left
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Helper function to build the team section with a title and a list of players.
+  Widget _buildTeamSection(String teamName, List<String> players) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildTeamTitle(teamName),
+        _buildPlayerList(players),
+      ],
+    );
+  }
+
+  // Helper function to build the title for each team section.
+  Widget _buildTeamTitle(String teamName) {
+    return Text(
+      teamName,
+      style: const TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: CupertinoColors.systemYellow, // Adjust color if necessary
+      ),
+    );
+  }
+
+  // Helper function to create the list of players in the team.
+  Widget _buildPlayerList(List<String> players) {
+    return Wrap(
+      spacing: 8.0, // Horizontal space between items
+      runSpacing: 8.0, // Vertical space between items
+      children: players.map((player) {
+        return Chip(
+          label: Text(
+            player,
+            style: TextStyle(
+              color: CupertinoColors.systemYellow,
+              fontSize: 18,// Change player names to yellow
+            ),
+          ),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+          ),
+          side: BorderSide.none,
+          padding: EdgeInsets.zero,
+          elevation: 0,
+        );
+      }).toList(),
+    );
+  }
+}
+
+class RainbowPlayersList extends StatefulWidget {
+  const RainbowPlayersList({super.key});
+
+  @override
+  RainbowPlayersListState createState() => RainbowPlayersListState();
+}
+
+class RainbowPlayersListState extends State<RainbowPlayersList> {
+  List<String> mainTeamPlayers = [];
+  List<String> academyTeamPlayers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPlayers();
+  }
+
+  Future<void> fetchPlayers() async {
+    const String apiUrl = 'http://www.ckk312.xyz:5000/api/searchplayers';
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: jsonEncode({
+          'query': 'Rainbow Six Siege Knights',
+          'userId': 1,
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final decodedData = json.decode(response.body);
+        final List<dynamic> results = decodedData['result'];
+
+        setState(() {
+          // Filter players based on TeamAffiliation explicitly for League of Legends teams
+          mainTeamPlayers = results
+              .where((player) =>
+          player['item']['TeamAffiliation'] == 'Knights' &&
+              player['item']['Game'] == 'Rainbow Six Siege') // Add filtering for the correct game
+              .map<String>((player) => player['item']['Username'])
+              .toList();
+
+          academyTeamPlayers = results
+              .where((player) =>
+          player['item']['TeamAffiliation'] == 'Knights Academy' &&
+              player['item']['Game'] == 'Rainbow Six Siege') // Add filtering for the correct game
+              .map<String>((player) => player['item']['Username'])
+              .toList();
+        });
+      } else {
+        setState(() {
+          mainTeamPlayers = [];
+          academyTeamPlayers = [];
+        });
+      }
+    } catch (e) {
+      setState(() {
+        mainTeamPlayers = [];
+        academyTeamPlayers = [];
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Rainbow Six'),
+      ),
+      body: mainTeamPlayers.isEmpty && academyTeamPlayers.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildTeamSection('Knights', mainTeamPlayers), // Top-left
+            const SizedBox(height: 75),
+            _buildTeamSection('Knights Academy', academyTeamPlayers), // Bottom-left
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Helper function to build the team section with a title and a list of players.
+  Widget _buildTeamSection(String teamName, List<String> players) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildTeamTitle(teamName),
+        _buildPlayerList(players),
+      ],
+    );
+  }
+
+  // Helper function to build the title for each team section.
+  Widget _buildTeamTitle(String teamName) {
+    return Text(
+      teamName,
+      style: const TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: CupertinoColors.systemYellow, // Adjust color if necessary
+      ),
+    );
+  }
+
+  // Helper function to create the list of players in the team.
+  Widget _buildPlayerList(List<String> players) {
+    return Wrap(
+      spacing: 8.0, // Horizontal space between items
+      runSpacing: 8.0, // Vertical space between items
+      children: players.map((player) {
+        return Chip(
+          label: Text(
+            player,
+            style: TextStyle(
+              color: CupertinoColors.systemYellow,
+              fontSize: 18,// Change player names to yellow
+            ),
+          ),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+          ),
+          side: BorderSide.none,
+          padding: EdgeInsets.zero,
+          elevation: 0,
+        );
+      }).toList(),
+    );
+  }
+}
+
+class OverwatchPlayersList extends StatefulWidget {
+  const OverwatchPlayersList({super.key});
+
+  @override
+  OverwatchPlayersListState createState() => OverwatchPlayersListState();
+}
+
+class OverwatchPlayersListState extends State<OverwatchPlayersList> {
+  List<String> mainTeamPlayers = [];
+  List<String> academyTeamPlayers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPlayers();
+  }
+
+  Future<void> fetchPlayers() async {
+    const String apiUrl = 'http://www.ckk312.xyz:5000/api/searchplayers';
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: jsonEncode({
+          'query': 'Overwatch Knights',
+          'userId': 1,
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final decodedData = json.decode(response.body);
+        final List<dynamic> results = decodedData['result'];
+
+        setState(() {
+          // Filter players based on TeamAffiliation explicitly for League of Legends teams
+          mainTeamPlayers = results
+              .where((player) =>
+          player['item']['TeamAffiliation'] == 'Knights' &&
+              player['item']['Game'] == 'Overwatch 2') // Add filtering for the correct game
+              .map<String>((player) => player['item']['Username'])
+              .toList();
+
+          academyTeamPlayers = results
+              .where((player) =>
+          player['item']['TeamAffiliation'] == 'Knights Academy' &&
+              player['item']['Game'] == 'Overwatch 2') // Add filtering for the correct game
+              .map<String>((player) => player['item']['Username'])
+              .toList();
+        });
+      } else {
+        setState(() {
+          mainTeamPlayers = [];
+          academyTeamPlayers = [];
+        });
+      }
+    } catch (e) {
+      setState(() {
+        mainTeamPlayers = [];
+        academyTeamPlayers = [];
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Overwatch 2'),
+      ),
+      body: mainTeamPlayers.isEmpty && academyTeamPlayers.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildTeamSection('Knights', mainTeamPlayers), // Top-left
+            const SizedBox(height: 75),
+            _buildTeamSection('Knights Academy', academyTeamPlayers), // Bottom-left
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Helper function to build the team section with a title and a list of players.
+  Widget _buildTeamSection(String teamName, List<String> players) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildTeamTitle(teamName),
+        _buildPlayerList(players),
+      ],
+    );
+  }
+
+  // Helper function to build the title for each team section.
+  Widget _buildTeamTitle(String teamName) {
+    return Text(
+      teamName,
+      style: const TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: CupertinoColors.systemYellow, // Adjust color if necessary
+      ),
+    );
+  }
+
+  // Helper function to create the list of players in the team.
+  Widget _buildPlayerList(List<String> players) {
+    return Wrap(
+      spacing: 8.0, // Horizontal space between items
+      runSpacing: 8.0, // Vertical space between items
+      children: players.map((player) {
+        return Chip(
+          label: Text(
+            player,
+            style: TextStyle(
+              fontSize: 18,
+              color: CupertinoColors.systemYellow, // Change player names to yellow
+            ),
+          ),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+          ),
+          side: BorderSide.none,
+          padding: EdgeInsets.zero,
+          elevation: 0,
+        );
+      }).toList(),
+    );
+  }
+}
+
+class ValorantPlayersList extends StatefulWidget {
+  const ValorantPlayersList({super.key});
+
+  @override
+  ValorantPlayersListState createState() => ValorantPlayersListState();
+}
+
+class ValorantPlayersListState extends State<ValorantPlayersList> {
+  List<String> mainTeamPlayers = [];
+  List<String> academyTeamPlayers = [];
+  List<String> risingTeamPlayers = [];
+  List<String> pinkTeamPlayers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPlayers();
+  }
+
+  Future<void> fetchPlayers() async {
+    const String apiUrl = 'http://www.ckk312.xyz:5000/api/searchplayers';
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: jsonEncode({
+          'query': 'Valorant Knights',
+          'userId': 1,
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final decodedData = json.decode(response.body);
+        final List<dynamic> results = decodedData['result'];
+
+        setState(() {
+          // Filter players based on TeamAffiliation explicitly for League of Legends teams
+          mainTeamPlayers = results
+              .where((player) =>
+          player['item']['TeamAffiliation'] == 'Knights' &&
+              player['item']['Game'] == 'Valorant') // Add filtering for the correct game
+              .map<String>((player) => player['item']['Username'])
+              .toList();
+
+          academyTeamPlayers = results
+              .where((player) =>
+          player['item']['TeamAffiliation'] == 'Knights Academy' &&
+              player['item']['Game'] == 'Valorant') // Add filtering for the correct game
+              .map<String>((player) => player['item']['Username'])
+              .toList();
+
+          risingTeamPlayers = results
+              .where((player) =>
+          player['item']['TeamAffiliation'] == 'Knights Rising' &&
+              player['item']['Game'] == 'Valorant') // Add filtering for the correct game
+              .map<String>((player) => player['item']['Username'])
+              .toList();
+
+          pinkTeamPlayers = results
+              .where((player) =>
+          player['item']['TeamAffiliation'] == 'Knights Pink' &&
+              player['item']['Game'] == 'Valorant') // Add filtering for the correct game
+              .map<String>((player) => player['item']['Username'])
+              .toList();
+        });
+      } else {
+        setState(() {
+          mainTeamPlayers = [];
+          academyTeamPlayers = [];
+          risingTeamPlayers = [];
+          pinkTeamPlayers = [];
+        });
+      }
+    } catch (e) {
+      setState(() {
+        mainTeamPlayers = [];
+        academyTeamPlayers = [];
+        risingTeamPlayers = [];
+        pinkTeamPlayers = [];
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Valorant'),
+      ),
+      body: mainTeamPlayers.isEmpty && academyTeamPlayers.isEmpty && risingTeamPlayers.isEmpty && pinkTeamPlayers.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if(mainTeamPlayers.isNotEmpty)
+              _buildTeamSection('Knights', mainTeamPlayers), // Top-left
+            const SizedBox(height: 75),
+            if(academyTeamPlayers.isNotEmpty)
+              _buildTeamSection('Knights Academy', academyTeamPlayers),
+            const SizedBox(height: 75),
+            if(risingTeamPlayers.isNotEmpty)
+              _buildTeamSection('Knights Rising', risingTeamPlayers),
+            const SizedBox(height: 75),
+            if(pinkTeamPlayers.isNotEmpty)
+              _buildTeamSection('Knights Pink', pinkTeamPlayers),// Bottom-left
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Helper function to build the team section with a title and a list of players.
+  Widget _buildTeamSection(String teamName, List<String> players) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildTeamTitle(teamName),
+        _buildPlayerList(players),
+      ],
+    );
+  }
+
+  // Helper function to build the title for each team section.
+  Widget _buildTeamTitle(String teamName) {
+    return Text(
+      teamName,
+      style: const TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: CupertinoColors.systemYellow, // Adjust color if necessary
+      ),
+    );
+  }
+
+  // Helper function to create the list of players in the team.
+  Widget _buildPlayerList(List<String> players) {
+    return Wrap(
+      spacing: 8.0, // Horizontal space between items
+      runSpacing: 8.0, // Vertical space between items
+      children: players.map((player) {
+        return Chip(
+          label: Text(
+            player,
+            style: TextStyle(
+              color: CupertinoColors.systemYellow,
+              fontSize: 18,// Change player names to yellow
+            ),
+          ),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+          ),
+          side: BorderSide.none,
+          padding: EdgeInsets.zero,
+          elevation: 0,
+        );
+      }).toList(),
+    );
+  }
+}
+
+class CODPlayersList extends StatefulWidget {
+  const CODPlayersList({super.key});
+
+  @override
+  CODPlayersListState createState() => CODPlayersListState();
+}
+
+class CODPlayersListState extends State<CODPlayersList> {
+  List<String> mainTeamPlayers = [];
+  List<String> academyTeamPlayers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPlayers();
+  }
+
+  Future<void> fetchPlayers() async {
+    const String apiUrl = 'http://www.ckk312.xyz:5000/api/searchplayers';
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: jsonEncode({
+          'query': 'Call Knights',
+          'userId': 1,
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final decodedData = json.decode(response.body);
+        final List<dynamic> results = decodedData['result'];
+
+        setState(() {
+          // Filter players based on TeamAffiliation explicitly for League of Legends teams
+          mainTeamPlayers = results
+              .where((player) =>
+          player['item']['TeamAffiliation'] == 'Knights' &&
+              player['item']['Game'] == 'Call of Duty') // Add filtering for the correct game
+              .map<String>((player) => player['item']['Username'])
+              .toList();
+
+          academyTeamPlayers = results
+              .where((player) =>
+          player['item']['TeamAffiliation'] == 'Knights Academy' &&
+              player['item']['Game'] == 'Call of Duty') // Add filtering for the correct game
+              .map<String>((player) => player['item']['Username'])
+              .toList();
+        });
+      } else {
+        setState(() {
+          mainTeamPlayers = [];
+          academyTeamPlayers = [];
+        });
+      }
+    } catch (e) {
+      setState(() {
+        mainTeamPlayers = [];
+        academyTeamPlayers = [];
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Call of Duty'),
+      ),
+      body: mainTeamPlayers.isEmpty && academyTeamPlayers.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildTeamSection('Knights', mainTeamPlayers), // Top-left
+            const SizedBox(height: 75),
+            _buildTeamSection('Knights Academy', academyTeamPlayers), // Bottom-left
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Helper function to build the team section with a title and a list of players.
+  Widget _buildTeamSection(String teamName, List<String> players) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildTeamTitle(teamName),
+        _buildPlayerList(players),
+      ],
+    );
+  }
+
+  // Helper function to build the title for each team section.
+  Widget _buildTeamTitle(String teamName) {
+    return Text(
+      teamName,
+      style: const TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: CupertinoColors.systemYellow, // Adjust color if necessary
+      ),
+    );
+  }
+
+  // Helper function to create the list of players in the team.
+  Widget _buildPlayerList(List<String> players) {
+    return Wrap(
+      spacing: 8.0, // Horizontal space between items
+      runSpacing: 8.0, // Vertical space between items
+      children: players.map((player) {
+        return Chip(
+          label: Text(
+            player,
+            style: TextStyle(
+              color: CupertinoColors.systemYellow,
+              fontSize: 18,// Change player names to yellow
+            ),
+          ),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+          ),
+          side: BorderSide.none,
+          padding: EdgeInsets.zero,
+          elevation: 0,
+        );
+      }).toList(),
+    );
+  }
+}
+
+class SmashPlayersList extends StatefulWidget {
+  const SmashPlayersList({super.key});
+
+  @override
+  SmashPlayersListState createState() => SmashPlayersListState();
+}
+
+class SmashPlayersListState extends State<SmashPlayersList> {
+  List<String> mainTeamPlayers = [];
+  List<String> academyTeamPlayers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPlayers();
+  }
+
+  Future<void> fetchPlayers() async {
+    const String apiUrl = 'http://www.ckk312.xyz:5000/api/searchplayers';
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: jsonEncode({
+          'query': 'Smash Bros Ultimate Knights',
+          'userId': 1,
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final decodedData = json.decode(response.body);
+        final List<dynamic> results = decodedData['result'];
+
+        setState(() {
+          // Filter players based on TeamAffiliation explicitly for League of Legends teams
+          mainTeamPlayers = results
+              .where((player) =>
+          player['item']['TeamAffiliation'] == 'Knights' &&
+              player['item']['Game'] == 'Smash Bros Ultimate') // Add filtering for the correct game
+              .map<String>((player) => player['item']['Username'])
+              .toList();
+
+          academyTeamPlayers = results
+              .where((player) =>
+          player['item']['TeamAffiliation'] == 'Knights Academy' &&
+              player['item']['Game'] == 'Smash Bros Ultimate') // Add filtering for the correct game
+              .map<String>((player) => player['item']['Username'])
+              .toList();
+        });
+      } else {
+        setState(() {
+          mainTeamPlayers = [];
+          academyTeamPlayers = [];
+        });
+      }
+    } catch (e) {
+      setState(() {
+        mainTeamPlayers = [];
+        academyTeamPlayers = [];
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Smash Ultimate'),
+      ),
+      body: mainTeamPlayers.isEmpty && academyTeamPlayers.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if(mainTeamPlayers.isNotEmpty)
+              _buildTeamSection('Knights', mainTeamPlayers), // Top-left
+            const SizedBox(height: 75),
+            if(academyTeamPlayers.isNotEmpty)
+              _buildTeamSection('Knights Academy', academyTeamPlayers), // Bottom-left
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Helper function to build the team section with a title and a list of players.
+  Widget _buildTeamSection(String teamName, List<String> players) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildTeamTitle(teamName),
+        _buildPlayerList(players),
+      ],
+    );
+  }
+
+  // Helper function to build the title for each team section.
+  Widget _buildTeamTitle(String teamName) {
+    return Text(
+      teamName,
+      style: const TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: CupertinoColors.systemYellow, // Adjust color if necessary
+      ),
+    );
+  }
+
+  // Helper function to create the list of players in the team.
+  Widget _buildPlayerList(List<String> players) {
+    return Wrap(
+      spacing: 8.0, // Horizontal space between items
+      runSpacing: 8.0, // Vertical space between items
+      children: players.map((player) {
+        return Chip(
+          label: Text(
+            player,
+            style: TextStyle(
+              color: CupertinoColors.systemYellow,
+              fontSize: 18,// Change player names to yellow
+            ),
+          ),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+          ),
+          side: BorderSide.none,
+          padding: EdgeInsets.zero,
+          elevation: 0,
+        );
+      }).toList(),
+    );
+  }
+}
+
+class SplatoonPlayersList extends StatefulWidget {
+  const SplatoonPlayersList({super.key});
+
+  @override
+  SplatoonPlayersListState createState() => SplatoonPlayersListState();
+}
+
+class SplatoonPlayersListState extends State<SplatoonPlayersList> {
+  List<String> mainTeamPlayers = [];
+  List<String> academyTeamPlayers = [];
+  List<String> risingTeamPlayers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPlayers();
+  }
+
+  Future<void> fetchPlayers() async {
+    const String apiUrl = 'http://www.ckk312.xyz:5000/api/searchplayers';
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: jsonEncode({
+          'query': 'Splatoon Knights',
+          'userId': 1,
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final decodedData = json.decode(response.body);
+        final List<dynamic> results = decodedData['result'];
+
+        setState(() {
+          // Filter players based on TeamAffiliation explicitly for League of Legends teams
+          mainTeamPlayers = results
+              .where((player) =>
+          player['item']['TeamAffiliation'] == 'Knights' &&
+              player['item']['Game'] == 'Splatoon') // Add filtering for the correct game
+              .map<String>((player) => player['item']['Username'])
+              .toList();
+
+          academyTeamPlayers = results
+              .where((player) =>
+          player['item']['TeamAffiliation'] == 'Knights Academy' &&
+              player['item']['Game'] == 'Splatoon') // Add filtering for the correct game
+              .map<String>((player) => player['item']['Username'])
+              .toList();
+
+          risingTeamPlayers = results
+              .where((player) =>
+          player['item']['TeamAffiliation'] == 'Knights Rising' &&
+              player['item']['Game'] == 'Splatoon') // Add filtering for the correct game
+              .map<String>((player) => player['item']['Username'])
+              .toList();
+        });
+      } else {
+        setState(() {
+          mainTeamPlayers = [];
+          academyTeamPlayers = [];
+          risingTeamPlayers = [];
+        });
+      }
+    } catch (e) {
+      setState(() {
+        mainTeamPlayers = [];
+        academyTeamPlayers = [];
+        risingTeamPlayers = [];
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Splatoon'),
+      ),
+      body: mainTeamPlayers.isEmpty && academyTeamPlayers.isEmpty && risingTeamPlayers.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if(mainTeamPlayers.isNotEmpty)
+              _buildTeamSection('Knights', mainTeamPlayers), // Top-left
+            const SizedBox(height: 75),
+            if(academyTeamPlayers.isNotEmpty)
+              _buildTeamSection('Knights Academy', academyTeamPlayers),
+            const SizedBox(height: 75),
+            if(risingTeamPlayers.isNotEmpty)
+              _buildTeamSection('Knights Rising', risingTeamPlayers),// Bottom-left
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Helper function to build the team section with a title and a list of players.
+  Widget _buildTeamSection(String teamName, List<String> players) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildTeamTitle(teamName),
+        _buildPlayerList(players),
+      ],
+    );
+  }
+
+  // Helper function to build the title for each team section.
+  Widget _buildTeamTitle(String teamName) {
+    return Text(
+      teamName,
+      style: const TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: CupertinoColors.systemYellow, // Adjust color if necessary
+      ),
+    );
+  }
+
+  // Helper function to create the list of players in the team.
+  Widget _buildPlayerList(List<String> players) {
+    return Wrap(
+      spacing: 8.0, // Horizontal space between items
+      runSpacing: 8.0, // Vertical space between items
+      children: players.map((player) {
+        return Chip(
+          label: Text(
+            player,
+            style: TextStyle(
+              color: CupertinoColors.systemYellow,
+              fontSize: 18,// Change player names to yellow
+            ),
+          ),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+          ),
+          side: BorderSide.none,
+          padding: EdgeInsets.zero,
+          elevation: 0,
+        );
+      }).toList(),
+    );
+  }
+}
 
 class PasswordTextInputFormatter extends TextInputFormatter {
   @override
