@@ -5,5 +5,5 @@ const nodecg = nodecgApiContext.get();
 const flavortext = nodecg.Replicant<BreakFlavorText>('breakFlavorText');
 
 nodecg.listenFor('updateFlavorText', (text : string) => {
-        flavortext.value = text;
+        flavortext!.value = text;
 });

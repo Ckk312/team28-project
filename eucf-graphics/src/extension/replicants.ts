@@ -40,15 +40,29 @@ nodecg.Replicant<CasterInfo>('casterInfo', {
         }
 });
 
-const matchteams: [TeamInfo, TeamInfo] = 
-        [{ teamName: "", numOfPlayers: 0, players: [] },
-         { teamName: "", numOfPlayers: 0, players: [] }];
 nodecg.Replicant<MatchInfo>('matchInfo', {
         defaultValue:
         {
                 gamePlayed: "",
                 maps: [],
-                teams: matchteams,
+                teams: [
+                        {
+                                teamName: "Example Team",
+                                players: [
+                                        {
+                                                username: "Example Playerh"
+                                        }
+                                ]
+                        },
+                        {
+                                teamName: "Example Team",
+                                players: [
+                                        {
+                                                username: "Example Player"
+                                        }
+                                ]
+                        }
+                ],
                 score: {
                         teamAScore: 0,
                         teamBScore: 0

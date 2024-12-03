@@ -6,7 +6,7 @@ module.exports = (nodecg: NodeCG.ServerAPI) => {
 
 	require('./replicants');
 	require('./breaktext');
-	require('./matches');
+	require('./matchinfo');
 	require('./players');
 	require('./scene');
 	require('./teams');

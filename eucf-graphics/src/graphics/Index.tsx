@@ -3,7 +3,7 @@ import React from 'react';
 import { MatchInfo } from '../types/schemas';
 
 export function Index() {
-	const [scene] = useReplicant('scene');
+	const [scene] = useReplicant<number>('scene');
 
 	return(
 		<>
@@ -24,7 +24,7 @@ function ChooseScene(props: any) {
 }
 
 function BRB() {
-	const [text] = useReplicant('breakFlavorText');
+	const [text] = useReplicant<string>('breakFlavorText');
 
 	return (
 		<>
@@ -47,11 +47,9 @@ function MapsTeams() {
 					</div>
 					<div className="player-list-box">
 					<ul className="player-list">
-						{ match?.teams[0].players.map((player) => {
+						{ match?.teams[0].players.map((player, index) => {
 							return (
-								<>
-									<p className="player-text">{ player.username }</p>
-								</>
+								<p className="player-text" key={ index }>{ match?.teams[0].players[index].username }</p>
 							)
 						}) }
 						</ul>
@@ -66,11 +64,9 @@ function MapsTeams() {
 					</div>
 					<div className="player-list-box">
 						<ul className="player-list">
-						{ (match as unknown as MatchInfo | undefined)?.teams[1].players.map((player) => {
+						{ match?.teams[1].players.map((player, index) => {
 							return (
-								<>
-									<p className="player-text">{ player.username }</p>
-								</>
+								<p className="player-text" key={ index }>{ player.username }</p>
 							)
 						}) }
 						</ul>
