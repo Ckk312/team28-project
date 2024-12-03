@@ -30,7 +30,8 @@ class MyApp extends StatelessWidget {
 }
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final String ? prefilledEmailLogin;
+  const LoginPage({super.key, this.prefilledEmailLogin});
 
   @override
   LoginPageState createState() => LoginPageState();
@@ -100,6 +101,15 @@ class LoginPageState extends State<LoginPage> {
             backgroundColor: Colors.redAccent,
           )
       );
+    }
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    if(widget.prefilledEmailLogin != null)
+    {
+      _userLoginController.text = widget.prefilledEmailLogin!;
     }
   }
 
@@ -243,8 +253,8 @@ class LoginPageState extends State<LoginPage> {
 
 class RegisterPage extends StatefulWidget {
 
-  final String ? prefilledEmail;
-  const RegisterPage({super.key, this.prefilledEmail});
+  final String ? prefilledEmailRegister;
+  const RegisterPage({super.key, this.prefilledEmailRegister});
 
   @override
   RegisterPageState createState() => RegisterPageState();
@@ -297,9 +307,20 @@ class RegisterPageState extends State<RegisterPage> {
 
       if (response.statusCode == 200) {
         // Navigate to the next screen if registration is successful
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Account has been made successfully',
+              style: TextStyle(
+                  color: CupertinoColors.black
+              ),
+            ),
+            backgroundColor: Colors.greenAccent,
+          ),
+        );
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const LoginPage()),
+          MaterialPageRoute(builder: (context) => LoginPage(prefilledEmailLogin: _emailController.text,)),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -323,9 +344,9 @@ class RegisterPageState extends State<RegisterPage> {
   @override
   void initState(){
     super.initState();
-    if(widget.prefilledEmail != null)
+    if(widget.prefilledEmailRegister != null)
       {
-        _emailController.text = widget.prefilledEmail!;
+        _emailController.text = widget.prefilledEmailRegister!;
       }
   }
 
@@ -825,7 +846,7 @@ class ForgotPageState extends State<ForgotPage> {
                   onPressed: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => RegisterPage(prefilledEmail: _emailController.text,)),
+                      MaterialPageRoute(builder: (context) => RegisterPage(prefilledEmailRegister: _emailController.text,)),
                     );
                   },
                 ),
