@@ -21,7 +21,7 @@ export async function forgotpass(req: Request, res: Response, next: Function) : 
         const tokenExpiration = Date.now() + 3600000;
         database.collection('Users').updateOne({ Login: email }, { $set: { ResetToken: token, TokenExpiry: tokenExpiration } });
 
-        const url : string = `http://ckk312.xyz:5000/resetpass/${token}`;
+        const url : string = `http://www.ckk312.xyz:5000/resetpass/${token}`;
 
         await sendMail(email, 'Password Reset', `Click the link to reset your password: ${url}`);
 
