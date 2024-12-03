@@ -319,6 +319,7 @@ class RegisterPageState extends State<RegisterPage> {
       );
     }
   }
+
   @override
   void initState(){
     super.initState();
@@ -515,7 +516,7 @@ class TitlePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => LeaguePlayersList())
+                    MaterialPageRoute(builder: (context) => SelectPlayersList(gameSelect: 'League of Legends'))
                 );
               },
               child: Column(
@@ -546,7 +547,7 @@ class TitlePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => RainbowPlayersList())
+                    MaterialPageRoute(builder: (context) => SelectPlayersList(gameSelect: 'Rainbow Six Siege'))
                 );
               },
               child: Column(
@@ -576,7 +577,7 @@ class TitlePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => OverwatchPlayersList())
+                    MaterialPageRoute(builder: (context) => SelectPlayersList(gameSelect: 'Overwatch 2'))
                 );
               },
               child: Column(
@@ -606,7 +607,7 @@ class TitlePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ValorantPlayersList())
+                    MaterialPageRoute(builder: (context) => SelectPlayersList(gameSelect: 'Valorant'))
                 );
               },
               child: Column(
@@ -636,7 +637,7 @@ class TitlePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ApexPlayersList())
+                    MaterialPageRoute(builder: (context) => SelectPlayersList(gameSelect: 'Apex Legends'))
                 );
               },
               child: Column(
@@ -665,7 +666,7 @@ class TitlePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => CODPlayersList())
+                    MaterialPageRoute(builder: (context) => SelectPlayersList(gameSelect: 'Call of Duty'))
                 );
               },
               child: Column(
@@ -694,7 +695,7 @@ class TitlePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SmashPlayersList())
+                    MaterialPageRoute(builder: (context) => SelectPlayersList(gameSelect: 'Smash Bros Ultimate'))
                 );
               },
               child: Column(
@@ -723,7 +724,7 @@ class TitlePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SplatoonPlayersList())
+                    MaterialPageRoute(builder: (context) => SelectPlayersList(gameSelect: 'Splatoon'))
                 );
               },
               child: Column(
@@ -931,561 +932,15 @@ class ForgotPageState extends State<ForgotPage> {
   }
 }
 
-class ApexPlayersList extends StatefulWidget {
-  const ApexPlayersList({super.key});
+class SelectPlayersList extends StatefulWidget {
+  final String ? gameSelect;
+  const SelectPlayersList({super.key, this.gameSelect});
 
   @override
-  ApexPlayersListState createState() => ApexPlayersListState();
+  SelectPlayersListState createState() => SelectPlayersListState();
 }
 
-class ApexPlayersListState extends State<ApexPlayersList> {
-  List<String> mainTeamPlayers = [];
-  List<String> academyTeamPlayers = [];
-
-  @override
-  void initState() {
-    super.initState();
-    fetchPlayers();
-  }
-
-  Future<void> fetchPlayers() async {
-    const String apiUrl = 'http://www.ckk312.xyz:5000/api/searchplayers';
-    try {
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        body: jsonEncode({
-          'query': 'Apex Legends Knights',
-          'userId': 1,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final decodedData = json.decode(response.body);
-        final List<dynamic> results = decodedData['result'];
-
-        setState(() {
-          // Filter players based on TeamAffiliation explicitly for League of Legends teams
-          mainTeamPlayers = results
-              .where((player) =>
-          player['item']['TeamAffiliation'] == 'Knights' &&
-              player['item']['Game'] == 'Apex Legends') // Add filtering for the correct game
-              .map<String>((player) => player['item']['Username'])
-              .toList();
-
-          academyTeamPlayers = results
-              .where((player) =>
-          player['item']['TeamAffiliation'] == 'Knights Academy' &&
-              player['item']['Game'] == 'Apex Legends') // Add filtering for the correct game
-              .map<String>((player) => player['item']['Username'])
-              .toList();
-        });
-      } else {
-        setState(() {
-          mainTeamPlayers = [];
-          academyTeamPlayers = [];
-        });
-      }
-    } catch (e) {
-      setState(() {
-        mainTeamPlayers = [];
-        academyTeamPlayers = [];
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Apex Legends'),
-      ),
-      body: mainTeamPlayers.isEmpty && academyTeamPlayers.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildTeamSection('Knights', mainTeamPlayers), // Top-left
-            const SizedBox(height: 75),
-            _buildTeamSection('Knights Academy', academyTeamPlayers), // Bottom-left
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Helper function to build the team section with a title and a list of players.
-  Widget _buildTeamSection(String teamName, List<String> players) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildTeamTitle(teamName),
-        _buildPlayerList(players),
-      ],
-    );
-  }
-
-  // Helper function to build the title for each team section.
-  Widget _buildTeamTitle(String teamName) {
-    return Text(
-      teamName,
-      style: const TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
-        color: CupertinoColors.systemYellow, // Adjust color if necessary
-      ),
-    );
-  }
-
-  // Helper function to create the list of players in the team.
-  Widget _buildPlayerList(List<String> players) {
-    return Wrap(
-      spacing: 8.0, // Horizontal space between items
-      runSpacing: 8.0, // Vertical space between items
-      children: players.map((player) {
-        return Chip(
-          label: Text(
-            player,
-            style: TextStyle(
-              color: CupertinoColors.systemYellow,
-              fontSize: 18,// Change player names to yellow
-            ),
-          ),
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-          ),
-          side: BorderSide.none,
-          padding: EdgeInsets.zero,
-          elevation: 0,
-        );
-      }).toList(),
-    );
-  }
-}
-
-class LeaguePlayersList extends StatefulWidget {
-  const LeaguePlayersList({super.key});
-
-  @override
-  LeaguePlayersListState createState() => LeaguePlayersListState();
-}
-
-class LeaguePlayersListState extends State<LeaguePlayersList> {
-  List<String> mainTeamPlayers = [];
-  List<String> academyTeamPlayers = [];
-
-  @override
-  void initState() {
-    super.initState();
-    fetchPlayers();
-  }
-
-  Future<void> fetchPlayers() async {
-    const String apiUrl = 'http://www.ckk312.xyz:5000/api/searchplayers';
-    try {
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        body: jsonEncode({
-          'query': 'League of Legends Knights', // Ensure the query is correct
-          'userId': 1,
-        }),
-        headers: {'Content-Type': 'application/json'},
-      );
-
-      if (response.statusCode == 200) {
-        final decodedData = json.decode(response.body);
-        final List<dynamic> results = decodedData['result'];
-
-        setState(() {
-          // Filter players based on TeamAffiliation explicitly for League of Legends teams
-          mainTeamPlayers = results
-              .where((player) =>
-          player['item']['TeamAffiliation'] == 'Knights' &&
-              player['item']['Game'] == 'League of Legends') // Add filtering for the correct game
-              .map<String>((player) => player['item']['Username'])
-              .toList();
-
-          academyTeamPlayers = results
-              .where((player) =>
-          player['item']['TeamAffiliation'] == 'Knights Academy' &&
-              player['item']['Game'] == 'League of Legends') // Add filtering for the correct game
-              .map<String>((player) => player['item']['Username'])
-              .toList();
-        });
-      } else {
-        setState(() {
-          mainTeamPlayers = [];
-          academyTeamPlayers = [];
-        });
-      }
-    } catch (e) {
-      setState(() {
-        mainTeamPlayers = [];
-        academyTeamPlayers = [];
-      });
-    }
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('League of Legends'),
-      ),
-      body: mainTeamPlayers.isEmpty && academyTeamPlayers.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildTeamSection('Knights', mainTeamPlayers), // Top-left
-            const SizedBox(height: 75),
-            _buildTeamSection('Knights Academy', academyTeamPlayers), // Bottom-left
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Helper function to build the team section with a title and a list of players.
-  Widget _buildTeamSection(String teamName, List<String> players) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildTeamTitle(teamName),
-        _buildPlayerList(players),
-      ],
-    );
-  }
-
-  // Helper function to build the title for each team section.
-  Widget _buildTeamTitle(String teamName) {
-    return Text(
-      teamName,
-      style: const TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
-        color: CupertinoColors.systemYellow, // Adjust color if necessary
-      ),
-    );
-  }
-
-  // Helper function to create the list of players in the team.
-  Widget _buildPlayerList(List<String> players) {
-    return Wrap(
-      spacing: 8.0, // Horizontal space between items
-      runSpacing: 8.0, // Vertical space between items
-      children: players.map((player) {
-        return Chip(
-          label: Text(
-            player,
-            style: TextStyle(
-              color: CupertinoColors.systemYellow,
-              fontSize: 18,// Change player names to yellow
-            ),
-          ),
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-          ),
-          side: BorderSide.none,
-          padding: EdgeInsets.zero,
-          elevation: 0,
-        );
-      }).toList(),
-    );
-  }
-}
-
-class RainbowPlayersList extends StatefulWidget {
-  const RainbowPlayersList({super.key});
-
-  @override
-  RainbowPlayersListState createState() => RainbowPlayersListState();
-}
-
-class RainbowPlayersListState extends State<RainbowPlayersList> {
-  List<String> mainTeamPlayers = [];
-  List<String> academyTeamPlayers = [];
-
-  @override
-  void initState() {
-    super.initState();
-    fetchPlayers();
-  }
-
-  Future<void> fetchPlayers() async {
-    const String apiUrl = 'http://www.ckk312.xyz:5000/api/searchplayers';
-    try {
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        body: jsonEncode({
-          'query': 'Rainbow Six Siege Knights',
-          'userId': 1,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final decodedData = json.decode(response.body);
-        final List<dynamic> results = decodedData['result'];
-
-        setState(() {
-          // Filter players based on TeamAffiliation explicitly for League of Legends teams
-          mainTeamPlayers = results
-              .where((player) =>
-          player['item']['TeamAffiliation'] == 'Knights' &&
-              player['item']['Game'] == 'Rainbow Six Siege') // Add filtering for the correct game
-              .map<String>((player) => player['item']['Username'])
-              .toList();
-
-          academyTeamPlayers = results
-              .where((player) =>
-          player['item']['TeamAffiliation'] == 'Knights Academy' &&
-              player['item']['Game'] == 'Rainbow Six Siege') // Add filtering for the correct game
-              .map<String>((player) => player['item']['Username'])
-              .toList();
-        });
-      } else {
-        setState(() {
-          mainTeamPlayers = [];
-          academyTeamPlayers = [];
-        });
-      }
-    } catch (e) {
-      setState(() {
-        mainTeamPlayers = [];
-        academyTeamPlayers = [];
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Rainbow Six'),
-      ),
-      body: mainTeamPlayers.isEmpty && academyTeamPlayers.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildTeamSection('Knights', mainTeamPlayers), // Top-left
-            const SizedBox(height: 75),
-            _buildTeamSection('Knights Academy', academyTeamPlayers), // Bottom-left
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Helper function to build the team section with a title and a list of players.
-  Widget _buildTeamSection(String teamName, List<String> players) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildTeamTitle(teamName),
-        _buildPlayerList(players),
-      ],
-    );
-  }
-
-  // Helper function to build the title for each team section.
-  Widget _buildTeamTitle(String teamName) {
-    return Text(
-      teamName,
-      style: const TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
-        color: CupertinoColors.systemYellow, // Adjust color if necessary
-      ),
-    );
-  }
-
-  // Helper function to create the list of players in the team.
-  Widget _buildPlayerList(List<String> players) {
-    return Wrap(
-      spacing: 8.0, // Horizontal space between items
-      runSpacing: 8.0, // Vertical space between items
-      children: players.map((player) {
-        return Chip(
-          label: Text(
-            player,
-            style: TextStyle(
-              color: CupertinoColors.systemYellow,
-              fontSize: 18,// Change player names to yellow
-            ),
-          ),
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-          ),
-          side: BorderSide.none,
-          padding: EdgeInsets.zero,
-          elevation: 0,
-        );
-      }).toList(),
-    );
-  }
-}
-
-class OverwatchPlayersList extends StatefulWidget {
-  const OverwatchPlayersList({super.key});
-
-  @override
-  OverwatchPlayersListState createState() => OverwatchPlayersListState();
-}
-
-class OverwatchPlayersListState extends State<OverwatchPlayersList> {
-  List<String> mainTeamPlayers = [];
-  List<String> academyTeamPlayers = [];
-
-  @override
-  void initState() {
-    super.initState();
-    fetchPlayers();
-  }
-
-  Future<void> fetchPlayers() async {
-    const String apiUrl = 'http://www.ckk312.xyz:5000/api/searchplayers';
-    try {
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        body: jsonEncode({
-          'query': 'Overwatch Knights',
-          'userId': 1,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final decodedData = json.decode(response.body);
-        final List<dynamic> results = decodedData['result'];
-
-        setState(() {
-          // Filter players based on TeamAffiliation explicitly for League of Legends teams
-          mainTeamPlayers = results
-              .where((player) =>
-          player['item']['TeamAffiliation'] == 'Knights' &&
-              player['item']['Game'] == 'Overwatch 2') // Add filtering for the correct game
-              .map<String>((player) => player['item']['Username'])
-              .toList();
-
-          academyTeamPlayers = results
-              .where((player) =>
-          player['item']['TeamAffiliation'] == 'Knights Academy' &&
-              player['item']['Game'] == 'Overwatch 2') // Add filtering for the correct game
-              .map<String>((player) => player['item']['Username'])
-              .toList();
-        });
-      } else {
-        setState(() {
-          mainTeamPlayers = [];
-          academyTeamPlayers = [];
-        });
-      }
-    } catch (e) {
-      setState(() {
-        mainTeamPlayers = [];
-        academyTeamPlayers = [];
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Overwatch 2'),
-      ),
-      body: mainTeamPlayers.isEmpty && academyTeamPlayers.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildTeamSection('Knights', mainTeamPlayers), // Top-left
-            const SizedBox(height: 75),
-            _buildTeamSection('Knights Academy', academyTeamPlayers), // Bottom-left
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Helper function to build the team section with a title and a list of players.
-  Widget _buildTeamSection(String teamName, List<String> players) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildTeamTitle(teamName),
-        _buildPlayerList(players),
-      ],
-    );
-  }
-
-  // Helper function to build the title for each team section.
-  Widget _buildTeamTitle(String teamName) {
-    return Text(
-      teamName,
-      style: const TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
-        color: CupertinoColors.systemYellow, // Adjust color if necessary
-      ),
-    );
-  }
-
-  // Helper function to create the list of players in the team.
-  Widget _buildPlayerList(List<String> players) {
-    return Wrap(
-      spacing: 8.0, // Horizontal space between items
-      runSpacing: 8.0, // Vertical space between items
-      children: players.map((player) {
-        return Chip(
-          label: Text(
-            player,
-            style: TextStyle(
-              fontSize: 18,
-              color: CupertinoColors.systemYellow, // Change player names to yellow
-            ),
-          ),
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-          ),
-          side: BorderSide.none,
-          padding: EdgeInsets.zero,
-          elevation: 0,
-        );
-      }).toList(),
-    );
-  }
-}
-
-class ValorantPlayersList extends StatefulWidget {
-  const ValorantPlayersList({super.key});
-
-  @override
-  ValorantPlayersListState createState() => ValorantPlayersListState();
-}
-
-class ValorantPlayersListState extends State<ValorantPlayersList> {
+class SelectPlayersListState extends State<SelectPlayersList> {
   List<String> mainTeamPlayers = [];
   List<String> academyTeamPlayers = [];
   List<String> risingTeamPlayers = [];
@@ -1503,7 +958,7 @@ class ValorantPlayersListState extends State<ValorantPlayersList> {
       final response = await http.post(
         Uri.parse(apiUrl),
         body: jsonEncode({
-          'query': 'Valorant Knights',
+          'query': '${widget.gameSelect!} Knights',
           'userId': 1,
         }),
         headers: {
@@ -1520,28 +975,28 @@ class ValorantPlayersListState extends State<ValorantPlayersList> {
           mainTeamPlayers = results
               .where((player) =>
           player['item']['TeamAffiliation'] == 'Knights' &&
-              player['item']['Game'] == 'Valorant') // Add filtering for the correct game
+              player['item']['Game'] == widget.gameSelect!) // Add filtering for the correct game
               .map<String>((player) => player['item']['Username'])
               .toList();
 
           academyTeamPlayers = results
               .where((player) =>
           player['item']['TeamAffiliation'] == 'Knights Academy' &&
-              player['item']['Game'] == 'Valorant') // Add filtering for the correct game
+              player['item']['Game'] == widget.gameSelect!) // Add filtering for the correct game
               .map<String>((player) => player['item']['Username'])
               .toList();
 
           risingTeamPlayers = results
               .where((player) =>
           player['item']['TeamAffiliation'] == 'Knights Rising' &&
-              player['item']['Game'] == 'Valorant') // Add filtering for the correct game
+              player['item']['Game'] == widget.gameSelect!) // Add filtering for the correct game
               .map<String>((player) => player['item']['Username'])
               .toList();
 
           pinkTeamPlayers = results
               .where((player) =>
           player['item']['TeamAffiliation'] == 'Knights Pink' &&
-              player['item']['Game'] == 'Valorant') // Add filtering for the correct game
+              player['item']['Game'] == widget.gameSelect!) // Add filtering for the correct game
               .map<String>((player) => player['item']['Username'])
               .toList();
         });
@@ -1567,7 +1022,7 @@ class ValorantPlayersListState extends State<ValorantPlayersList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Valorant'),
+        title: Text(widget.gameSelect!),
       ),
       body: mainTeamPlayers.isEmpty && academyTeamPlayers.isEmpty && risingTeamPlayers.isEmpty && pinkTeamPlayers.isEmpty
           ? const Center(child: CircularProgressIndicator())
@@ -1586,435 +1041,7 @@ class ValorantPlayersListState extends State<ValorantPlayersList> {
               _buildTeamSection('Knights Rising', risingTeamPlayers),
             const SizedBox(height: 75),
             if(pinkTeamPlayers.isNotEmpty)
-              _buildTeamSection('Knights Pink', pinkTeamPlayers),// Bottom-left
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Helper function to build the team section with a title and a list of players.
-  Widget _buildTeamSection(String teamName, List<String> players) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildTeamTitle(teamName),
-        _buildPlayerList(players),
-      ],
-    );
-  }
-
-  // Helper function to build the title for each team section.
-  Widget _buildTeamTitle(String teamName) {
-    return Text(
-      teamName,
-      style: const TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
-        color: CupertinoColors.systemYellow, // Adjust color if necessary
-      ),
-    );
-  }
-
-  // Helper function to create the list of players in the team.
-  Widget _buildPlayerList(List<String> players) {
-    return Wrap(
-      spacing: 8.0, // Horizontal space between items
-      runSpacing: 8.0, // Vertical space between items
-      children: players.map((player) {
-        return Chip(
-          label: Text(
-            player,
-            style: TextStyle(
-              color: CupertinoColors.systemYellow,
-              fontSize: 18,// Change player names to yellow
-            ),
-          ),
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-          ),
-          side: BorderSide.none,
-          padding: EdgeInsets.zero,
-          elevation: 0,
-        );
-      }).toList(),
-    );
-  }
-}
-
-class CODPlayersList extends StatefulWidget {
-  const CODPlayersList({super.key});
-
-  @override
-  CODPlayersListState createState() => CODPlayersListState();
-}
-
-class CODPlayersListState extends State<CODPlayersList> {
-  List<String> mainTeamPlayers = [];
-  List<String> academyTeamPlayers = [];
-
-  @override
-  void initState() {
-    super.initState();
-    fetchPlayers();
-  }
-
-  Future<void> fetchPlayers() async {
-    const String apiUrl = 'http://www.ckk312.xyz:5000/api/searchplayers';
-    try {
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        body: jsonEncode({
-          'query': 'Call Knights',
-          'userId': 1,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final decodedData = json.decode(response.body);
-        final List<dynamic> results = decodedData['result'];
-
-        setState(() {
-          // Filter players based on TeamAffiliation explicitly for League of Legends teams
-          mainTeamPlayers = results
-              .where((player) =>
-          player['item']['TeamAffiliation'] == 'Knights' &&
-              player['item']['Game'] == 'Call of Duty') // Add filtering for the correct game
-              .map<String>((player) => player['item']['Username'])
-              .toList();
-
-          academyTeamPlayers = results
-              .where((player) =>
-          player['item']['TeamAffiliation'] == 'Knights Academy' &&
-              player['item']['Game'] == 'Call of Duty') // Add filtering for the correct game
-              .map<String>((player) => player['item']['Username'])
-              .toList();
-        });
-      } else {
-        setState(() {
-          mainTeamPlayers = [];
-          academyTeamPlayers = [];
-        });
-      }
-    } catch (e) {
-      setState(() {
-        mainTeamPlayers = [];
-        academyTeamPlayers = [];
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Call of Duty'),
-      ),
-      body: mainTeamPlayers.isEmpty && academyTeamPlayers.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildTeamSection('Knights', mainTeamPlayers), // Top-left
-            const SizedBox(height: 75),
-            _buildTeamSection('Knights Academy', academyTeamPlayers), // Bottom-left
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Helper function to build the team section with a title and a list of players.
-  Widget _buildTeamSection(String teamName, List<String> players) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildTeamTitle(teamName),
-        _buildPlayerList(players),
-      ],
-    );
-  }
-
-  // Helper function to build the title for each team section.
-  Widget _buildTeamTitle(String teamName) {
-    return Text(
-      teamName,
-      style: const TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
-        color: CupertinoColors.systemYellow, // Adjust color if necessary
-      ),
-    );
-  }
-
-  // Helper function to create the list of players in the team.
-  Widget _buildPlayerList(List<String> players) {
-    return Wrap(
-      spacing: 8.0, // Horizontal space between items
-      runSpacing: 8.0, // Vertical space between items
-      children: players.map((player) {
-        return Chip(
-          label: Text(
-            player,
-            style: TextStyle(
-              color: CupertinoColors.systemYellow,
-              fontSize: 18,// Change player names to yellow
-            ),
-          ),
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-          ),
-          side: BorderSide.none,
-          padding: EdgeInsets.zero,
-          elevation: 0,
-        );
-      }).toList(),
-    );
-  }
-}
-
-class SmashPlayersList extends StatefulWidget {
-  const SmashPlayersList({super.key});
-
-  @override
-  SmashPlayersListState createState() => SmashPlayersListState();
-}
-
-class SmashPlayersListState extends State<SmashPlayersList> {
-  List<String> mainTeamPlayers = [];
-  List<String> academyTeamPlayers = [];
-
-  @override
-  void initState() {
-    super.initState();
-    fetchPlayers();
-  }
-
-  Future<void> fetchPlayers() async {
-    const String apiUrl = 'http://www.ckk312.xyz:5000/api/searchplayers';
-    try {
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        body: jsonEncode({
-          'query': 'Smash Bros Ultimate Knights',
-          'userId': 1,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final decodedData = json.decode(response.body);
-        final List<dynamic> results = decodedData['result'];
-
-        setState(() {
-          // Filter players based on TeamAffiliation explicitly for League of Legends teams
-          mainTeamPlayers = results
-              .where((player) =>
-          player['item']['TeamAffiliation'] == 'Knights' &&
-              player['item']['Game'] == 'Smash Bros Ultimate') // Add filtering for the correct game
-              .map<String>((player) => player['item']['Username'])
-              .toList();
-
-          academyTeamPlayers = results
-              .where((player) =>
-          player['item']['TeamAffiliation'] == 'Knights Academy' &&
-              player['item']['Game'] == 'Smash Bros Ultimate') // Add filtering for the correct game
-              .map<String>((player) => player['item']['Username'])
-              .toList();
-        });
-      } else {
-        setState(() {
-          mainTeamPlayers = [];
-          academyTeamPlayers = [];
-        });
-      }
-    } catch (e) {
-      setState(() {
-        mainTeamPlayers = [];
-        academyTeamPlayers = [];
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Smash Ultimate'),
-      ),
-      body: mainTeamPlayers.isEmpty && academyTeamPlayers.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if(mainTeamPlayers.isNotEmpty)
-              _buildTeamSection('Knights', mainTeamPlayers), // Top-left
-            const SizedBox(height: 75),
-            if(academyTeamPlayers.isNotEmpty)
-              _buildTeamSection('Knights Academy', academyTeamPlayers), // Bottom-left
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Helper function to build the team section with a title and a list of players.
-  Widget _buildTeamSection(String teamName, List<String> players) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildTeamTitle(teamName),
-        _buildPlayerList(players),
-      ],
-    );
-  }
-
-  // Helper function to build the title for each team section.
-  Widget _buildTeamTitle(String teamName) {
-    return Text(
-      teamName,
-      style: const TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
-        color: CupertinoColors.systemYellow, // Adjust color if necessary
-      ),
-    );
-  }
-
-  // Helper function to create the list of players in the team.
-  Widget _buildPlayerList(List<String> players) {
-    return Wrap(
-      spacing: 8.0, // Horizontal space between items
-      runSpacing: 8.0, // Vertical space between items
-      children: players.map((player) {
-        return Chip(
-          label: Text(
-            player,
-            style: TextStyle(
-              color: CupertinoColors.systemYellow,
-              fontSize: 18,// Change player names to yellow
-            ),
-          ),
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-          ),
-          side: BorderSide.none,
-          padding: EdgeInsets.zero,
-          elevation: 0,
-        );
-      }).toList(),
-    );
-  }
-}
-
-class SplatoonPlayersList extends StatefulWidget {
-  const SplatoonPlayersList({super.key});
-
-  @override
-  SplatoonPlayersListState createState() => SplatoonPlayersListState();
-}
-
-class SplatoonPlayersListState extends State<SplatoonPlayersList> {
-  List<String> mainTeamPlayers = [];
-  List<String> academyTeamPlayers = [];
-  List<String> risingTeamPlayers = [];
-
-  @override
-  void initState() {
-    super.initState();
-    fetchPlayers();
-  }
-
-  Future<void> fetchPlayers() async {
-    const String apiUrl = 'http://www.ckk312.xyz:5000/api/searchplayers';
-    try {
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        body: jsonEncode({
-          'query': 'Splatoon Knights',
-          'userId': 1,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final decodedData = json.decode(response.body);
-        final List<dynamic> results = decodedData['result'];
-
-        setState(() {
-          // Filter players based on TeamAffiliation explicitly for League of Legends teams
-          mainTeamPlayers = results
-              .where((player) =>
-          player['item']['TeamAffiliation'] == 'Knights' &&
-              player['item']['Game'] == 'Splatoon') // Add filtering for the correct game
-              .map<String>((player) => player['item']['Username'])
-              .toList();
-
-          academyTeamPlayers = results
-              .where((player) =>
-          player['item']['TeamAffiliation'] == 'Knights Academy' &&
-              player['item']['Game'] == 'Splatoon') // Add filtering for the correct game
-              .map<String>((player) => player['item']['Username'])
-              .toList();
-
-          risingTeamPlayers = results
-              .where((player) =>
-          player['item']['TeamAffiliation'] == 'Knights Rising' &&
-              player['item']['Game'] == 'Splatoon') // Add filtering for the correct game
-              .map<String>((player) => player['item']['Username'])
-              .toList();
-        });
-      } else {
-        setState(() {
-          mainTeamPlayers = [];
-          academyTeamPlayers = [];
-          risingTeamPlayers = [];
-        });
-      }
-    } catch (e) {
-      setState(() {
-        mainTeamPlayers = [];
-        academyTeamPlayers = [];
-        risingTeamPlayers = [];
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Splatoon'),
-      ),
-      body: mainTeamPlayers.isEmpty && academyTeamPlayers.isEmpty && risingTeamPlayers.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if(mainTeamPlayers.isNotEmpty)
-              _buildTeamSection('Knights', mainTeamPlayers), // Top-left
-            const SizedBox(height: 75),
-            if(academyTeamPlayers.isNotEmpty)
-              _buildTeamSection('Knights Academy', academyTeamPlayers),
-            const SizedBox(height: 75),
-            if(risingTeamPlayers.isNotEmpty)
-              _buildTeamSection('Knights Rising', risingTeamPlayers),// Bottom-left
+              _buildTeamSection('Knights Pink', pinkTeamPlayers), // Bottom-left
           ],
         ),
       ),
