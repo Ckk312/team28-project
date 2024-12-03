@@ -104,8 +104,10 @@ class LoginPageState extends State<LoginPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context){
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Center(
@@ -155,6 +157,12 @@ class LoginPageState extends State<LoginPage> {
                         filled: true,
                         fillColor: Colors.white,
                       ),
+                      validator: (value){
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your password';
+                        }
+                        return null;
+                      },
                       obscureText: true,
                       inputFormatters: [
                         PasswordTextInputFormatter()
@@ -163,40 +171,64 @@ class LoginPageState extends State<LoginPage> {
 
                     const SizedBox(height: 20),
 
-                    // Login Button
-                    ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState?.validate() == true) {
-                          loginUser();
-                        }
-                      },
-                      child: const Text('Login'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                      // Login Button
+                        SizedBox(
+                          width: 150,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.zero
+                                )
+                            ),
+                            onPressed: () {
+                              if (_formKey.currentState?.validate() == true) {
+                                loginUser();
+                              }
+                            },
+                            child: const Text('Login'),
+                          ),
+                        ),
+
+                        const SizedBox(width: 60),
+
+                        // Register Button
+                        SizedBox(
+                          width: 150,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.zero
+                              )
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const RegisterPage()),
+                              );
+                            },
+                            child: const Text('Register Here'),
+                          ),
+                        ),
+                      ]
                     ),
 
-                    const SizedBox(height: 20),
-
-                    // Register Button
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const RegisterPage()),
-                        );
-                      },
-                      child: const Text('Register Here'),
-                    ),
-
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 70),
 
                     // Forgot Button
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const ForgotPage()),
-                        );
-                      },
-                      child: const Text('Forgot Your Password?'),
+                    SizedBox(
+                      width: 198,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const ForgotPage()),
+                          );
+                        },
+                        child: const Text('Forgot Your Password?'),
+                      ),
                     ),
                   ],
                 ),
@@ -204,12 +236,15 @@ class LoginPageState extends State<LoginPage> {
             ),
           ),
         )
+      ),
     );
   }
 }
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+
+  final String ? prefilledEmail;
+  const RegisterPage({super.key, this.prefilledEmail});
 
   @override
   RegisterPageState createState() => RegisterPageState();
@@ -242,14 +277,6 @@ class RegisterPageState extends State<RegisterPage> {
     if (_passwordController.text != _confirmPasswordController.text) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Passwords do not match')),
-      );
-      return;
-    }
-
-    if (!passwordRegex.hasMatch(_passwordController.text)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('Password must meet complexity requirements')),
       );
       return;
     }
@@ -293,134 +320,160 @@ class RegisterPageState extends State<RegisterPage> {
     }
   }
   @override
+  void initState(){
+    super.initState();
+    if(widget.prefilledEmail != null)
+      {
+        _emailController.text = widget.prefilledEmail!;
+      }
+  }
+
+  @override
   Widget build(BuildContext context){
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Form(
-          key: _formKey,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // First Name Field
-                TextFormField(
-                  controller: _userControllerF,
-                  decoration: const InputDecoration(
-                    labelText: 'First Name',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: CupertinoColors.white,
+          ),
+          backgroundColor: Colors.transparent,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Form(
+            key: _formKey,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // First Name Field
+                  TextFormField(
+                    controller: _userControllerF,
+                    decoration: const InputDecoration(
+                      labelText: 'First Name',
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    inputFormatters: [
+                      NameTextInputFormatter()
+                    ],
                   ),
-                  inputFormatters: [
-                    NameTextInputFormatter()
-                  ],
-                ),
 
-                const SizedBox(height: 15),
+                  const SizedBox(height: 8),
 
-                //Last Name Field
-                TextFormField(
-                  controller: _userControllerL,
-                  decoration: const InputDecoration(
-                    labelText: 'Last Name',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
+                  //Last Name Field
+                  TextFormField(
+                    controller: _userControllerL,
+                    decoration: const InputDecoration(
+                      labelText: 'Last Name',
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    inputFormatters: [
+                      NameTextInputFormatter()
+                    ],
                   ),
-                  inputFormatters: [
-                    NameTextInputFormatter()
-                  ],
-                ),
 
-                const SizedBox(height: 15),
+                  const SizedBox(height: 8),
 
-                // Email Field
-                TextFormField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
+                  // Email Field
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    validator: (value) {
+                      if (value == null || !EmailValidator.validate(value)) {
+                        return 'Please enter a valid email';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    if (value == null || !EmailValidator.validate(value)) {
-                      return 'Please enter a valid email';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 15),
+                  const SizedBox(height: 8),
 
-                // Password Field with regex validation
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
+                  // Password Field with regex validation
+                  TextFormField(
+                    controller: _passwordController,
+                    decoration: const InputDecoration(
+                      labelText: 'Password',
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    inputFormatters: [
+                      PasswordTextInputFormatter()
+                    ],
+                    obscureText: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a password';
+                      } else if (!passwordRegex.hasMatch(value)) {
+                        return '1 Capital letter, 1 number, 1 special character, 8 characters required';
+                      }
+                      return null;
+                    },
                   ),
-                  inputFormatters: [
-                    PasswordTextInputFormatter()
-                  ],
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a password';
-                    } else if (!passwordRegex.hasMatch(value)) {
-                      return 'Password must be at least 8 characters long, contain at least 1 uppercase letter, 1 number, and 1 special character';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 15),
+                  const SizedBox(height: 8),
 
-                // Confirm Password Field
-                TextFormField(
-                  controller: _confirmPasswordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Confirm Password',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
+                  // Confirm Password Field
+                  TextFormField(
+                    controller: _confirmPasswordController,
+                    decoration: const InputDecoration(
+                      labelText: 'Confirm Password',
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    inputFormatters: [
+                      PasswordTextInputFormatter()
+                    ],
+                    obscureText: true,
+                    validator: (value) {
+                      if (value != _passwordController.text) {
+                        return 'Passwords do not match';
+                      }
+                      return null;
+                    },
                   ),
-                  inputFormatters: [
-                    PasswordTextInputFormatter()
-                  ],
-                  obscureText: true,
-                  validator: (value) {
-                    if (value != _passwordController.text) {
-                      return 'Passwords do not match';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 15),
+                  const SizedBox(height: 8),
 
-                // Register Button
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      registerUser();
-                    }
-                  },
-                  child: const Text('Register'),
-                ),
+                  // Register Button
+                  SizedBox(
+                    width: 198,
+                    child:
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          registerUser();
+                        }
+                      },
+                      child: const Text('Register'),
+                    ),
+                  ),
 
-                const SizedBox(height: 30),
+                  const SizedBox(height: 15),
 
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const LoginPage())
-                    );
-                  },
-                  child: const Text('Back to Login'),
-                ),
-              ],
+                  SizedBox(
+                    width: 198,
+                    child:
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const LoginPage())
+                        );
+                      },
+                      child: const Text('Back to Login'),
+                    ),
+                  ),
+                ],  //Children
+              ),
             ),
           ),
         ),
@@ -718,7 +771,7 @@ class ForgotPageState extends State<ForgotPage> {
   final passwordRegex = RegExp(
       r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
 
-  final apiURL = "http://www.ckk312.xyz:5000/api/forgotpass";
+  final apiForgotURL = "http://www.ckk312.xyz:5000/api/forgotpass";
 
   // Function to register user using API
 
@@ -732,7 +785,7 @@ class ForgotPageState extends State<ForgotPage> {
 
     try {
       final response = await http.post(
-        Uri.parse(apiURL),
+        Uri.parse(apiForgotURL),
         headers: {
           'Content-Type': 'application/json'
         },
@@ -744,11 +797,16 @@ class ForgotPageState extends State<ForgotPage> {
       if (response.statusCode == 200){
         final responseForgotData = jsonDecode(response.body);
         // Navigate to the next screen if registration is successful
-        if(responseForgotData['error'] == "Email has been sent with details to reset your password"){
+        if(responseForgotData == "Email sent with details to reset your password"){
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Email has been sent with details to reset your password'),
-              backgroundColor: Colors.redAccent,
+              content: Text(
+                  'Check your email for a link to reset your password.',
+                  style: TextStyle(
+                    color: CupertinoColors.black
+                  ),
+              ),
+              backgroundColor: Colors.greenAccent,
             ),
           );
           Navigator.push(
@@ -759,8 +817,24 @@ class ForgotPageState extends State<ForgotPage> {
         else{
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Email does not exist'),
-                backgroundColor: Colors.redAccent,
+                duration: Duration(seconds: 20),
+                action: SnackBarAction(
+                  textColor: CupertinoColors.white,
+                  label: 'Register',
+                  onPressed: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RegisterPage(prefilledEmail: _emailController.text,)),
+                    );
+                  },
+                ),
+                content: Text(
+                    'Email does not exist. Would you like to register one instead? Click Here',
+                    style: TextStyle(
+                      color: CupertinoColors.white,
+                    ),
+                ),
+                backgroundColor: Colors.lightBlueAccent,
               ),
           );
         }
@@ -784,43 +858,71 @@ class ForgotPageState extends State<ForgotPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: CupertinoColors.white,
+        ),
+        backgroundColor: Colors.transparent,
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Form(
-          key: _formKey,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Email Field
-                TextFormField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
-                    filled: true,
-                    fillColor: Colors.white,
+          padding: const EdgeInsets.all(8.0),
+          child: Form(
+            key: _formKey,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Email Field
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    validator: (value) {
+                      if (value == null || !EmailValidator.validate(value)) {
+                        return 'Please enter a valid email';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    if (value == null || !EmailValidator.validate(value)) {
-                      return 'Please enter a valid email';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
-                // Register Button
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      forgotUser();
-                    }
-                  },
-                  child: const Text('Reset Your Password'),
-                ),
-              ],
+                  // Register Button
+                  SizedBox(
+                    width: 198,
+                    child:
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          forgotUser();
+                        }
+                      },
+                      child: const Text('Reset Your Password'),
+                    ),
+                  ),
+
+                  const SizedBox(height: 30),
+                  SizedBox(
+                    width: 198,
+                    child:
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const LoginPage())
+                        );
+                      },
+                      child: const Text('Back to Login'),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
