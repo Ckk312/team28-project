@@ -21,7 +21,7 @@ export async function forgotpass(req: Request, res: Response, next: Function) : 
         result[0].ResetToken = token;
         result[0].TokenExpiry = Date.now() + 3600000;
 
-        const url : string = 'http://159.223.189.43:5000/reset-password/${token}';
+        const url : string = 'http://www.ckk312.xyz:5000/reset-password/${token}';
 
         await sendMail(email, 'Password Reset', 'Click the link to reset your password: ${url}');
 
