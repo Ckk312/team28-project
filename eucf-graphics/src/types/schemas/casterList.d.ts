@@ -5,6 +5,9 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
+export interface CasterList {
+	list: CasterInfo[];
+}
 export interface CasterInfo {
 	username: string;
 	pronouns?: string;

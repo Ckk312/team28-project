@@ -7,7 +7,7 @@
 		// Output related
 		"target": "es2021",
 		"outDir": "./build",
-		"module": "commonjs",
+		"module": "ESNext",
 
 		// Module resolution
 		"moduleResolution": "node",

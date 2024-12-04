@@ -1,27 +1,20 @@
 {
-	"$schema": "http://json-schema.org/draft-04/schema#",
-	"type": "object",
-	"properties": {
-		"username": {
-			"type": "string"
-		},
-		"pronouns": {
-			"type": "string"
-		},
-		"handles": {
-			"description": "Social Media Handle(s)",
-			"type": "object",
-            "properties": {
-                "twitter": {
-                    "type": "string"
-                }
-            },
-            "additionalProperties": true
-		}
-	},
-	"additionalProperties": false,
-	"required": ["username"],
-	"default": {
-		"username": "example caster"
-	}
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "username": {
+            "type": "string"
+        },
+        "pronouns": {
+            "type": "string"
+        },
+        "handle": {
+            "type": "string"
+        }
+    },
+    "additionalProperties": true,
+    "required": ["username"],
+    "default": {
+        "username": "Example Caster"
+    }
 }

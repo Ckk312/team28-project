@@ -1,6 +1,6 @@
 import { useReplicant } from '@nodecg/react-hooks'
 import React from 'react';
-import { MatchInfo } from '../types/schemas';
+import { CasterInfo, CasterList, MatchInfo } from '../types/schemas';
 
 export function Index() {
 	const [scene] = useReplicant<number>('scene');
@@ -37,6 +37,8 @@ function BRB() {
 
 function MapsTeams() {
 	let [match] = useReplicant<MatchInfo>('matchInfo');
+	const test: CasterInfo = { username: "Example Commentator", pronouns: "/", handle: '@example' };
+	const [commentators] = useReplicant<CasterList>('casterInfo', { defaultValue: {list: [{ test }] }} );
 
 	return (
 		<>
@@ -46,32 +48,57 @@ function MapsTeams() {
 
 					</div>
 					<div className="player-list-box">
-					<ul className="player-list">
-						{ match?.teams[0].players.map((player, index) => {
-							return (
-								<p className="player-text" key={ index }>{ match?.teams[0].players[index].username }</p>
-							)
-						}) }
+						<h1>{ match?.teams[0].teamName }</h1>
+						<ul className="player-list">
+							{ match?.teams[0].players.map((player, index) => {
+								return (
+									<div className={'player-text-box'} key={ index }>
+										<p className="player-text">{ player.username }</p>
+									</div>
+								)
+							}) }
 						</ul>
 					</div>
 				</div>
 				<div id="vs">
-					<p>vs</p>
+					<h1 id="vs-text">vs</h1>
 				</div>
 				<div className="team-box" id="team-box-B">
 					<div className="title">
 
 					</div>
 					<div className="player-list-box">
+						<h1>{ match?.teams[1].teamName }</h1>
 						<ul className="player-list">
-						{ match?.teams[1].players.map((player, index) => {
-							return (
-								<p className="player-text" key={ index }>{ player.username }</p>
-							)
-						}) }
+							{ match?.teams[1].players.map((player, index) => {
+								return (
+									<div className={'player-text-box'} key={ index }>
+										<p className="player-text">{ player.username }</p>
+									</div>
+								)
+							}) }
 						</ul>
 					</div>
 				</div>
+			</div>
+			<div id="commentator-container">
+				{ (commentators !== undefined && commentators.list.length > 0) &&
+				
+				commentators.list.map((commentator) => {
+					return (
+						<>
+							<div className="commentator-username">
+								<h3>{(commentator as CasterInfo).username}</h3>
+							</div>
+							<div className="commentator-pronouns">
+								<p>{(commentator as CasterInfo).pronouns}</p>
+							</div>
+							<div className="commentator-handle">
+								<p>{(commentator as CasterInfo).handle}</p>
+							</div>
+						</>
+					)
+				}) }
 			</div>
 		</>
 	);

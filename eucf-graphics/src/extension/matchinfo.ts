@@ -25,21 +25,10 @@ nodecg.listenFor('updateScore', (newScore : { teamAScore: number, teamBScore: nu
         match!.value!.score = newScore;
 });
 
-nodecg.listenFor('updateMatchTeamA', (team : TeamInfo) => {
-        match!.value!.teams[0] = team;
-});
-
-nodecg.listenFor('updateMatchTeamB', (team : TeamInfo) => {
-        match!.value!.teams[1] = team;
+nodecg.listenFor('updateMatchTeamName', (info: { name: string, type: number }) => {
+        match!.value!.teams[info.type].teamName = info.name;
 });
 
 nodecg.listenFor('updateTeamPlayers', (info: { players: PlayerInfo[], type: number }) => {
-        if (info.type != 0 && info.type != 1) {
-                return;
-        }
-
-        const newMatch: MatchInfo = {...(match.value!)};
-        newMatch.teams[info.type].players = info.players;
-
-        match!.value = newMatch;
+        match!.value!.teams[info.type].players = info.players;
 });

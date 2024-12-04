@@ -4,6 +4,8 @@ export * from './breakFlavorText';
 // @ts-ignore
 export * from './casterInfo';
 // @ts-ignore
+export * from './casterList';
+// @ts-ignore
 export * from './exampleReplicant';
 // @ts-ignore
 export * from './matchInfo';

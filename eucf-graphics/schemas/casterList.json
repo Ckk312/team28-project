@@ -1,0 +1,21 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"list": {
+			"type": "array",
+			"items": {
+				"$ref": "./casterInfo.json"
+			}
+		}
+	},
+	"additionalProperties": false,
+	"required": ["list"],
+	"default": {
+		"list": [
+			{
+				"username": "Example Commentator"
+			}
+		]
+	}
+}

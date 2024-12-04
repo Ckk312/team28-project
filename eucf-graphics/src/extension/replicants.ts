@@ -1,7 +1,7 @@
 import * as nodecgApiContext from './nodecg-api-context';
 import { ExampleReplicant } from '../types/schemas/exampleReplicant';
 import { EventEmitter } from 'events';
-import { TeamInfo, PlayerInfo, CasterInfo, MatchInfo, BreakFlavorText, Scene } from '../types/schemas';
+import { TeamInfo, PlayerInfo, CasterInfo, MatchInfo, BreakFlavorText, Scene, CasterList } from '../types/schemas';
 
 const nodecg = nodecgApiContext.get();
 EventEmitter.defaultMaxListeners = 100;
@@ -29,14 +29,21 @@ nodecg.Replicant<PlayerInfo>('playerInfo', {
         }
 });
 
-nodecg.Replicant<CasterInfo>('casterInfo', {
+nodecg.Replicant<CasterList>('casterInfo', {
         defaultValue:
         {
-                username: "",
-                pronouns: "",
-                handles: {
-                        twitter: ""
-                }
+                list: [
+                        {
+                                username: "",
+                                pronouns: "",
+                                handle: ""
+                        },
+                        {
+                                username: "",
+                                pronouns: "",
+                                handle: ""
+                        }
+                ]
         }
 });
 

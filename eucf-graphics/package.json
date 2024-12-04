@@ -41,6 +41,13 @@
         "width": 2,
         "file": "scene.html",
         "headerColor": "#525F78"
+      },
+      {
+        "name": "commentatorSelect",
+        "title": "Commentator Select",
+        "width": 2,
+        "file": "commentator.html",
+        "headerColor": "#525F78"
       }
     ],
     "graphics": [
