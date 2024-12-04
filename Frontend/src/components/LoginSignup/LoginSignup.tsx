@@ -83,7 +83,7 @@ const LoginSignup: React.FC = () => {
   return (
     <div className="container">
       <div className="form-container">
-        <h2>{isLogin ? 'Login' : 'Sign Up'}</h2>
+        <h3 id="this">{isLogin ? 'Login' : 'Sign Up'}</h3>
         <form onSubmit={handleSubmit}>
           {!isLogin && (
             <>
@@ -133,6 +133,12 @@ const LoginSignup: React.FC = () => {
               required
             />
           </div>
+          <button
+        className="forgot-password-btn"
+        onClick={() => navigate('/forgot-password')} // Navigate to Forgot Password page
+      >
+        Forgot Password?
+      </button>
           {!isLogin && (
             <div className="form-group">
               <label>Confirm Password</label>
