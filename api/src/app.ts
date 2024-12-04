@@ -4,6 +4,7 @@ import { login } from './login.js';
 import { forgotpass } from './forgotpass.js';
 import { searchplayers } from './searchplayers.js';
 import { resetpass } from './resetpass.js';
+import { verify } from './verifytoken.js';
 
 const app : Express = express();
 
@@ -27,6 +28,9 @@ app.post('/api/login', login);
 app.post('/api/forgotpass', forgotpass);
 app.post('/api/resetpass', resetpass);
 app.post('/api/searchplayers', searchplayers);
+app.get('/api/verifytoken', verify);
+
+
 
 
 export default app;
