@@ -12,7 +12,7 @@
   top: 0;
   left: 0;
   width: 100%; /* Ensures the top bar spans the full width */
-  height: 60px; /* Fixed height for the top bar */
+  height: 100px; /* Fixed height for the top bar */
   background-color: #333;
   color: #fff;
   display: flex;
@@ -44,7 +44,7 @@
 }
 
 .project-name {
-  font-size: 18px;
+  font-size: 50px;
   font-weight: bold;
   text-align: center;
   margin: 0 auto;
