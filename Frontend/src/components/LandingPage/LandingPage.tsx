@@ -19,7 +19,7 @@ const LandingPage: React.FC = () => {
         <h1 className="project-name">Team 28 UCF ESPORTS Project</h1>
         <button
           className="auth-btn"
-          onClick={isLoggedIn ? handleSignOut : () => (window.location.href = '/auth')}
+          onClick={isLoggedIn ? handleSignOut : () => (window.location.href = '/')}
         >
           {isLoggedIn ? 'Sign Out' : 'Sign In'}
         </button>
@@ -29,7 +29,7 @@ const LandingPage: React.FC = () => {
     By fostering greater engagement and accessibility, it seeks to enhance the visibility and community participation in the growing field of competitive gaming.
         </h2>
         
-        <button className="start-btn" onClick={() => isLoggedIn ? window.location.href = "www.ckk312.xyz/" : (window.location.href = '/auth')}>
+        <button className="start-btn" onClick={() => window.location.href = "www.ckk312.xyz/"}>
           Start
         </button>
       </div>
