@@ -58,6 +58,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: 0px 300px 0px 300px;
   height: calc(100vh - 60px); /* Makes the main content fill the rest of the page */
 }
 
