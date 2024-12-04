@@ -21,6 +21,9 @@ function ChooseScene(props: any) {
 	else if (props.scene === 1) {
 		return <MapsTeams />;
 	}
+	else if (props.scene === 2) {
+		return <MatchOverlay />;
+	}
 }
 
 function BRB() {
@@ -99,6 +102,48 @@ function MapsTeams() {
 						</>
 					)
 				}) }
+			</div>
+		</>
+	);
+}
+
+function MatchOverlay() {
+	let [match] = useReplicant<MatchInfo>('matchInfo');
+	let temp = JSON.stringify(match?.score);
+	let score = JSON.parse(temp);
+
+	return (
+		<>
+			<div id="team-box-root">
+				<div className="team-box" id="team-box-A">
+					<div className="title">
+
+					</div>
+					<div className="team-score-box">
+						<h1>{ match?.teams[0].teamName }</h1>
+						<ul className="team-score-text">
+							<div>
+								<p className="score-text">{ score.teamAScore }</p>
+							</div>
+						</ul>
+					</div>
+				</div>
+				<div id="vs">
+					<h1 id="vs-text">vs</h1>
+				</div>
+				<div className="team-box" id="team-box-B">
+					<div className="title">
+
+					</div>
+					<div className="team-score-box">
+						<h1>{ match?.teams[1].teamName }</h1>
+						<ul className="team-score-text">
+							<div>
+								<p className="score-text">{ score.teamBScore }</p>
+							</div>
+						</ul>
+					</div>
+				</div>
 			</div>
 		</>
 	);
