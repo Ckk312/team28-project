@@ -1,7 +1,4 @@
 import React from 'react';
-import * as nodecgApiContext from '../../extension/nodecg-api-context';
-
-const nodecg = nodecgApiContext.get();
 
 export function Panel() {
 	return (

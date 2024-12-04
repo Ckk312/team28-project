@@ -16,7 +16,7 @@ const LandingPage: React.FC = () => {
         <button className="home-btn" onClick={() => window.location.reload()}>
           Home
         </button>
-        <h1 className="project-name">Project Name</h1>
+        <h1 className="project-name">Team 28 UCF ESPORTS Project</h1>
         <button
           className="auth-btn"
           onClick={isLoggedIn ? handleSignOut : () => (window.location.href = '/')}
@@ -25,8 +25,10 @@ const LandingPage: React.FC = () => {
         </button>
       </div>
       <div className="main-content">
-        <h2>Welcome to Our Project</h2>
-        <p>This is a brief description of the project, its goals, and purpose.</p>
+        <h2>This project aims to raise awareness about Esports at the University of Central Florida (UCF) while providing tools to support the streaming of Esports matches. 
+    By fostering greater engagement and accessibility, it seeks to enhance the visibility and community participation in the growing field of competitive gaming.
+        </h2>
+        
         <button className="start-btn" onClick={() => window.location.href = "www.ckk312.xyz/"}>
           Start
         </button>
