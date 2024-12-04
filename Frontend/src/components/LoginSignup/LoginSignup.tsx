@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import for navigation
+import { useNavigate } from 'react-router-dom';
 import './LoginSignup.css';
 
 const LoginSignup: React.FC = () => {
@@ -9,18 +9,37 @@ const LoginSignup: React.FC = () => {
     lastName: '',
     username: '',
     password: '',
+    confirmPassword: '', // Added confirmPassword
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const navigate = useNavigate(); // Navigation hook
+  const [passwordError, setPasswordError] = useState(''); // State for password mismatch
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    // Validate passwords on change
+    if (name === 'password' || name === 'confirmPassword') {
+      if (
+        (name === 'password' && value !== formData.confirmPassword) ||
+        (name === 'confirmPassword' && value !== formData.password)
+      ) {
+        setPasswordError('Passwords do not match');
+      } else {
+        setPasswordError('');
+      }
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isLogin && passwordError) {
+      setMessage('Passwords must match to proceed.');
+      return;
+    }
+
     setLoading(true);
     setMessage('');
 
@@ -29,7 +48,7 @@ const LoginSignup: React.FC = () => {
       const endpoint = isLogin ? '/api/login' : '/api/register';
       const body = isLogin
         ? {
-            email: formData.username,
+            username: formData.username,
             password: formData.password,
           }
         : {
@@ -47,10 +66,12 @@ const LoginSignup: React.FC = () => {
 
       const data = await response.json();
       if (response.ok) {
-        setMessage(isLogin ? 'Login Successful!' : 'Registration Successful!');
-        if (isLogin) navigate('/landing'); // Navigate to landing page after login
-      } else {
-        setMessage(data.message || 'Something went wrong. Please try again.');
+        if (data['error'] === '') {
+          setMessage(isLogin ? 'Login Successful!' : 'Registration Successful!');
+          if (isLogin) navigate('/landing');
+        } else {
+          setMessage('Incorrect username or password');
+        }
       }
     } catch (error) {
       setMessage('An error occurred. Please try again.');
@@ -91,11 +112,11 @@ const LoginSignup: React.FC = () => {
             </>
           )}
           <div className="form-group">
-            <label>Username</label>
+            <label>Email</label>
             <input
               type="text"
               name="username"
-              placeholder="Enter your username"
+              placeholder="Enter your email"
               value={formData.username}
               onChange={handleChange}
               required
@@ -112,7 +133,25 @@ const LoginSignup: React.FC = () => {
               required
             />
           </div>
-          <button type="submit" className="btn" disabled={loading}>
+          {!isLogin && (
+            <div className="form-group">
+              <label>Confirm Password</label>
+              <input
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm your password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+              {passwordError && <p className="error">{passwordError}</p>}
+            </div>
+          )}
+          <button
+            type="submit"
+            className="btn"
+            disabled={loading || (!isLogin && passwordError !== '')}
+          >
             {loading ? 'Processing...' : isLogin ? 'Login' : 'Sign Up'}
           </button>
         </form>
@@ -125,7 +164,14 @@ const LoginSignup: React.FC = () => {
             onClick={() => {
               setIsLogin(!isLogin);
               setMessage('');
-              setFormData({ firstName: '', lastName: '', username: '', password: '' });
+              setPasswordError('');
+              setFormData({
+                firstName: '',
+                lastName: '',
+                username: '',
+                password: '',
+                confirmPassword: '',
+              });
             }}
           >
             {isLogin ? 'Sign Up' : 'Login'}
@@ -137,4 +183,3 @@ const LoginSignup: React.FC = () => {
 };
 
 export default LoginSignup;
-
