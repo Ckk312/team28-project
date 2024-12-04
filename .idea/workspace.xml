@@ -4,29 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="03c44745-d649-47ea-8eea-30b2293a9c30" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Flutter/Testing_Flutter/.dart_tool/dartpad/web_plugin_registrant.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Flutter/Testing_Flutter/.dart_tool/package_config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Flutter/Testing_Flutter/.dart_tool/package_config_subset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Flutter/Testing_Flutter/.dart_tool/version" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Flutter/Testing_Flutter/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Flutter/Testing_Flutter/android/local.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Flutter/Testing_Flutter/ios/Flutter/Generated.xcconfig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Flutter/Testing_Flutter/ios/Flutter/flutter_export_environment.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Flutter/Testing_Flutter/ios/Runner/GeneratedPluginRegistrant.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Flutter/Testing_Flutter/ios/Runner/GeneratedPluginRegistrant.m" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Flutter/Testing_Flutter/macos/Flutter/ephemeral/Flutter-Generated.xcconfig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Flutter/Testing_Flutter/macos/Flutter/ephemeral/flutter_export_environment.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter/Testing_Flutter/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter/Testing_Flutter/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter/Testing_Flutter/linux/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter/Testing_Flutter/linux/flutter/generated_plugin_registrant.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter/Testing_Flutter/linux/flutter/generated_plugin_registrant.h" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter/Testing_Flutter/linux/flutter/generated_plugin_registrant.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter/Testing_Flutter/linux/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter/Testing_Flutter/linux/flutter/generated_plugins.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter/Testing_Flutter/macos/Flutter/GeneratedPluginRegistrant.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter/Testing_Flutter/macos/Flutter/GeneratedPluginRegistrant.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter/Testing_Flutter/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter/Testing_Flutter/windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter/Testing_Flutter/windows/flutter/generated_plugin_registrant.h" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter/Testing_Flutter/windows/flutter/generated_plugin_registrant.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter/Testing_Flutter/windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter/Testing_Flutter/windows/flutter/generated_plugins.cmake" afterDir="false" />
-    </list>
+    <list default="true" id="03c44745-d649-47ea-8eea-30b2293a9c30" name="Changes" comment="Updated Flutter App to have funny Leinecker Page" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -87,6 +65,19 @@
       <option name="presentableId" value="Default" />
       <updated>1733342775134</updated>
     </task>
+    <task id="LOCAL-00001" summary="Updated Flutter App to have funny Leinecker Page">
+      <option name="closed" value="true" />
+      <created>1733345742354</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1733345742354</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Updated Flutter App to have funny Leinecker Page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated Flutter App to have funny Leinecker Page" />
   </component>
 </project>
