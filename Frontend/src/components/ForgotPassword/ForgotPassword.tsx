@@ -31,7 +31,7 @@ const ForgotPassword: React.FC = () => {
 
   return (
     <div className="forgot-password-container">
-      <h2>Forgot Password</h2>
+      <h2 id="this">Forgot Password</h2>
       <p>Enter your email to receive a password reset link.</p>
       <div className="form-group">
         <label>Email</label>
