@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -504,14 +506,57 @@ class RegisterPageState extends State<RegisterPage> {
   }
 }
 
-class TitlePage extends StatelessWidget {
+class TitlePage extends StatefulWidget{
   const TitlePage({super.key});
+
+  @override
+  TitlePageState createState() => TitlePageState();
+}
+
+class TitlePageState extends State<TitlePage> {
+
+  int appBarPressed = 0;
+  Timer? tappedTimer;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Game Selection'),
+        title: GestureDetector(
+            onTap: () {
+              setState(() => appBarPressed++);
+              tappedTimer?.cancel();
+              tappedTimer = Timer(Duration(milliseconds: 500), () {
+                if (appBarPressed >= 3) {
+                  // Trigger callback or execute custom action
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      duration: Duration(seconds: 5),
+                      action: SnackBarAction(
+                        textColor: CupertinoColors.white,
+                        label: 'GO',
+                        onPressed: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => LeineckerImage()),
+                          );
+                        },
+                      ),
+                      content: Text(
+                        'You found a Secret, Would You Like To Go To The Secret Page?',
+                        style: TextStyle(
+                          color: CupertinoColors.white,
+                        ),
+                      ),
+                      backgroundColor: Colors.lightBlueAccent,
+                    ),
+                  );
+                  appBarPressed = 0;
+                }
+              });
+            },
+            child: Text('Game Selection'),
+        ),
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
@@ -775,6 +820,63 @@ class TitlePage extends StatelessWidget {
       ),
     );
   }
+}
+
+class LeineckerImage extends StatelessWidget {
+
+  const LeineckerImage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    int tapCount = 0;
+
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'You have been cursed by Leinecker',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: CupertinoColors.systemYellow
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            GestureDetector(
+              onTap: () {
+                tapCount++;
+                if (tapCount == 3) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TitlePage()),
+                  );// Go back to the game selection menu
+                }
+              },
+              child: InteractiveViewer(
+                minScale: 0.5,
+                maxScale: 2.0,
+                child: Image.asset('./assets/Rick-Leinecker.png', fit: BoxFit.cover),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Click Him 3 times to go back to the Game Selection Menu',
+              style: TextStyle(
+                fontSize: 16,
+                fontStyle: FontStyle.italic,
+                color: CupertinoColors.systemYellow
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
 }
 
 class ForgotPage extends StatefulWidget {
