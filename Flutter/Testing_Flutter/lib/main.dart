@@ -921,7 +921,7 @@ class ForgotPageState extends State<ForgotPage> {
       if (response.statusCode == 200){
         final responseForgotData = jsonDecode(response.body);
         // Navigate to the next screen if registration is successful
-        if(responseForgotData['error'] == "Email has been sent with details to reset your password"){
+        if(responseForgotData == "Email sent with details to reset your password"){
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
@@ -941,7 +941,7 @@ class ForgotPageState extends State<ForgotPage> {
         else{
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                duration: Duration(seconds: 20),
+                duration: Duration(seconds: 10),
                 action: SnackBarAction(
                   textColor: CupertinoColors.white,
                   label: 'Register',
