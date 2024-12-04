@@ -4,16 +4,16 @@ import { mdbclient } from './mongodb.js';
 
 export async function deleteuser(req: Request, res: Response, next: Function) : Promise<void>
 {
-    // in : email, password
+    // in : email, password, userId
     // out : error
 
-    const { email, password } = req.body;
+    const { email, password, userId } = req.body;
     let error : string = '';
 
     const database: Db = mdbclient.db('LargeProject');
 
     try
-    { database.collection('All Players').deleteOne({ Login: email, Password: password }) }
+    { database.collection('All Players').deleteOne({ Login: email, Password: password, UserID: userId }) }
     catch(err : any)
     {
         error = err.toString();
