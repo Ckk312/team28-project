@@ -13,6 +13,12 @@ export async function searchplayers(req: Request, res: Response, next: Function)
 
     const database: Db = mdbclient.db('LargeProject');
     const list: any = await database.collection('All Teams').find().toArray();
+    if(!query)
+    {
+        res.status(200).json({ result: list, error: error });
+        return;
+    }
+    
     const keys = { keys: ["TeamAffiliation", "Username", "Game"] };
     const fuse = new Fuse(list, keys);
     const result = fuse.search(query);
