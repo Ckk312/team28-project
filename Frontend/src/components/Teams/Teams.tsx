@@ -1,3 +1,5 @@
+import React from "react";
+
 
 /***
  * 
@@ -9,9 +11,24 @@ export default function Teams() {
             <div id="team-container">
                 <h1>Here are our teams</h1>
             </div>
-            <TeamCards />
         </>
     );
+}
+
+/***
+ * 
+ */
+function TeamCard(props: any) {
+    return (
+        <>
+            <div>
+                <p>
+                    {props.name}
+                </p>
+                <img src={props.image} alt={props.name}/>
+            </div>
+        </>
+    )
 }
 
 /***
