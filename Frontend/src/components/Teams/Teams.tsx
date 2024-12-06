@@ -14,7 +14,7 @@ export default function Teams() {
                 <div id="team-list" >
                 {
                     teamInfo.map((team) => {
-                        return <TeamCards image={team[1]} name={team[0]} />;
+                        return <TeamCard image={team[1]} name={team[0]} />;
                     })
                 }
                 </div>
