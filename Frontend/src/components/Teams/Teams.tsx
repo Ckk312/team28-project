@@ -4,7 +4,7 @@ import './Teams.css'
  * 
  */
 export default function Teams() {
-    const teamInfo: [string, string][] = [['Apex Legends', ''], ['Call of Duty', ''], ['League of Legends', ''], ['Overwatch 2', ''], ['Smash Ultimate', ''], ['Splatoon 3', ''], ['Tom Clancy\'s: Rainbow Six Siege', ''], ['Valorant', '']];
+    const teamInfo: [string, string][] = [['Apex Legends', ''], ['Call of Duty', 'https://i.ibb.co/gr6xvCv/COD-Logo.webp'], ['League of Legends', ''], ['Overwatch 2', ''], ['Smash Ultimate', ''], ['Splatoon 3', ''], ['Tom Clancy\'s: Rainbow Six Siege', ''], ['Valorant', '']];
 
     return (
         <>
