@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import './TopBar.css';
 
-export default function TopBar() {
+function TopBar() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false); // Track login state
 
     const handleSignOut = () => {
@@ -35,3 +35,5 @@ export default function TopBar() {
         
     )
 }
+
+export default memo(TopBar);

@@ -4,19 +4,25 @@ import Error from '../Error/Error'
 import './TeamLayout.css';
 
 async function getRoster(title: string): Promise<any[]> {
-    const header = new Headers();
-    header.append('Content-Type', 'application/json');
+    try {
+        const header = new Headers();
+        header.append('Content-Type', 'application/json');
 
-    console.log(title + ' Knights');
+        console.log(title + ' Knights');
 
-    const response = await fetch(/*'https://www.ckk312.xyz/api/searchdocuments*/'http://www.ckk312.xyz:5000/api/searchplayers', {
-        method: 'POST',
-        body: JSON.stringify({ collection: 'All Teams' , query: title + ' Knights' }),
-        headers: header
-    });
+        const response = await fetch(/*'https://www.ckk312.xyz/api/searchdocuments*/'http://www.ckk312.xyz:5000/api/searchplayers', {
+            method: 'POST',
+            body: JSON.stringify({ collection: 'All Teams' , query: title + ' Knights' }),
+            headers: header
+        });
 
-    const result = await response.json();
-    return result.result;
+        const result = await response.json();
+        return result.result;
+    } catch (e) {
+        console.error(e);
+        return [];
+    }
+    
 }
 
 /***
@@ -54,7 +60,7 @@ export default function TeamLayout() {
     const handleLoad = async () => {
         const stuff = await getRoster(game.at(-1)!);
         setRoster(stuff);
-        if (!stuff) {
+        if (stuff.length === 0) {
             setIsError(true);
             return null;
         }
@@ -70,12 +76,15 @@ export default function TeamLayout() {
         return <Error />
     }
 
+    let teamName: string;
+
     return (
         <>
             <div id="team-layout-container">
                 <div id="team-banner">
 
                 </div>
+                <h1>{game.at(-1)}</h1>
                 <div id="team-info-wrapper" >
                     {
                         rosters.map((team: string, index: number) => {
@@ -83,7 +92,10 @@ export default function TeamLayout() {
                                 console.log(player.item.Game.replaceAll(' ', '') + ' ' + game.at(-1));
                                 return player.item.TeamAffiliation === team && player.item.Game.replaceAll(' ', '') === game.at(-1);
                             });
-                            return <Roster key={index} roster={newRoster} />
+                            if (newRoster.length !== 0) {
+                                teamName = newRoster[0].item.Game;
+                            }
+                            return <Roster key={index} roster={newRoster} game={teamName + ' ' + team} />
                         })
                     }
                 </div>
@@ -109,7 +121,7 @@ function Roster(props: any) {
                         setIsOpen(true);
                     }
                  }}>
-                    <h1>RAAAAAAAA</h1>
+                    <h1>{props.game}</h1>
                 </div>
                 <div className="roster-display">
                     { isOpen &&
@@ -166,7 +178,7 @@ function Match(props: any) {
                     props.match.HomeTeam  VS props.match.AwayTeam    
                 </p>
                 <p> 
-                    '${datePart}    ${timePart}'
+                    {datePart} {timePart}
                 </p>
                 </div>
                    
