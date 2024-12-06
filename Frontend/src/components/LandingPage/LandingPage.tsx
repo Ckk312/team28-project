@@ -8,7 +8,7 @@ const LandingPage: React.FC = () => {
     By fostering greater engagement and accessibility, it seeks to enhance the visibility and community participation in the growing field of competitive gaming.
         </h2>
         
-        <button className="start-btn" onClick={() => window.location.href = "www.ckk312.xyz/"}>
+        <button className="start-btn" onClick={() => window.location.href = "/teams"}>
           Start
         </button>
       </div>

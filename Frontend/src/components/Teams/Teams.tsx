@@ -1,6 +1,3 @@
-import React from "react";
-
-
 /***
  * 
  */
@@ -16,6 +13,8 @@ export default function Teams() {
                     teamInfo.map((team) => {
                         return <TeamCard image={team[1]} name={team[0]} />;
                     })
+
+                    
                 }
                 </div>
             </div>

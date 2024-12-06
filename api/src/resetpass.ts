@@ -4,14 +4,14 @@ import { mdbclient } from './mongodb.js';
 
 export async function resetpass(req : Request, res : Response, next : Function) : Promise<void>
 {
-    // in: email, password, token
+    // in: password, token
     // out: error
 
-    const { email, password, token } = req.body;
+    const { password, token } = req.body;
     let error : string = '';
 
     const database : Db = mdbclient.db('LargeProject');
-    const result : any = await database.collection('Users').findOne({ Login: email, ResetToken: token });
+    const result : any = await database.collection('Users').findOne({ ResetToken: token });
 
     if(result === null )
     {
@@ -26,7 +26,7 @@ export async function resetpass(req : Request, res : Response, next : Function) 
         return;
     }
 
-    database.collection('Users').updateOne({ Login: email, ResetToken: token}, { $set: { Password: password, ResetToken: "" } });
+    database.collection('Users').updateOne({ ResetToken: token }, { $set: { Password: password, ResetToken: "" } });
 
     res.status(200).json({ error: error });
 }

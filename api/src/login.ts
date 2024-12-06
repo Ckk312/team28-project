@@ -4,23 +4,16 @@ import { mdbclient } from './mongodb.js';
 
 export async function login(req: Request, res: Response, next: Function) : Promise<void>
 {
-    // in : Username, Password
+    // in : email, password
     // out : UserID, error
 
-    const { username, password } = req.body;
-    let error : string = '';
+    const { email, password } = req.body;
 
     const database: Db = mdbclient.db('LargeProject');
-    const result: any = await database.collection('Users').find({ Login: username, Password: password }).toArray();
+    const result: any = await database.collection('Users').findOne({ Login: email, Password: password });
 
-    let userId: number = -1;
-    if (result[0])
-    {
-        userId = result[0].UserID;
-    } else 
-    {
-        error = 'No user found.';
-    }
+    if (!result)
+    { res.status(200).json({ _id: -1, error: 'No user found' })}
 
-    res.status(200).json({ userId: userId, error: error });
+    res.status(200).json({ _id: result._id, error: '' });
 }

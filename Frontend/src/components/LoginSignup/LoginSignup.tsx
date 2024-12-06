@@ -85,6 +85,10 @@ const LoginSignup: React.FC = () => {
       <div className="form-container">
         <h3 id="this">{isLogin ? 'Login' : 'Sign Up'}</h3>
         <form onSubmit={handleSubmit}>
+          {/* IF REGISTER ASK FOR FIRST & LAST NAME*/}
+          {/* 
+              Alex respectfully, MAKE COMMENTS ON THE FUCKING CODE
+          */}
           {!isLogin && (
             <>
               <div className="form-group">
