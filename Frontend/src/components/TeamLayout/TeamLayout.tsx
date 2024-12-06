@@ -14,8 +14,7 @@ export default function TeamLayout(props: any) {
 
                 </div>
                 <div id="team-info-wrapper">
-                    
-
+                    <Match />
                 </div>
             </div>
         </>
@@ -44,7 +43,6 @@ function Player(props: any) {
         <>
             <div className="player-container">
                 <div className="player-img">
-
                 </div>
                 <h3>
                     {}
@@ -55,7 +53,33 @@ function Player(props: any) {
 }
 
 function Match(props: any) {
+    const d = new Date(1711036038 * 1000);
+    const timeZone = 'America/New_York';
+    const formatter = d.toLocaleString('en-US', {
+        timeZone: timeZone,
+        month: 'numeric',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+    });
+    
+    const [datePart, timePart] = formatter.split(',');
 
-
-    return ();
+    return (
+        <>
+                <div>
+                <p>
+                    if(match not ended)
+                    props.match.title
+                    props.match.HomeTeam  VS props.match.AwayTeam    
+                </p>
+                <p> 
+                    '${datePart}    ${timePart}'
+                </p>
+                </div>
+                   
+        </>
+        
+    );
 }

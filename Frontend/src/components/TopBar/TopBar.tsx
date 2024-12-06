@@ -26,7 +26,7 @@ export default function TopBar() {
                     id="auth-btn"
                     onClick={handleSignOut}
                 >
-                    {isLoggedIn ? 'Sign Out' : 'Sign In'}
+                    {isLoggedIn ? ('Sign Out') : (<> Admin<br /> Sign In</>)}
                 </button>
             </div>
 
