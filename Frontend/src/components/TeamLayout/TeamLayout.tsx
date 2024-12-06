@@ -97,7 +97,6 @@ export default function TeamLayout() {
                         })
                     }
                 </div>
-                <Match />
             </div>
         </>
     );
@@ -129,6 +128,7 @@ function Roster(props: any) {
                                     return <Player key={index} player={player.item} logIn={props.logIn} />
                                 })
                             }
+                            <Match />
                         </>
                     }
                 </div>
@@ -139,13 +139,11 @@ function Roster(props: any) {
 }
 
 function Player(props: any) {
-    console.log(props);
-    console.log("Image source:", props.player.Img);
     return (
         <>
             <div className="player-container">
                 <div className="player-img">
-                    <img className = "player-image" src={props.player.Img} alt={`"${props.player.Img}"`}/>
+                    <img className = "player-image" src={props.player.Img || "https://i.ibb.co/ncCbrRS/360-F-917122367-k-Spdp-RJ5-Hcmn0s4-WMd-Jb-SZpl7-NRzwup-U.webp"} alt={`"${props.player.Img}"`}/>
                 </div>
                 {
                     
@@ -176,8 +174,10 @@ function Match(props: any) {
         <>
                 <div>
                 <p>
-                    if(match not ended)
-                    props.match.title
+                    Next Upcoming Match
+                    <br/>
+                    props.match.title && props.match.TeamAffilicaiton
+                    <br/>
                     props.match.HomeTeam  VS props.match.AwayTeam    
                 </p>
                 <p> 
