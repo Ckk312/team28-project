@@ -6,51 +6,6 @@
   padding: 0;
 }
 
-/* Top Bar */
-.top-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%; /* Ensures the top bar spans the full width */
-  height: 100px; /* Fixed height for the top bar */
-  background-color: #333;
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px; /* Adds some horizontal padding */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Optional shadow for depth */
-  z-index: 1000; /* Keeps the top bar above other content */
-}
-
-.home-btn,
-.auth-btn {
-  background-color: #555;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 22px;
-}
-
-.home-btn:hover,
-.auth-btn:hover {
-  background-color: #777;
-}
-
-.auth-btn {
-  margin-right: 40px; /* Moves the button slightly to the left */
-}
-
-.project-name {
-  font-size: 50px;
-  font-weight: bold;
-  text-align: center;
-  margin: 0 auto;
-}
-
-
 /* Main Content */
 .main-content {
   margin-top: 10px; /* Adds space to avoid overlapping with the fixed top bar */

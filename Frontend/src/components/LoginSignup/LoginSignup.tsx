@@ -133,12 +133,14 @@ const LoginSignup: React.FC = () => {
               required
             />
           </div>
+          { isLogin && 
           <button
-        className="forgot-password-btn"
-        onClick={() => navigate('/forgot-password')} // Navigate to Forgot Password page
-      >
-        Forgot Password?
-      </button>
+          className="forgot-password-btn"
+          onClick={() => navigate('/forgot-password')} // Navigate to Forgot Password page
+        >
+          Forgot Password?
+        </button>
+        }  
           {!isLogin && (
             <div className="form-group">
               <label>Confirm Password</label>
