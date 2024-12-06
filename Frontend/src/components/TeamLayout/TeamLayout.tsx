@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
 import Error from '../Error/Error'
-
 import './TeamLayout.css';
 
 async function getRoster(title: string): Promise<any[]> {
     try {
         const header = new Headers();
         header.append('Content-Type', 'application/json');
-
-        console.log(title + ' Knights');
 
         const response = await fetch(/*'https://www.ckk312.xyz/api/searchdocuments*/'http://www.ckk312.xyz:5000/api/searchplayers', {
             method: 'POST',
@@ -128,7 +125,7 @@ function Roster(props: any) {
                         <>
                             {
                                 roster.map((player: any, index: number) => {
-                                    return <Player key={index} player={player.item.Username} />
+                                    return <Player key={index} player={player.item} />
                                 })
                             }
                         </>
@@ -141,14 +138,16 @@ function Roster(props: any) {
 }
 
 function Player(props: any) {
+    console.log(props);
+    console.log("Image source:", props.player.Img);
     return (
         <>
             <div className="player-container">
                 <div className="player-img">
-                    <img src={props.img} alt={props.player}/>
+                    <img className = "player-image" src={props.player.Img} alt={`"${props.player.Img}"`}/>
                 </div>
                 <h3>
-                    {props.player}
+                    {props.player.Username}
                 </h3>
             </div>
         </>
