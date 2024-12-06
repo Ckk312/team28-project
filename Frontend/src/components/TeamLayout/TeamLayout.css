@@ -13,17 +13,29 @@
 
 /* Clearfix to avoid collapsing margins */
 #team-layout-container {
-    padding-top: 120px; /* Ensure this value is the same or greater than the app bar height */
-    padding-bottom: 50px; /* Optional: To prevent content from touching the bottom */
     z-index: 1; /* Makes sure it's below the app bar */
     height: 100%; /* Fills available space */
     max-height: calc(100vh - 100px);
     max-width: 100%;
-    right: auto;
     position: relative;
-
 }
 
-p{
+#team-banner{
+   padding-top: 50px;
+   padding-bottom: 50px;
+}
+
+
+
+pre{
     text-align: center;
 }
+
+.roster-container{
+    padding-bottom: 1px;
+}
+
+.game-title{
+    text-align: center;
+}
+

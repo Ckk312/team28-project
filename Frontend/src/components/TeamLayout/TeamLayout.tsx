@@ -80,9 +80,9 @@ export default function TeamLayout() {
         <>
             <div id="team-layout-container">
                 <div id="team-banner">
-
+                    <h1 className = "game-title"> {game.at(-1)} </h1>
+                    <img src="https://i.ibb.co/gr6xvCv/COD-Logo.webp" alt=""/>
                 </div>
-                <h1>{game.at(-1)}</h1>
                 <div id="team-info-wrapper" >
                     {
                         rosters.map((team: string, index: number) => {

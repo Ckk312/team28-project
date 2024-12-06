@@ -21,7 +21,7 @@ const LoginSignup: React.FC = () => {
     setFormData({ ...formData, [name]: value });
 
     // Validate passwords on change
-    if (name === 'password' || name === 'confirmPassword') {
+      if (name === 'password' || name === 'confirmPassword') {
       if (
         (name === 'password' && value !== formData.confirmPassword) ||
         (name === 'confirmPassword' && value !== formData.password)
