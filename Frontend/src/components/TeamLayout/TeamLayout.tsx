@@ -1,12 +1,14 @@
 import { useState } from "react";
 
+import './TeamLayout.css';
+
 async function getRoster(title: string): Promise<any> {
     const header = new Headers();
     header.append('Content-type', 'application/json')
 
     return await fetch('https://www.ckk312.xyz/api/searchdocuments', {
         method: 'POST',
-        body: JSON.stringify({ collection: 'All Teams' ,query: title }),
+        body: JSON.stringify({ collection: 'All Teams' , query: title }),
         headers: header
     });
 }
@@ -15,32 +17,39 @@ async function getRoster(title: string): Promise<any> {
  * Team Layout React Component
  * 
  */
-export default function TeamLayout(props: any) {
+export default function TeamLayout() {
     const [roster, setRoster] = useState<any[]>([]);
 
     let path = window.location.pathname;
-    const game = path.split(',');
+    const game = path.split('/');
+    console.log(game);
 
     const allRosters = ['Knights', 'Knights Academy', 'Knights Rising', 'Knights Pink']
     let rosterNum = 2;
 
-    if (game[-1] === 'Valorant') {
-        rosterNum = 4;
+    console.log('game[-1]: ' + game.at(-1));
+
+    if (game.at(-1) === 'Valorant') {
+        rosterNum = 0;
     }
 
-    else if (game[-1] === 'Splatoon') {
-        rosterNum = 3;
-    }
-
-    else if (game[-1] === 'Smash') {
+    else if (game.at(-1) === 'Splatoon') {
         rosterNum = 1;
+    }
+
+    else if (game.at(-1) === 'SmashUltimate') {
+        rosterNum = 3;
     }
 
     const rosters = allRosters.slice(rosterNum);
 
     const handleLoad = async () => {
-        setRoster((await getRoster(game[-1])).result);
+        const stuff = await getRoster(game.at(-1)!);
+        console.log(stuff);
+        setRoster(stuff.result);
     }
+
+    console.log(roster);
 
     return (
         <>
@@ -53,7 +62,7 @@ export default function TeamLayout(props: any) {
                         rosters.map((team: string, index: number) => {
                             const newRoster = roster.filter((player: any) => {
                                 return player.TeamAffiliation = team;
-                            })
+                            });
                             return <Roster key={index} roster={newRoster} />
                         })
                     }
@@ -71,7 +80,7 @@ function Roster(props: any) {
         <>
             <div className="roster-container" >
                 <div className="roster-container-clickable" onClick={() => { setIsOpen(true) }}>
-
+                    <h1>RAAAAAAAA</h1>
                 </div>
                 <div className="roster-display">
                     { isOpen &&

@@ -1,3 +1,5 @@
+import './Teams.css'
+
 /***
  * 
  */
@@ -29,7 +31,7 @@ function TeamCard(props: any) {
 
     return (
         <>
-            <div>
+            <div className="team-cards" onClick={() => { window.location.href = '/teams/' + (props.name as string).replaceAll(' ', '') }}>
                 <p>
                     {props.name}
                 </p>
