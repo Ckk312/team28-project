@@ -29,6 +29,7 @@ async function getRoster(title: string): Promise<any[]> {
 export default function TeamLayout() {
     const [roster, setRoster] = useState<any[]>([]);
     const [isError, setIsError] = useState<boolean>(false);
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
     let path = window.location.pathname;
     const game = path.split('/');
@@ -92,7 +93,7 @@ export default function TeamLayout() {
                             if (newRoster.length !== 0) {
                                 teamName = newRoster[0].item.Game;
                             }
-                            return <Roster key={index} roster={newRoster} game={teamName + ' ' + team} />
+                            return <Roster key={index} roster={newRoster} game={teamName + ' ' + team} logIn={isLoggedIn} />
                         })
                     }
                 </div>
@@ -125,7 +126,7 @@ function Roster(props: any) {
                         <>
                             {
                                 roster.map((player: any, index: number) => {
-                                    return <Player key={index} player={player.item} />
+                                    return <Player key={index} player={player.item} logIn={props.logIn} />
                                 })
                             }
                         </>
@@ -146,6 +147,9 @@ function Player(props: any) {
                 <div className="player-img">
                     <img className = "player-image" src={props.player.Img} alt={`"${props.player.Img}"`}/>
                 </div>
+                {
+                    
+                }
                 <h3>
                     {props.player.Username}
                 </h3>
