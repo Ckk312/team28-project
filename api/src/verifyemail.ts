@@ -34,7 +34,7 @@ export async function verifyemail(req: Request, res: Response, next: Function) :
         const tokenExpiration = Date.now() + 3600000;
         database.collection('Users').updateOne({ Login: email }, { $set: { ResetToken: newToken, TokenExpiry: tokenExpiration } });
 
-        const url : string = `http://ckk312.xyz:5000/verifyemail?token=${newToken}`;
+        const url : string = `http://ckk312.xyz:5000/verify-email?email=${email}&token=${newToken}`;
 
         await sendMail(email, 'Email Verification', `Click the link to verify your email: ${url}`);
 
