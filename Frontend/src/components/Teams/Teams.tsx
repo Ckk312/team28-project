@@ -19,6 +19,7 @@ export default function Teams() {
  * 
  */
 function TeamCard(props: any) {
+
     return (
         <>
             <div>
@@ -27,18 +28,6 @@ function TeamCard(props: any) {
                 </p>
                 <img src={props.image} alt={props.name}/>
             </div>
-        </>
-    )
-}
-
-/***
- * 
- */
-function TeamCards(props: any) {
-
-    return (
-        <>
-            
         </>
     )
 }
