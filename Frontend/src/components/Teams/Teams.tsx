@@ -12,8 +12,8 @@ export default function Teams() {
                 <h1>Here are our teams</h1>
                 <div id="team-list" >
                 {
-                    teamInfo.map((team) => {
-                        return <TeamCard image={team[1]} name={team[0]} />;
+                    teamInfo.map((team, index) => {
+                        return <TeamCard key={index} image={team[1]} name={team[0]} />;
                     })
 
                     
@@ -28,10 +28,14 @@ export default function Teams() {
  * 
  */
 function TeamCard(props: any) {
+    let name = props.name;
+    if (props.name === 'Tom Clancy\'s: Rainbow Six Siege') {
+        name = 'Rainbow Six Siege';
+    }
 
     return (
         <>
-            <div className="team-cards" onClick={() => { window.location.href = '/teams/' + (props.name as string).replaceAll(' ', '') }}>
+            <div className="team-cards" onClick={() => { window.location.href = '/teams/' + (name as string).replaceAll(' ', '') }}>
                 <p>
                     {props.name}
                 </p>

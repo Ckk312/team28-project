@@ -1,16 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Error from '../Error/Error'
 
 import './TeamLayout.css';
 
-async function getRoster(title: string): Promise<any> {
+async function getRoster(title: string): Promise<any[]> {
     const header = new Headers();
-    header.append('Content-type', 'application/json')
+    header.append('Content-Type', 'application/json');
 
-    return await fetch('https://www.ckk312.xyz/api/searchdocuments', {
+    console.log(title + ' Knights');
+
+    const response = await fetch(/*'https://www.ckk312.xyz/api/searchdocuments*/'http://www.ckk312.xyz:5000/api/searchplayers', {
         method: 'POST',
-        body: JSON.stringify({ collection: 'All Teams' , query: title }),
+        body: JSON.stringify({ collection: 'All Teams' , query: title + ' Knights' }),
         headers: header
     });
+
+    const result = await response.json();
+    return result.result;
 }
 
 /***
@@ -19,37 +25,50 @@ async function getRoster(title: string): Promise<any> {
  */
 export default function TeamLayout() {
     const [roster, setRoster] = useState<any[]>([]);
+    const [isError, setIsError] = useState<boolean>(false);
 
     let path = window.location.pathname;
     const game = path.split('/');
-    console.log(game);
 
     const allRosters = ['Knights', 'Knights Academy', 'Knights Rising', 'Knights Pink']
     let rosterNum = 2;
 
-    console.log('game[-1]: ' + game.at(-1));
-
     if (game.at(-1) === 'Valorant') {
-        rosterNum = 0;
+        rosterNum = 4;
     }
 
-    else if (game.at(-1) === 'Splatoon') {
-        rosterNum = 1;
-    }
-
-    else if (game.at(-1) === 'SmashUltimate') {
+    else if (game.at(-1) === 'Splatoon3') {
+        game.pop();
+        game.push('Splatoon');
         rosterNum = 3;
     }
 
-    const rosters = allRosters.slice(rosterNum);
+    else if (game.at(-1) === 'SmashUltimate') {
+        game.pop();
+        game.push('SmashBrosUltimate');
+        rosterNum = 1;
+    }
+
+    const rosters = allRosters.slice(0, rosterNum);
 
     const handleLoad = async () => {
         const stuff = await getRoster(game.at(-1)!);
-        console.log(stuff);
-        setRoster(stuff.result);
+        setRoster(stuff);
+        if (!stuff) {
+            setIsError(true);
+            return null;
+        }
     }
 
-    console.log(roster);
+    useEffect(() => {
+        if (!handleLoad()) {
+            setIsError(true);
+        };
+    }, []);
+
+    if (isError) {
+        return <Error />
+    }
 
     return (
         <>
@@ -57,11 +76,12 @@ export default function TeamLayout() {
                 <div id="team-banner">
 
                 </div>
-                <div id="team-info-wrapper" onLoad={handleLoad}>
+                <div id="team-info-wrapper" >
                     {
                         rosters.map((team: string, index: number) => {
-                            const newRoster = roster.filter((player: any) => {
-                                return player.TeamAffiliation = team;
+                            const newRoster = roster.filter((player) => {
+                                console.log(player.item.Game.replaceAll(' ', '') + ' ' + game.at(-1));
+                                return player.item.TeamAffiliation === team && player.item.Game.replaceAll(' ', '') === game.at(-1);
                             });
                             return <Roster key={index} roster={newRoster} />
                         })
@@ -76,18 +96,27 @@ export default function TeamLayout() {
 function Roster(props: any) {
     const [isOpen, setIsOpen] = useState(false);
 
+    const roster = props.roster;
+
     return (
         <>
             <div className="roster-container" >
-                <div className="roster-container-clickable" onClick={() => { setIsOpen(true) }}>
+                <div className="roster-container-clickable" onClick={(e) => { 
+                    e.preventDefault();
+                    if (isOpen) {
+                        setIsOpen(false);
+                    } else {
+                        setIsOpen(true);
+                    }
+                 }}>
                     <h1>RAAAAAAAA</h1>
                 </div>
                 <div className="roster-display">
                     { isOpen &&
                         <>
                             {
-                                props.roster.map((player: any, index: number) => {
-                                    return <Player key={index} player={player.name} />
+                                roster.map((player: any, index: number) => {
+                                    return <Player key={index} player={player.item.Username} />
                                 })
                             }
                         </>
@@ -104,6 +133,7 @@ function Player(props: any) {
         <>
             <div className="player-container">
                 <div className="player-img">
+                    <img src={props.img} alt={props.player}/>
                 </div>
                 <h3>
                     {props.player}

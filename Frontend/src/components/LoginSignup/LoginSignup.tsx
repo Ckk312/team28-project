@@ -68,7 +68,7 @@ const LoginSignup: React.FC = () => {
       if (response.ok) {
         if (data['error'] === '') {
           setMessage(isLogin ? 'Login Successful!' : 'Registration Successful!');
-          if (isLogin) navigate('/landing');
+          if (isLogin) navigate('/');
         } else {
           setMessage('Incorrect username or password');
         }
