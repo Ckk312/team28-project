@@ -1,0 +1,164 @@
+/* General styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f9f9f9;
+}
+
+/* Container styles */
+.container {
+  width: 100%;
+  max-width: 400px; /* Slightly larger container for profile editing */
+  margin: auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  position: relative;
+}
+
+/* Form container */
+.form-container {
+  padding: 15px; /* Increased padding for more space */
+}
+
+/* Header styles */
+h3#this {
+  color: #b89630;
+  font-size: 36px;
+  margin-bottom: 20px; /* Slightly larger margin */
+}
+
+/* Form group */
+.form-group {
+  margin-bottom: 18px; /* Larger spacing between fields */
+  text-align: left;
+}
+
+/* Label */
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Input fields */
+input, textarea {
+  width: 100%;
+  padding: 10px; /* Slightly larger padding for profile fields */
+  margin: 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #d4af37;
+  background-color: #fafad2; /* Light yellow for focus effect */
+}
+
+/* Profile Picture */
+#profile-picture {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 15px;
+  object-fit: cover;
+  border: 2px solid #ddd;
+  margin: 0 auto;
+}
+
+#profile-picture-upload {
+  margin-top: 10px;
+  color: #d4af37;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Error message */
+.error-message {
+  color: red;
+  font-size: 0.8rem;
+  height: 1em;
+  margin-top: 3px;
+}
+
+/* Button styles */
+.btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #d4af37;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.btn:hover {
+  background-color: #b89630;
+}
+
+/* Secondary button (cancel or reset) */
+.btn-secondary {
+  width: 100%;
+  margin-top: 10px;
+  background: none;
+  color: #d4af37;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Toggle button (change password, etc.) */
+.toggle-btn {
+  background: none;
+  color: #d4af37;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+/* Hover effects */
+.toggle-btn:hover,
+.btn-secondary:hover {
+  color: #b89630;
+}
+
+/* Paragraph spacing */
+p {
+  margin: 10px 0;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .container {
+    max-width: 300px;
+    padding: 10px;
+  }
+
+  h3#this {
+    font-size: 28px;
+    margin-bottom: 15px;
+  }
+
+  input, textarea {
+    padding: 8px; /* Smaller padding on smaller screens */
+  }
+}
+

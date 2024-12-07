@@ -1,0 +1,876 @@
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LoginSignup from './components/LoginSignup/LoginSignup';
+import LandingPage from './components/LandingPage/LandingPage';
+import ForgotPassword from './components/ForgotPassword/ForgotPassword';
+import TopBar from './components/TopBar/TopBar';
+import ResetPassword from './components/ResetPassword/ResetPassword'; // Import ResetPassword page
+import Teams from './components/Teams/Teams';
+import TeamLayout from './components/TeamLayout/TeamLayout';
+import Error from './components/Error/Error';
+import EditProfile from './components/EditProfile/EditProfile'
+import { UserProvider } from './context/UserContext';
+
+
+function App() {
+  return (
+    <UserProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<TopBar />} >
+            <Route index element={<LandingPage />} />
+            <Route path="login" element={<LoginSignup />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="reset-password" element={<ResetPassword />} />
+            <Route path="teams" >
+              <Route index element={<Teams />} />
+              <Route path="*" element={<TeamLayout />} />
+            </Route>
+            <Route path="edit-profile" element={<EditProfile />} />
+            <Route path="*" element={<Error />} />
+            {/* Add ResetPassword route */}
+          </Route>
+        </Routes>
+      </Router>
+      </UserProvider>
+  );
+}
+
+export default App;
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+
+interface UserContextProps {
+  isLoggedIn: boolean;
+  firstName: string | null;
+  lastName: string | null;
+  setIsLoggedIn: (status: boolean, firstName?: string, lastName?: string) => void;
+  updateProfile: (firstName: string, lastName: string) => void;
+}
+
+const UserContext = createContext<UserContextProps | undefined>(undefined);
+
+export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [isLoggedIn, setIsLoggedInState] = useState<boolean>(
+    () => JSON.parse(localStorage.getItem('isLoggedIn') || 'false')
+  );
+  const [firstName, setFirstName] = useState<string | null>(
+    () => localStorage.getItem('firstName') || null
+  );
+  const [lastName, setLastName] = useState<string | null>(
+    () => localStorage.getItem('lastName') || null
+  );
+
+  const setIsLoggedIn = (status: boolean, firstName?: string, lastName?: string) => {
+    setIsLoggedInState(status);
+    localStorage.setItem('isLoggedIn', JSON.stringify(status));
+
+    if (status) {
+      setFirstName(firstName || null);
+      setLastName(lastName || null);
+      if (firstName) localStorage.setItem('firstName', firstName);
+      if (lastName) localStorage.setItem('lastName', lastName);
+    } else {
+      setFirstName(null);
+      setLastName(null);
+      localStorage.removeItem('firstName');
+      localStorage.removeItem('lastName');
+    }
+  };
+
+  const updateProfile = (firstName: string, lastName: string) => {
+    setFirstName(firstName);
+    setLastName(lastName);
+    localStorage.setItem('firstName', firstName);
+    localStorage.setItem('lastName', lastName);
+  }
+
+  return (
+    <UserContext.Provider value={{ isLoggedIn, firstName, lastName, setIsLoggedIn, updateProfile }}>
+      {children}
+    </UserContext.Provider>
+  );
+};
+
+export const useUser = () => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error('useUser must be used within a UserProvider');
+  }
+  return context;
+};
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import App from './App';
+
+test('renders learn react link', () => {
+  render(<App />);
+  const linkElement = screen.getByText(/learn react/i);
+  expect(linkElement).toBeInTheDocument();
+});
+import React, { useState } from 'react';
+import { useUser } from '../../context/UserContext';  // Import the custom hook to access the context
+
+const EditProfile = () => {
+  const { firstName, lastName, setIsLoggedIn } = useUser();  // Get context values and the setIsLoggedIn function
+  const [newFirstName, setNewFirstName] = useState(firstName || '');  // Set default to current first name or empty string
+  const [newLastName, setNewLastName] = useState(lastName || '');  // Set default to current last name or empty string
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Update context and localStorage with the new values
+    setIsLoggedIn(true, newFirstName, newLastName);  // Call the context's setter to update values in context and localStorage
+
+    // Optionally, you can show a success message, or reset the form fields
+    alert('Profile updated successfully!');
+  };
+
+  return (
+    <div className="container">
+      <h3>Edit Profile</h3>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label>First Name</label>
+          <input
+            type="text"
+            value={newFirstName}
+            onChange={(e) => setNewFirstName(e.target.value)}  // Update state as the user types
+          />
+        </div>
+        <div className="form-group">
+          <label>Last Name</label>
+          <input
+            type="text"
+            value={newLastName}
+            onChange={(e) => setNewLastName(e.target.value)}  // Update state as the user types
+          />
+        </div>
+        <button type="submit" className="btn">Save Changes</button>
+      </form>
+    </div>
+  );
+};
+
+export default EditProfile;
+
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../context/UserContext'; // Import the context
+import './LoginSignup.css';
+
+const LoginSignup: React.FC = () => {
+  const { setIsLoggedIn } = useUser(); // Destructure the function from context
+  const [isLogin, setIsLogin] = useState(true);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    username: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [nameError, setNameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordStrengthError, setPasswordStrengthError] = useState('');
+  const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    // Validate passwords for strength
+    if (name === 'password') {
+      const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])/; // At least one uppercase, one number, and one special character
+      if (!passwordRegex.test(value)) {
+        setPasswordStrengthError(
+          'Password must contain at least one uppercase letter, one number, and one special character'
+        );
+      } else {
+        setPasswordStrengthError('');
+      }
+    }
+
+    // Confirm passwords match
+    if (name === 'password' || name === 'confirmPassword') {
+      if (
+        (name === 'password' && value !== formData.confirmPassword) ||
+        (name === 'confirmPassword' && value !== formData.password)
+      ) {
+        setPasswordError('Passwords do not match');
+      } else {
+        setPasswordError('');
+      }
+    }
+
+    // Validate first and last names dynamically
+    if (name === 'firstName' || name === 'lastName') {
+      const nameRegex = /^[A-Za-z]*$/; // Allow empty input while typing
+      if (!nameRegex.test(value)) {
+        setNameError('First and Last name must be characters only');
+      } else {
+        setNameError('');
+      }
+    }
+
+    // Validate email dynamically
+    if (name === 'username') {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email validation
+      if (!emailRegex.test(value)) {
+        setEmailError('Not a valid email');
+      } else {
+        setEmailError('');
+      }
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+  
+    if (!isLogin && (passwordError || nameError || emailError || passwordStrengthError)) {
+      setMessage('Please fix the errors before proceeding.');
+      return;
+    }
+  
+    setLoading(true);
+    setMessage('');
+  
+    try {
+      const url = 'http://ckk312.xyz:5000';
+      const endpoint = isLogin ? '/api/login' : '/api/register';
+      const body = isLogin
+        ? {
+            username: formData.username,
+            password: formData.password,
+          }
+        : {
+            firstname: formData.firstName,
+            lastname: formData.lastName,
+            email: formData.username,
+            password: formData.password,
+          };
+  
+      const response = await fetch(`${url}${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+  
+      const data = await response.json();
+      if (response.ok && data.error === '') {
+        if (isLogin) {
+          setMessage('Login Successful!');
+          setIsLoggedIn(true, data.firstName, data.lastName); // Pass names from response
+          navigate('/');
+        } else {
+          setMessage('Registration Successful!');
+          setIsLoggedIn(true, formData.firstName, formData.lastName); // Pass names from formData
+          navigate('/');
+        }
+      } else {
+        setMessage(data.error || 'An error occurred. Please try again.');
+      }
+    } catch (error) {
+      setMessage('An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+
+  return (
+    <div className="container">
+      <div className="form-container">
+        <h3 id="this">{isLogin ? 'Login' : 'Sign Up'}</h3>
+        <form onSubmit={handleSubmit}>
+          {!isLogin && (
+            <>
+              <div className="form-group">
+                <label>First Name</label>
+                <input
+                  type="text"
+                  name="firstName"
+                  placeholder="Enter your first name"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Last Name</label>
+                <input
+                  type="text"
+                  name="lastName"
+                  placeholder="Enter your last name"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              {nameError && <p className="error-message">{nameError}</p>}
+            </>
+          )}
+          <div className="form-group">
+            <label>Email</label>
+            <input
+              type="text"
+              name="username"
+              placeholder="Enter your email"
+              value={formData.username}
+              onChange={handleChange}
+              required
+            />
+            {emailError && <p className="error-message">{emailError}</p>}
+          </div>
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter your password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+            {passwordStrengthError && (
+              <p className="error-message">{passwordStrengthError}</p>
+            )}
+          </div>
+          {!isLogin && (
+            <div className="form-group">
+              <label>Confirm Password</label>
+              <input
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm your password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+              {passwordError && <p className="error-message">{passwordError}</p>}
+            </div>
+          )}
+          <button
+            type="submit"
+            className="btn"
+            disabled={
+              loading ||
+              (!isLogin &&
+                (!!passwordError || !!nameError || !!emailError || !!passwordStrengthError))
+            }
+          >
+            {loading ? 'Processing...' : isLogin ? 'Login' : 'Sign Up'}
+          </button>
+        </form>
+        <p>{message}</p>
+        <p>
+          {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
+          <button
+            type="button"
+            className="toggle-btn"
+            onClick={() => {
+              setIsLogin(!isLogin);
+              setMessage('');
+              setPasswordError('');
+              setNameError('');
+              setEmailError('');
+              setPasswordStrengthError('');
+              setFormData({
+                firstName: '',
+                lastName: '',
+                username: '',
+                password: '',
+                confirmPassword: '',
+              });
+            }}
+          >
+            {isLogin ? 'Sign Up' : 'Login'}
+          </button>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default LoginSignup;
+import React, { useState } from 'react';
+import './ForgotPassword.css';
+
+const ForgotPassword: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+
+  const handleForgotPassword = async () => {
+    try {
+      const response = await fetch('http://ckk312.xyz:5000/api/forgotpass', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+
+      const responseData = await response.json();
+      if (response.ok) {
+        setMessage(responseData.message);
+        setError('');
+      } else {
+        setError(responseData.error || 'Something went wrong.');
+        setMessage('');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setError('An error occurred. Please try again later.');
+      setMessage('');
+    }
+  };
+
+  return (
+    <div className="forgot-password-container">
+      <h2 id="this">Forgot Password</h2>
+      <p>Enter your email to receive a password reset link.</p>
+      <div className="form-group">
+        <label>Email</label>
+        <input
+          type="email"
+          placeholder="Enter your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+      </div>
+      <button className="btn" onClick={handleForgotPassword}>
+        Send Reset Link
+      </button>
+      {message && <p className="success-message">{message}</p>}
+      {error && <p className="error-message">{error}</p>}
+    </div>
+  );
+};
+
+export default ForgotPassword;
+import { useEffect, useState } from "react";
+import Error from '../Error/Error'
+import './TeamLayout.css';
+
+async function getRoster(title: string): Promise<any[]> {
+    try {
+        const header = new Headers();
+        header.append('Content-Type', 'application/json');
+
+        const response = await fetch('http://www.ckk312.xyz:5000/api/searchdocuments', {
+            method: 'POST',
+            body: JSON.stringify({ collection: 'All Teams' , query: title + ' Knights', searchKeys: ['Game'] }),
+            headers: header
+        });
+
+        const result = await response.json();
+        return result.result;
+    } catch (e) {
+        console.error(e);
+        return [];
+    }
+    
+}
+
+async function updateName(oldPlayer: any, newPlayer: any) {
+    try {
+        const header = new Headers();
+        header.append('Content-Type', 'application/json');
+
+        const response = await fetch('https://www.ckk312.xyz/api/searchdocuments', {
+            method: 'POST',
+            body: JSON.stringify({ collection: 'All Teams' , query: oldPlayer + ' Knights' }),
+            headers: header
+        });
+
+        const result = await response.json();
+        return result.result;
+    } catch (e) {
+        console.error(e);
+        return [];
+    }
+}
+
+/***
+ * Team Layout React Component
+ * 
+ */
+export default function TeamLayout() {
+    const [roster, setRoster] = useState<any[]>([]);
+    const [isError, setIsError] = useState<boolean>(false);
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+    let path = window.location.pathname;
+    const game = path.split('/');
+
+    const allRosters = ['Knights', 'Knights Academy', 'Knights Rising', 'Knights Pink']
+    let rosterNum = 2;
+
+    if (game.at(-1) === 'Valorant') {
+        rosterNum = 4;
+    }
+
+    else if (game.at(-1) === 'Splatoon3') {
+        game.pop();
+        game.push('Splatoon');
+        rosterNum = 3;
+    }
+
+    else if (game.at(-1) === 'SmashUltimate') {
+        game.pop();
+        game.push('SmashBrosUltimate');
+        rosterNum = 1;
+    }
+
+    const rosters = allRosters.slice(0, rosterNum);
+
+    const handleLoad = async () => {
+        const stuff = await getRoster(game.at(-1)!);
+        setRoster(stuff);
+        if (stuff.length === 0) {
+            setIsError(true);
+            return null;
+        }
+    }
+
+    useEffect(() => {
+        if (!handleLoad()) {
+            setIsError(true);
+        };
+    }, []);
+
+    if (isError) {
+        return <Error />
+    }
+
+    let teamName: string;
+
+    return (
+        <>
+            <div id="team-layout-container">
+                <div id="team-banner">
+
+                </div>
+                <h1>{game.at(-1)}</h1>
+                <div id="team-info-wrapper" >
+                    {
+                        rosters.map((team: string, index: number) => {
+                            const newRoster = roster.filter((player) => {
+                                console.log(player.item.Game.replaceAll(' ', '') + ' ' + game.at(-1));
+                                return player.item.TeamAffiliation === team && player.item.Game.replaceAll(' ', '') === game.at(-1);
+                            });
+                            if (newRoster.length !== 0) {
+                                teamName = newRoster[0].item.Game;
+                            }
+                            return <Roster key={index} roster={newRoster} game={teamName + ' ' + team} logIn={isLoggedIn} />
+                        })
+                    }
+                </div>
+            </div>
+        </>
+    );
+}
+
+function Roster(props: any) {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const roster = props.roster;
+
+    return (
+        <>
+            <div className="roster-container" >
+                <div className="roster-container-clickable" onClick={(e) => { 
+                    e.preventDefault();
+                    if (isOpen) {
+                        setIsOpen(false);
+                    } else {
+                        setIsOpen(true);
+                    }
+                 }}>
+                    <h1>{props.game}</h1>
+                </div>
+                <div className="roster-display">
+                    { isOpen &&
+                        <>
+                            {
+                                roster.map((player: any, index: number) => {
+                                    return <Player key={index} player={player.item} logIn={props.logIn} />
+                                })
+                            }
+                            <Match />
+                        </>
+                    }
+                </div>
+                
+            </div>
+        </>
+    );
+}
+
+function Player(props: any) {
+    return (
+        <>
+            <div className="player-container">
+                <div className="player-img">
+                    <img className = "player-image" src={props.player.Img || "https://i.ibb.co/ncCbrRS/360-F-917122367-k-Spdp-RJ5-Hcmn0s4-WMd-Jb-SZpl7-NRzwup-U.webp"} alt={`"${props.player.Img}"`}/>
+                </div>
+                {
+                    
+                }
+                <h3>
+                    {props.player.Username}
+                </h3>
+            </div>
+        </>
+    );
+}
+
+function Match(props: any) {
+    const d = new Date(1711036038 * 1000);
+    const timeZone = 'America/New_York';
+    const formatter = d.toLocaleString('en-US', {
+        timeZone: timeZone,
+        month: 'numeric',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+    });
+    
+    const [datePart, timePart] = formatter.split(',');
+
+    return (
+        <>
+                <div>
+                <p>
+                    Next Upcoming Match
+                    <br/>
+                    props.match.title && props.match.TeamAffilicaiton
+                    <br/>
+                    props.match.HomeTeam  VS props.match.AwayTeam    
+                </p>
+                <p> 
+                    {datePart} {timePart}
+                </p>
+                </div>
+                   
+        </>
+        
+    );
+}import React, { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import './ResetPassword.css';
+
+const ResetPassword: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+
+  const token = searchParams.get('token'); // Get token from URL
+
+  const handleResetPassword = async () => {
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://ckk312.xyz:5000/api/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token, password }),
+      });
+
+      const responseData = await response.json();
+      if (response.ok) {
+        setMessage('Password reset successful. You can now log in.');
+        setError('');
+      } else {
+        setError(responseData.error || 'Something went wrong.');
+        setMessage('');
+      }
+    } catch (err) {
+      console.error('Error:', err);
+      setError('An error occurred. Please try again later.');
+      setMessage('');
+    }
+  };
+
+  return (
+    <div className="reset-password-container">
+      <h2>Reset Password</h2>
+      <p>Enter your new password below.</p>
+      <div className="form-group">
+        <label>New Password</label>
+        <input
+          type="password"
+          placeholder="Enter new password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </div>
+      <div className="form-group">
+        <label>Confirm Password</label>
+        <input
+          type="password"
+          placeholder="Confirm new password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          required
+        />
+      </div>
+      <button className="btn" onClick={handleResetPassword}>
+        Reset Password
+      </button>
+      {message && <p className="success-message">{message}</p>}
+      {error && <p className="error-message">{error}</p>}
+    </div>
+  );
+};
+
+export default ResetPassword;
+import './Teams.css'
+
+/***
+ * 
+ */
+export default function Teams() {
+    const teamInfo: [string, string][] = [['Apex Legends', ''], ['Call of Duty', 'https://i.ibb.co/gr6xvCv/COD-Logo.webp'], ['League of Legends', ''], ['Overwatch 2', ''], ['Smash Ultimate', ''], ['Splatoon 3', ''], ['Tom Clancy\'s: Rainbow Six Siege', ''], ['Valorant', '']];
+
+    return (
+        <>
+            <div id="team-container">
+                <h1>Here are our teams</h1>
+                <div id="team-list" >
+                {
+                    teamInfo.map((team, index) => {
+                        return <TeamCard key={index} image={team[1]} name={team[0]} />;
+                    })
+
+                    
+                }
+                </div>
+            </div>
+        </>
+    );
+}
+
+/***
+ * 
+ */
+function TeamCard(props: any) {
+    let name = props.name;
+    if (props.name === 'Tom Clancy\'s: Rainbow Six Siege') {
+        name = 'Rainbow Six Siege';
+    }
+
+    return (
+        <>
+            <div className="team-cards" onClick={() => { window.location.href = '/teams/' + (name as string).replaceAll(' ', '') }}>
+                <p>
+                    {props.name}
+                </p>
+                <img src={props.image} alt={props.name}/>
+            </div>
+        </>
+    )
+}import React from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { useUser } from '../../context/UserContext';
+import './TopBar.css';
+
+function TopBar() {
+  const { isLoggedIn, firstName, lastName, setIsLoggedIn } = useUser();
+  console.log('User Data: ', {isLoggedIn, firstName, lastName});
+  const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    setIsLoggedIn(false);
+    navigate('/login');
+  };
+
+  const handleEditProfile = () => {
+    navigate('/edit-profile');
+  };
+
+  return (
+    <>
+      <div id="top-bar">
+        <button id="home-btn" onClick={() => navigate('/')}>
+          Home
+        </button>
+        <h1 id="project-name">
+          {isLoggedIn
+            ? `Welcome ${firstName} ${lastName}`
+            : 'Welcome!'}
+        </h1>
+        {isLoggedIn ? (
+          <div>
+            <button id="prof-btn" onClick={handleEditProfile}>
+              Edit Profile
+            </button>
+            <button id="auth-btn" onClick={handleSignOut}>
+              Sign Out
+            </button>
+          </div>
+        ) : (
+          <button id="auth-btn" onClick={() => navigate('/login')}>
+            Admin<br /> Sign In
+          </button>
+        )}
+      </div>
+      <Outlet />
+    </>
+  );
+}
+
+export default React.memo(TopBar);
+
+import './LandingPage.css';
+
+const LandingPage: React.FC = () => {
+  return (
+    <div className="landing-container">
+      <div className="main-content">
+        <h2>This project aims to raise awareness about Esports at the University of Central Florida (UCF) while providing tools to support the streaming of Esports matches. 
+    By fostering greater engagement and accessibility, it seeks to enhance the visibility and community participation in the growing field of competitive gaming.
+        </h2>
+        
+        <button className="start-btn" onClick={() => window.location.href = "/teams"}>
+          Start
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default LandingPage;export default function Error() {
+    return (
+        <>
+            <h1>ERROR 404</h1>
+        </>
+    )
+}
