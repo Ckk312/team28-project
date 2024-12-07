@@ -29,9 +29,9 @@ async function updateName(oldPlayer: string, newPlayer: string): Promise<boolean
         const header = new Headers();
         header.append('Content-Type', 'application/json');
 
-        const response = await fetch('https://www.ckk312.xyz:5000/api/searchdocuments', {
+        const response = await fetch('http://www.ckk312.xyz:5000/api/readdocument', {
             method: 'POST',
-            body: JSON.stringify({ collection: 'All Teams' , query: oldPlayer, searchKeys: ['Username'] }),
+            body: JSON.stringify({ collection: 'All Teams' , name: oldPlayer }),
             headers: header
         });
 
@@ -41,15 +41,17 @@ async function updateName(oldPlayer: string, newPlayer: string): Promise<boolean
         return false;
     }
 
+    
+
     try {
-        const edit = await fetch('https://www.ckk312.xyz:5000/api/updatedocuments', {
+        const edit = await fetch('http://www.ckk312.xyz:5000/api/updatedocument', {
             method: 'POST',
             body: JSON.stringify({
                 collection: 'All Teams', 
-                _id: result._id, 
+                _id: result.result._id, 
                 username: newPlayer,
-                game: result.Game,
-                teamaffiliation: result.TeamAffiliation
+                game: result.result.Game,
+                teamaffiliation: result.result.TeamAffiliation
             })
         });
 
@@ -210,6 +212,7 @@ function Player(props: any) {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        console.log(props.player.Username + " " + playerTextValue);
         updateName(props.player.Username, playerTextValue);
         return;
     }
@@ -221,7 +224,7 @@ function Player(props: any) {
                     <img className = "player-image" src={props.player.Img || "https://i.ibb.co/ncCbrRS/360-F-917122367-k-Spdp-RJ5-Hcmn0s4-WMd-Jb-SZpl7-NRzwup-U.webp"} alt={`"${props.player.Img}"`}/>
                 </div>
                 <div className="player-name" >
-                    { isLoggedIn === isEdit &&
+                    { (isLoggedIn === true && isEdit === true) &&
                         <form className="player-form" onSubmit={handleSubmit}>
                             <input
                                 className="player-input"
@@ -257,10 +260,10 @@ async function getMatches(title: string, teamAffiliation: string): Promise<any[]
         });
 
         const result = await response.json();
-        console.log(result);
+        //.log(result);
         return result.result;
     } catch (e) {
-        console.error(e);
+        //console.error(e);
         return [];
     }
 }
@@ -274,9 +277,9 @@ function getFutureMatches(matches: any[]) {
             const matchDate = new Date(match.item.Date*1000); // Convert Unix timestamp to Date object
             const timeDifference = (matchDate.getTime() - Date.now());
 
-            console.log("Current Time:", Date.now()); // Log the current time
-            console.log("Match Date:", matchDate); // Log the match date
-            console.log("Time Difference:", timeDifference); // Log the time difference
+            //console.log("Current Time:", Date.now()); // Log the current time
+            //console.log("Match Date:", matchDate); // Log the match date
+            //console.log("Time Difference:", timeDifference); // Log the time difference
 
             // Only return matches that are in the future
             if (timeDifference > 0) {
@@ -302,16 +305,16 @@ function getFutureMatches(matches: any[]) {
 function Match(props: any) {
     const [nextMatch, setNextMatch] = useState<any | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
-    console.log(props);
+    //console.log(props);
 
     useEffect(() => {
         const fetchMatches = async () => {
             // Fetch matches based on game and team affiliation
             const allMatches = await getMatches(props.match.Game, props.match.TeamAffiliation);
-            console.log(allMatches);
+            //console.log(allMatches);
             // Find the next match
             const nextMatch = getFutureMatches(allMatches);
-            console.log(nextMatch);
+            //console.log(nextMatch);
             // Update the state with the next match
             setNextMatch(nextMatch[0]);
             setLoading(false);
