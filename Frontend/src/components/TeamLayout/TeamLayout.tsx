@@ -29,7 +29,7 @@ async function updateName(oldPlayer: string, newPlayer: string): Promise<boolean
         const header = new Headers();
         header.append('Content-Type', 'application/json');
 
-        const response = await fetch('https://www.ckk312.xyz/api/searchdocuments', {
+        const response = await fetch('https://www.ckk312.xyz:5000/api/searchdocuments', {
             method: 'POST',
             body: JSON.stringify({ collection: 'All Teams' , query: oldPlayer, searchKeys: ['Username'] }),
             headers: header
@@ -42,7 +42,7 @@ async function updateName(oldPlayer: string, newPlayer: string): Promise<boolean
     }
 
     try {
-        const edit = await fetch('https://www.ckk312.xyz/api/updatedocuments', {
+        const edit = await fetch('https://www.ckk312.xyz:5000/api/updatedocuments', {
             method: 'POST',
             body: JSON.stringify({
                 collection: 'All Teams', 
@@ -160,7 +160,7 @@ function Roster(props: any) {
     const { isLoggedIn } = useUser();
 
     const roster = props.roster;
-    console.log(roster);
+    
 
     return (
         <>
@@ -192,14 +192,13 @@ function Roster(props: any) {
                                         return <Player key={index} player={player.item} edit={isEdit} />
                                     })
                                 }
-                                <Match />
+                                <Match match={roster[0].item}/>
                             </>
                         }
                     </div>
                     
                 </div>
             </CardContext.Provider>
-            
         </>
     );
 }
@@ -253,7 +252,7 @@ async function getMatches(title: string, teamAffiliation: string): Promise<any[]
 
         const response = await fetch('http://www.ckk312.xyz:5000/api/searchdocuments', {
             method: 'POST',
-            body: JSON.stringify({ collection: 'MatchInfo', query: title + teamAffiliation }),
+            body: JSON.stringify({ collection: 'MatchInfo', query: title + teamAffiliation}),
             headers: header
         });
 
