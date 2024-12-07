@@ -15,5 +15,5 @@ export async function login(req: Request, res: Response, next: Function) : Promi
     if (!result)
     { res.status(200).json({ _id: -1, error: 'No user found' })}
 
-    res.status(200).json({ _id: result._id, error: '' });
+    res.status(200).json({ firstname: result.FirstName, lastname: result.LastName, _id: result._id, error: '' });
 }
