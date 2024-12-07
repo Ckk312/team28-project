@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createContext, useContext, memo } from "react";
 import Error from '../Error/Error'
 import './TeamLayout.css';
+import { useUser } from "../../context/UserContext";
 
 async function getRoster(title: string): Promise<any[]> {
     try {
@@ -22,24 +23,50 @@ async function getRoster(title: string): Promise<any[]> {
     
 }
 
-async function updateName(oldPlayer: any, newPlayer: any) {
+async function updateName(oldPlayer: string, newPlayer: string): Promise<boolean> {
+    let result;
     try {
         const header = new Headers();
         header.append('Content-Type', 'application/json');
 
         const response = await fetch('https://www.ckk312.xyz/api/searchdocuments', {
             method: 'POST',
-            body: JSON.stringify({ collection: 'All Teams' , query: oldPlayer + ' Knights' }),
+            body: JSON.stringify({ collection: 'All Teams' , query: oldPlayer, searchKeys: ['Username'] }),
             headers: header
         });
 
-        const result = await response.json();
-        return result.result;
+        result = await response.json();
     } catch (e) {
         console.error(e);
-        return [];
+        return false;
     }
+
+    try {
+        const edit = await fetch('https://www.ckk312.xyz/api/updatedocuments', {
+            method: 'POST',
+            body: JSON.stringify({
+                collection: 'All Teams', 
+                _id: result._id, 
+                username: newPlayer,
+                game: result.Game,
+                teamaffiliation: result.TeamAffiliation
+            })
+        });
+
+        const error = await edit.json();
+
+        if (error.error !== '') {
+            throw Error;
+        }
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
+
+    return true;
 }
+
+const CardContext = createContext<{isOpen: boolean, isEdit: boolean}>({ isOpen: false, isEdit: false });
 
 /***
  * Team Layout React Component
@@ -48,7 +75,7 @@ async function updateName(oldPlayer: any, newPlayer: any) {
 export default function TeamLayout() {
     const [roster, setRoster] = useState<any[]>([]);
     const [isError, setIsError] = useState<boolean>(false);
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    
 
     let path = window.location.pathname;
     const game = path.split('/');
@@ -87,7 +114,7 @@ export default function TeamLayout() {
         if (!handleLoad()) {
             setIsError(true);
         };
-    }, []);
+    });
 
     if (isError) {
         return <Error />
@@ -98,6 +125,15 @@ export default function TeamLayout() {
     return (
         <>
             <div id="team-layout-container">
+                <button
+                    id="return-to-teams-button"
+                    type="button"
+                    value="< Teams"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        window.location.pathname = '/teams'
+                    }} 
+                >Teams</button>
                 <div id="team-banner">
                     <h1 className = "game-title"> {game.at(-1)} </h1>
                     <img src="https://i.ibb.co/gr6xvCv/COD-Logo.webp" alt=""/>
@@ -112,7 +148,7 @@ export default function TeamLayout() {
                             if (newRoster.length !== 0) {
                                 teamName = newRoster[0].item.Game;
                             }
-                            return <Roster key={index} roster={newRoster} game={teamName + ' ' + team} logIn={isLoggedIn} />
+                            return <Roster key={index} roster={newRoster} game={teamName + ' ' + team} />
                         })
                     }
                 </div>
@@ -123,45 +159,61 @@ export default function TeamLayout() {
 
 function Roster(props: any) {
     const [isOpen, setIsOpen] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
+    const { isLoggedIn } = useUser();
 
     const roster = props.roster;
 
     return (
         <>
-            <div className="roster-container" >
-                <div className="roster-container-clickable" onClick={(e) => { 
-                    e.preventDefault();
-                    if (isOpen) {
-                        setIsOpen(false);
-                    } else {
-                        setIsOpen(true);
-                    }
-                 }}>
-                    <h1>{props.game}</h1>
+            <CardContext.Provider value={{isOpen, isEdit}} >
+                <div className="roster-container" >
+                    <div className="roster-container-clickable" onClick={(e) => { 
+                        e.preventDefault();
+                        setIsOpen(isOpen ? false : true);
+                    }}>
+                        <h1>{props.game}</h1>
+                        { isLoggedIn &&
+                            <button
+                                className="roster-edit-button"
+                                type="button"
+                                value={isEdit ? 'Edit' : 'Confirm'}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setIsEdit(isEdit ? false : true);
+                                }}
+                            >{isEdit ? 'Confirm' : 'Edit'}</button>
+                        }
+                    </div>
+                    
+                    <div className="roster-display">
+                        { isOpen &&
+                            <>
+                                {
+                                    roster.map((player: any, index: number) => {
+                                        return <Player key={index} player={player.item} edit={isEdit} />
+                                    })
+                                }
+                                <Match />
+                            </>
+                        }
+                    </div>
+                    
                 </div>
-                <div className="roster-display">
-                    { isOpen &&
-                        <>
-                            {
-                                roster.map((player: any, index: number) => {
-                                    return <Player key={index} player={player.item} logIn={props.logIn} />
-                                })
-                            }
-                            <Match />
-                        </>
-                    }
-                </div>
-                
-            </div>
+            </CardContext.Provider>
+            
         </>
     );
 }
 
 function Player(props: any) {
     const [playerTextValue, setPlayerTextValue] = useState(props.player.Username);
+    const { isLoggedIn } = useUser();
+    const { isOpen, isEdit } = useContext(CardContext);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        updateName(props.player.Username, playerTextValue);
         return;
     }
 
@@ -172,7 +224,7 @@ function Player(props: any) {
                     <img className = "player-image" src={props.player.Img || "https://i.ibb.co/ncCbrRS/360-F-917122367-k-Spdp-RJ5-Hcmn0s4-WMd-Jb-SZpl7-NRzwup-U.webp"} alt={`"${props.player.Img}"`}/>
                 </div>
                 <div className="player-name" >
-                    { props.isLoggedIn &&
+                    { isLoggedIn === isEdit &&
                         <form className="player-form" onSubmit={handleSubmit}>
                             <input
                                 className="player-input"
