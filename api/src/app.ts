@@ -9,6 +9,7 @@ import { readdocument } from './readdocument.js';
 import { updatedocument } from './updatedocument.js';
 import { deletedocument } from './deletedocument.js';
 import { searchdocuments } from './searchdocuments.js';
+import { searchplayers } from './searchplayers.js';
 
 const app : Express = express();
 
@@ -37,8 +38,6 @@ app.post('/api/readdocument', readdocument);
 app.post('/api/updatedocument', updatedocument);
 app.post('/api/deletedocument', deletedocument);
 app.post('/api/searchdocuments', searchdocuments);
-
-
-
+app.post('/api/searchplayers', searchplayers);
 
 export default app;

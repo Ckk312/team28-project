@@ -7,9 +7,9 @@ async function getRoster(title: string): Promise<any[]> {
         const header = new Headers();
         header.append('Content-Type', 'application/json');
 
-        const response = await fetch(/*'https://www.ckk312.xyz/api/searchdocuments*/'http://www.ckk312.xyz:5000/api/searchplayers', {
+        const response = await fetch('http://www.ckk312.xyz:5000/api/searchdocuments', {
             method: 'POST',
-            body: JSON.stringify({ collection: 'All Teams' , query: title + ' Knights' }),
+            body: JSON.stringify({ collection: 'All Teams' , query: title + ' Knights', searchKeys: ['Game'] }),
             headers: header
         });
 
@@ -20,6 +20,25 @@ async function getRoster(title: string): Promise<any[]> {
         return [];
     }
     
+}
+
+async function updateName(oldPlayer: any, newPlayer: any) {
+    try {
+        const header = new Headers();
+        header.append('Content-Type', 'application/json');
+
+        const response = await fetch('https://www.ckk312.xyz/api/searchdocuments', {
+            method: 'POST',
+            body: JSON.stringify({ collection: 'All Teams' , query: oldPlayer + ' Knights' }),
+            headers: header
+        });
+
+        const result = await response.json();
+        return result.result;
+    } catch (e) {
+        console.error(e);
+        return [];
+    }
 }
 
 /***

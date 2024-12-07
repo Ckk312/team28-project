@@ -8,7 +8,7 @@ export async function searchdocuments(req: Request, res: Response, next: Functio
     // in : collection, query
     // out : result, error
 
-    const { collection, query } = req.body;
+    const { collection, query, searchKeys } = req.body;
     let error : string = '';
 
     const database: Db = mdbclient.db('LargeProject');
@@ -17,14 +17,14 @@ export async function searchdocuments(req: Request, res: Response, next: Functio
     if(collection === 'All Teams')
     {
         const list: any = await database.collection('All Teams').find().toArray();
-        const keys = { keys: ["Username"] };
+        const keys = { keys: searchKeys || ["Game"] };
         const fuse = new Fuse(list, keys);
         result = fuse.search(query);
     }
     else if(collection === 'MatchInfo')
     {
         const list: any = await database.collection('MatchInfo').find().toArray();
-        const keys = { keys: ["Title"] };
+        const keys = { keys: searchKeys || ["Game"] };
         const fuse = new Fuse(list, keys);
         result = fuse.search(query);
     }
