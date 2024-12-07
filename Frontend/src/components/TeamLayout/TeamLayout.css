@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 .roster-container-clickable {
     background-color: azure;
 }
@@ -39,3 +40,131 @@ pre{
     text-align: center;
 }
 
+=======
+/* Set background color to gold */
+body {
+    margin: 0; /* Remove default margin */
+    height: 100%; /* Ensure the body takes full height of the viewport */
+    background-color: black; /* Set the background color to gold */
+    background-image: url('../../../public/images/ucfbackground.jpg'); /* Path from public folder */
+    background-size: cover; /* Make the image cover the entire viewport */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Prevent repeating the image */
+    overflow-x: hidden; /* Prevent horizontal overflow */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* Ensure #team-layout-container takes the full height */
+#team-layout-container {
+    z-index: 1;
+    min-height: 100%; /* Ensure this container covers the full height of the page */
+    max-width: 100%;
+    position: relative;
+    padding-top: 80px; /* Add space for top bar or header */
+    padding-bottom: 20px; /* Ensure there is padding at the bottom */
+    box-sizing: border-box; /* Prevent content from overflowing */
+}
+
+/* Team Banner Settings */
+#team-banner {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Roster container settings */
+.roster-container {
+    padding-top: 20px; /* Ensure space at the top of the roster */
+    overflow: hidden; /* Prevent elements from overflowing */
+    box-sizing: border-box; /* Ensure padding is included in height calculation */
+}
+
+/* Adjust player container settings for proper spacing */
+.player-container {
+    margin-top: 20px; /* Add margin-top for the first player to avoid cutting off */
+    margin-bottom: 20px; /* Space after each player */
+    box-sizing: border-box;
+}
+
+/* Styling for the clickable roster container */
+.roster-container-clickable {
+    background-color: rgb(255, 255, 255);
+    padding: 10px; /* Padding for clickable container */
+    cursor: pointer; /* Change cursor to indicate it's clickable */
+}
+
+/* Styling for player images */
+.player-image {
+    max-width: 150px;
+    max-height: 150px;
+    width: auto;
+    height: auto;
+    object-fit: cover;
+    
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Game title styling */
+.game-title {
+    text-align: center;
+    font-size: 10rem; /* Make the font size larger */
+    font-family: 'Impact', sans-serif; /* Use the Impact font */
+    color: #000000; /* Set font color to white for better contrast on dark background */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add shadow for emphasis */
+    margin-top: 20px; /* Add some spacing from the top */
+    margin-bottom: 20px; /* Add spacing below */
+}
+
+/* Text alignment for preformatted text */
+pre {
+    text-align: center;
+}
+
+/* Custom Dropdown Styling */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown button styling */
+.dropdown-button {
+    background-color: rgb(255, 255, 255);
+    color: black;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 2px solid #ffffff;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+}
+
+/* Dropdown menu styling */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: rgb(231, 231, 231);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border: 2px solid #ffffff; /* Border around the dropdown */
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+/* Show the dropdown when hovered */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Styling for each option */
+.dropdown-content a {
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    color: black;
+}
+>>>>>>> Stashed changes
