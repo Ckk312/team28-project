@@ -8,26 +8,29 @@ import ResetPassword from './components/ResetPassword/ResetPassword'; // Import 
 import Teams from './components/Teams/Teams';
 import TeamLayout from './components/TeamLayout/TeamLayout';
 import Error from './components/Error/Error';
+import { UserProvider } from './context/UserContext';
 
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<TopBar />} >
-          <Route index element={<LandingPage />} />
-          <Route path="login" element={<LoginSignup />} />
-          <Route path="forgot-password" element={<ForgotPassword />} />
-          <Route path="reset-password" element={<ResetPassword />} />
-          <Route path="teams" >
-            <Route index element={<Teams />} />
-            <Route path="*" element={<TeamLayout />} />
+    <UserProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<TopBar />} >
+            <Route index element={<LandingPage />} />
+            <Route path="login" element={<LoginSignup />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="reset-password" element={<ResetPassword />} />
+            <Route path="teams" >
+              <Route index element={<Teams />} />
+              <Route path="*" element={<TeamLayout />} />
+            </Route>
+            <Route path="*" element={<Error />} />
+            {/* Add ResetPassword route */}
           </Route>
-          <Route path="*" element={<Error />} />
-          {/* Add ResetPassword route */}
-        </Route>
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
+      </UserProvider>
   );
 }
 
