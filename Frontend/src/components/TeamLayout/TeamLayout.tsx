@@ -75,7 +75,6 @@ const CardContext = createContext<{isOpen: boolean, isEdit: boolean}>({ isOpen: 
 export default function TeamLayout() {
     const [roster, setRoster] = useState<any[]>([]);
     const [isError, setIsError] = useState<boolean>(false);
-    
 
     let path = window.location.pathname;
     const game = path.split('/');
@@ -136,13 +135,11 @@ export default function TeamLayout() {
                 >Teams</button>
                 <div id="team-banner">
                     <h1 className = "game-title"> {game.at(-1)} </h1>
-                    <img src="https://i.ibb.co/gr6xvCv/COD-Logo.webp" alt=""/>
                 </div>
                 <div id="team-info-wrapper" >
                     {
                         rosters.map((team: string, index: number) => {
                             const newRoster = roster.filter((player) => {
-                                console.log(player.item.Game.replaceAll(' ', '') + ' ' + game.at(-1));
                                 return player.item.TeamAffiliation === team && player.item.Game.replaceAll(' ', '') === game.at(-1);
                             });
                             if (newRoster.length !== 0) {
@@ -163,6 +160,7 @@ function Roster(props: any) {
     const { isLoggedIn } = useUser();
 
     const roster = props.roster;
+    console.log(roster);
 
     return (
         <>
@@ -247,36 +245,114 @@ function Player(props: any) {
     );
 }
 
+async function getMatches(title: string, teamAffiliation: string): Promise<any[]> {
+    
+    try {
+        const header = new Headers();
+        header.append('Content-Type', 'application/json');
+
+        const response = await fetch('http://www.ckk312.xyz:5000/api/searchdocuments', {
+            method: 'POST',
+            body: JSON.stringify({ collection: 'MatchInfo', query: title + teamAffiliation }),
+            headers: header
+        });
+
+        const result = await response.json();
+        console.log(result);
+        return result.result;
+    } catch (e) {
+        console.error(e);
+        return [];
+    }
+}
+
+function getFutureMatches(matches: any[]) {
+    // Get the current time in milliseconds
+
+    // Step 1: Map the matches to include the time difference from the current date
+    const matchesWithTimeDifference = matches
+        .map((match: any) => {
+            const matchDate = new Date(match.item.Date*1000); // Convert Unix timestamp to Date object
+            const timeDifference = (matchDate.getTime() - Date.now());
+
+            console.log("Current Time:", Date.now()); // Log the current time
+            console.log("Match Date:", matchDate); // Log the match date
+            console.log("Time Difference:", timeDifference); // Log the time difference
+
+            // Only return matches that are in the future
+            if (timeDifference > 0) {
+                return { ...match.item, date: matchDate, timeDifference }; // Return match with time difference
+            } else {
+                return null; // Exclude past matches
+            }
+        })
+        .filter((match: any) => match !== null); // Filter out any null (past matches)
+
+    // Step 2: Sort the future matches by the smallest time difference (ascending order)
+    const sortedFutureMatches = matchesWithTimeDifference.sort((a: any, b: any) => a.timeDifference - b.timeDifference);
+
+    // Step 3: Return all future matches
+    return sortedFutureMatches;
+}
+
+
+
+
+
+
 function Match(props: any) {
-    const d = new Date(1711036038 * 1000);
+    const [nextMatch, setNextMatch] = useState<any | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    console.log(props);
+
+    useEffect(() => {
+        const fetchMatches = async () => {
+            // Fetch matches based on game and team affiliation
+            const allMatches = await getMatches(props.match.Game, props.match.TeamAffiliation);
+            console.log(allMatches);
+            // Find the next match
+            const nextMatch = getFutureMatches(allMatches);
+            console.log(nextMatch);
+            // Update the state with the next match
+            setNextMatch(nextMatch[0]);
+            setLoading(false);
+        };
+
+        fetchMatches();
+    }, [props.match.Game, props.match.TeamAffiliation]);
+
+
+    // If no next match is found, display a message
+    if (!nextMatch) {
+        return <div><pre>No upcoming match found.</pre></div>;
+    }
+
+    const matchDate = new Date(nextMatch.date);
     const timeZone = 'America/New_York';
-    const formatter = d.toLocaleString('en-US', {
+
+    // Format date as month/day/year hour:minute AM/PM
+    const formatter = matchDate.toLocaleString('en-US', {
         timeZone: timeZone,
         month: 'numeric',
         day: 'numeric',
         year: 'numeric',
         hour: 'numeric',
         minute: 'numeric',
+        hour12: true // 12-hour format (AM/PM)
     });
-    
+
     const [datePart, timePart] = formatter.split(',');
 
+
     return (
-        <>
-                <div>
-                <p>
-                    Next Upcoming Match
-                    <br/>
-                    props.match.title && props.match.TeamAffilicaiton
-                    <br/>
-                    props.match.HomeTeam  VS props.match.AwayTeam    
-                </p>
-                <p> 
-                    {datePart} {timePart}
-                </p>
-                </div>
-                   
-        </>
-        
+        <div>
+            <p>
+                Next Upcoming Match
+                <br />
+                {nextMatch.HomeTeam} VS {nextMatch.AwayTeam}
+                <br />
+                {datePart}   @  {timePart}
+            </p>
+        </div>
     );
 }
