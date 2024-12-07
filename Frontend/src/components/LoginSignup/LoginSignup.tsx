@@ -106,7 +106,7 @@ const LoginSignup: React.FC = () => {
       if (response.ok && data.error === '') {
         if (isLogin) {
           setMessage('Login Successful!');
-          setIsLoggedIn(true, data.firstName, data.lastName); // Pass names from response
+          setIsLoggedIn(true, data.firstname, data.lastname); // Pass names from response
           navigate('/');
         } else {
           setMessage('Registration Successful!');

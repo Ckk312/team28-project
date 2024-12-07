@@ -44,6 +44,9 @@ async function updateName(oldPlayer: string, newPlayer: string): Promise<boolean
     
 
     try {
+        const header = new Headers();
+        header.append('Content-Type', 'application/json');
+
         const edit = await fetch('http://www.ckk312.xyz:5000/api/updatedocument', {
             method: 'POST',
             body: JSON.stringify({
@@ -52,7 +55,8 @@ async function updateName(oldPlayer: string, newPlayer: string): Promise<boolean
                 username: newPlayer,
                 game: result.result.Game,
                 teamaffiliation: result.result.TeamAffiliation
-            })
+            }),
+            headers: header
         });
 
         const error = await edit.json();
