@@ -1,5 +1,5 @@
 /* Set background color to gold */
-body {
+body{
     margin: 0; /* Remove default margin */
     height: 100%; /* Ensure the body takes full height of the viewport */
     background-color: black; /* Set the background color to gold */
