@@ -9,18 +9,33 @@ const LoginSignup: React.FC = () => {
     lastName: '',
     username: '',
     password: '',
-    confirmPassword: '', // Added confirmPassword
+    confirmPassword: '',
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const [passwordError, setPasswordError] = useState(''); // State for password mismatch
+  const [passwordError, setPasswordError] = useState('');
+  const [nameError, setNameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordStrengthError, setPasswordStrengthError] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
-    // Validate passwords on change
+    // Validate passwords for strength
+    if (name === 'password') {
+      const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])/; // At least one uppercase, one number, and one special character
+      if (!passwordRegex.test(value)) {
+        setPasswordStrengthError(
+          'Password must contain at least one uppercase letter, one number, and one special character'
+        );
+      } else {
+        setPasswordStrengthError('');
+      }
+    }
+
+    // Confirm passwords match
     if (name === 'password' || name === 'confirmPassword') {
       if (
         (name === 'password' && value !== formData.confirmPassword) ||
@@ -31,12 +46,33 @@ const LoginSignup: React.FC = () => {
         setPasswordError('');
       }
     }
+
+    // Validate first and last names dynamically
+    if (name === 'firstName' || name === 'lastName') {
+      const nameRegex = /^[A-Za-z]*$/; // Allow empty input while typing
+      if (!nameRegex.test(value)) {
+        setNameError('First and Last name must be characters only');
+      } else {
+        setNameError('');
+      }
+    }
+
+    // Validate email dynamically
+    if (name === 'username') {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email validation
+      if (!emailRegex.test(value)) {
+        setEmailError('Not a valid email');
+      } else {
+        setEmailError('');
+      }
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isLogin && passwordError) {
-      setMessage('Passwords must match to proceed.');
+
+    if (!isLogin && (passwordError || nameError || emailError || passwordStrengthError)) {
+      setMessage('Please fix the errors before proceeding.');
       return;
     }
 
@@ -85,10 +121,6 @@ const LoginSignup: React.FC = () => {
       <div className="form-container">
         <h3 id="this">{isLogin ? 'Login' : 'Sign Up'}</h3>
         <form onSubmit={handleSubmit}>
-          {/* IF REGISTER ASK FOR FIRST & LAST NAME*/}
-          {/* 
-              Alex respectfully, MAKE COMMENTS ON THE FUCKING CODE
-          */}
           {!isLogin && (
             <>
               <div className="form-group">
@@ -113,6 +145,7 @@ const LoginSignup: React.FC = () => {
                   required
                 />
               </div>
+              {nameError && <p className="error-message">{nameError}</p>}
             </>
           )}
           <div className="form-group">
@@ -125,6 +158,7 @@ const LoginSignup: React.FC = () => {
               onChange={handleChange}
               required
             />
+            {emailError && <p className="error-message">{emailError}</p>}
           </div>
           <div className="form-group">
             <label>Password</label>
@@ -136,15 +170,10 @@ const LoginSignup: React.FC = () => {
               onChange={handleChange}
               required
             />
+            {passwordStrengthError && (
+              <p className="error-message">{passwordStrengthError}</p>
+            )}
           </div>
-          { isLogin && 
-          <button
-          className="forgot-password-btn"
-          onClick={() => navigate('/forgot-password')} // Navigate to Forgot Password page
-        >
-          Forgot Password?
-        </button>
-        }  
           {!isLogin && (
             <div className="form-group">
               <label>Confirm Password</label>
@@ -156,13 +185,17 @@ const LoginSignup: React.FC = () => {
                 onChange={handleChange}
                 required
               />
-              {passwordError && <p className="error">{passwordError}</p>}
+              {passwordError && <p className="error-message">{passwordError}</p>}
             </div>
           )}
           <button
             type="submit"
             className="btn"
-            disabled={loading || (!isLogin && passwordError !== '')}
+            disabled={
+              loading ||
+              (!isLogin &&
+                (!!passwordError || !!nameError || !!emailError || !!passwordStrengthError))
+            }
           >
             {loading ? 'Processing...' : isLogin ? 'Login' : 'Sign Up'}
           </button>
@@ -177,6 +210,9 @@ const LoginSignup: React.FC = () => {
               setIsLogin(!isLogin);
               setMessage('');
               setPasswordError('');
+              setNameError('');
+              setEmailError('');
+              setPasswordStrengthError('');
               setFormData({
                 firstName: '',
                 lastName: '',
