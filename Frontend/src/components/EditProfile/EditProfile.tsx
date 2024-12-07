@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useUser } from '../../context/UserContext';  // Import the custom hook to access the context
 
+import './EditProfile.css';
+
 const EditProfile = () => {
   const { firstName, lastName, setIsLoggedIn } = useUser();  // Get context values and the setIsLoggedIn function
   const [newFirstName, setNewFirstName] = useState(firstName || '');  // Set default to current first name or empty string

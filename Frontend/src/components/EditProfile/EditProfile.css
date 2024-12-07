@@ -16,7 +16,8 @@ body {
   max-width: 400px; /* Slightly larger container for profile editing */
   margin: auto;
   padding: 20px;
-  background-color: #fff;
+  background-color: #333;
+  color: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -46,7 +47,7 @@ label {
   display: block;
   margin-bottom: 6px;
   font-weight: bold;
-  color: #333;
+  color: #fff;
 }
 
 /* Input fields */
@@ -95,50 +96,19 @@ input:focus, textarea:focus {
 
 /* Button styles */
 .btn {
-  width: 100%;
-  padding: 10px;
-  background-color: #d4af37;
-  color: #fff;
+  background-color: #555;
+  color: white;
   border: none;
+  padding: 10px 20px;
   border-radius: 5px;
-  font-size: 15px;
-  font-weight: bold;
   cursor: pointer;
-  margin-top: 8px;
+  font-size: 22px;
 }
 
 .btn:hover {
   background-color: #b89630;
 }
 
-/* Secondary button (cancel or reset) */
-.btn-secondary {
-  width: 100%;
-  margin-top: 10px;
-  background: none;
-  color: #d4af37;
-  font-size: 14px;
-  border: none;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-/* Toggle button (change password, etc.) */
-.toggle-btn {
-  background: none;
-  color: #d4af37;
-  font-size: 14px;
-  border: none;
-  cursor: pointer;
-  text-decoration: underline;
-  font-weight: bold;
-}
-
-/* Hover effects */
-.toggle-btn:hover,
-.btn-secondary:hover {
-  color: #b89630;
-}
 
 /* Paragraph spacing */
 p {
