@@ -39,7 +39,7 @@
     border: 1px solid #ddd; /* Subtle border around images */
     border-radius: 4px; /* Slightly rounded corners */
     padding: 5px; /* Internal padding around the image */
-    max-width: 100px; /* Scale image to fit within card */
-    max-height: 100px; /* Set a maximum height */
+    width: 100px; /* Scale image to fit within card */
+    height: 100px; /* Set a maximum height */
     object-fit: cover; /* Ensure image maintains aspect ratio */
 }
