@@ -15,8 +15,6 @@ export default function Teams() {
                     teamInfo.map((team, index) => {
                         return <TeamCard key={index} image={team[1]} name={team[0]} />;
                     })
-
-                    
                 }
                 </div>
             </div>
