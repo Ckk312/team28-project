@@ -5,6 +5,7 @@ interface UserContextProps {
   firstName: string | null;
   lastName: string | null;
   setIsLoggedIn: (status: boolean, firstName?: string, lastName?: string) => void;
+  updateProfile: (firstName: string, lastName: string) => void;
 }
 
 const UserContext = createContext<UserContextProps | undefined>(undefined);
@@ -37,8 +38,15 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const updateProfile = (firstName: string, lastName: string) => {
+    setFirstName(firstName);
+    setLastName(lastName);
+    localStorage.setItem('firstName', firstName);
+    localStorage.setItem('lastName', lastName);
+  }
+
   return (
-    <UserContext.Provider value={{ isLoggedIn, firstName, lastName, setIsLoggedIn }}>
+    <UserContext.Provider value={{ isLoggedIn, firstName, lastName, setIsLoggedIn, updateProfile }}>
       {children}
     </UserContext.Provider>
   );

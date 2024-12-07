@@ -6,7 +6,7 @@ import ForgotPassword from './components/ForgotPassword/ForgotPassword';
 import TopBar from './components/TopBar/TopBar';
 import ResetPassword from './components/ResetPassword/ResetPassword'; // Import ResetPassword page
 import Teams from './components/Teams/Teams';
-import TeamLayout from './components/TeamLayout/TeamLayout';
+import EditProfile from './components/EditProfile/EditProfile';
 import Error from './components/Error/Error';
 import { UserProvider } from './context/UserContext';
 
@@ -23,8 +23,8 @@ function App() {
             <Route path="reset-password" element={<ResetPassword />} />
             <Route path="teams" >
               <Route index element={<Teams />} />
-              <Route path="*" element={<TeamLayout />} />
             </Route>
+            <Route path="edit-profile" element={<EditProfile />} />
             <Route path="*" element={<Error />} />
             {/* Add ResetPassword route */}
           </Route>
