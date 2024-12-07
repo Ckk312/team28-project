@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../context/UserContext'; // Import the context
 import './LoginSignup.css';
 
 const LoginSignup: React.FC = () => {
+  const { setIsLoggedIn } = useUser(); // Destructure the function from context
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -70,15 +72,15 @@ const LoginSignup: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     if (!isLogin && (passwordError || nameError || emailError || passwordStrengthError)) {
       setMessage('Please fix the errors before proceeding.');
       return;
     }
-
+  
     setLoading(true);
     setMessage('');
-
+  
     try {
       const url = 'http://ckk312.xyz:5000';
       const endpoint = isLogin ? '/api/login' : '/api/register';
@@ -93,21 +95,26 @@ const LoginSignup: React.FC = () => {
             email: formData.username,
             password: formData.password,
           };
-
+  
       const response = await fetch(`${url}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
-
+  
       const data = await response.json();
-      if (response.ok) {
-        if (data['error'] === '') {
-          setMessage(isLogin ? 'Login Successful!' : 'Registration Successful!');
-          if (isLogin) navigate('/');
+      if (response.ok && data.error === '') {
+        if (isLogin) {
+          setMessage('Login Successful!');
+          setIsLoggedIn(true, data.firstName, data.lastName); // Pass names from response
+          navigate('/');
         } else {
-          setMessage('Incorrect username or password');
+          setMessage('Registration Successful!');
+          setIsLoggedIn(true, formData.firstName, formData.lastName); // Pass names from formData
+          navigate('/');
         }
+      } else {
+        setMessage(data.error || 'An error occurred. Please try again.');
       }
     } catch (error) {
       setMessage('An error occurred. Please try again.');
@@ -115,6 +122,7 @@ const LoginSignup: React.FC = () => {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="container">
