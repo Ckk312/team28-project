@@ -48,7 +48,9 @@ function TopBar() {
           </button>
         )}
       </div>
-      <Outlet />
+      <div>
+        <Outlet />
+      </div>
     </>
   );
 }
