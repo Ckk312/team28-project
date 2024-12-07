@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Error from '../Error/Error'
 import './TeamLayout.css';
 
@@ -158,18 +158,38 @@ function Roster(props: any) {
 }
 
 function Player(props: any) {
+    const [playerTextValue, setPlayerTextValue] = useState(props.player.Username);
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        return;
+    }
+
     return (
         <>
             <div className="player-container">
                 <div className="player-img">
                     <img className = "player-image" src={props.player.Img || "https://i.ibb.co/ncCbrRS/360-F-917122367-k-Spdp-RJ5-Hcmn0s4-WMd-Jb-SZpl7-NRzwup-U.webp"} alt={`"${props.player.Img}"`}/>
                 </div>
-                {
-                    
-                }
-                <h3>
-                    {props.player.Username}
-                </h3>
+                <div className="player-name" >
+                    { props.isLoggedIn &&
+                        <form className="player-form" onSubmit={handleSubmit}>
+                            <input
+                                className="player-input"
+                                type="text"
+                                value={ playerTextValue }
+                                onChange={(e) => { setPlayerTextValue(e.target.value) }}
+                            />
+                            <input
+                                className="player-submit"
+                                type="submit"
+                            />
+                        </form>   
+                    }
+                    <h3>
+                        {props.player.Username}
+                    </h3>
+                </div>                
             </div>
         </>
     );
