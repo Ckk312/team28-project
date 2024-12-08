@@ -25,7 +25,7 @@ export async function updatedocument(req: Request, res: Response, next: Function
     else if (collection === 'All Teams')
     {
         try
-        { database.collection(collection).updateOne({ _id: id }, { $set: { Username: req.body.username, Game: req.body.game, TeamAffiliation: req.body.teamaffiliation }}) }
+        { database.collection(collection).updateOne({ _id: id }, { $set: { Username: req.body.username, Game: req.body.game, IsCaptain: req.body.iscaptain, Role: req.body.role, TeamAffiliation: req.body.teamaffiliation }}) }
         catch(err: any)
         { error = err.toString() }
     }
