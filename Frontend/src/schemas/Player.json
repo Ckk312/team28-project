@@ -1,0 +1,22 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "Username": { "type": "string" },
+        "Game": { "type": "string" },
+        "TeamAffiliation": { "type": "string" },
+        "Img": { "type": "string" },
+        "ClubStatus": { "type": "string" },
+        "Description": { "type": "string" },
+        "MainCharacter": { "type": "string" },
+        "Rank": { "type": "string" },
+        "Role": { "type": "string" }
+    },
+    "additionalProperties": false,
+    "required": ["Username", "Game", "TeamAffiliation"],
+    "default": {
+        "Username": "",
+        "Game": "",
+        "TeamAffiliation": ""
+    }
+}

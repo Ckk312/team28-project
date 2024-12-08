@@ -1,0 +1,24 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "Title": { "type": "string" },
+        "Game": { "type": "string" },
+        "HomeScore": { "type": "number" },
+        "AwayScore": { "type": "number" },
+        "HomeTeam": { "type": "string" },
+        "AwayTeam": { "type": "string" },
+        "Date": { "type": "number" },
+        "VOD": { "type": "string" }
+    },
+    "additionalProperties": false,
+    "required": ["Title", "Game", "HomeTeam", "AwayTeam", "Date"],
+    "default": {
+        "Title": "",
+        "Game": "",
+        "HomeScore": 0,
+        "AwayScore": 0,
+        "HomeTeam": "",
+        "AwayTeam": ""
+    }
+}
