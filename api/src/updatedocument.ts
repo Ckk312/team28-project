@@ -7,7 +7,7 @@ export async function updatedocument(req: Request, res: Response, next: Function
     // in : collection, _id
     // json body changes depending on collection
     // if Users: email, firstname, lastname
-    // if All Teams: username, game, teamaffiliation
+    // if All Teams: username, game, teamaffiliation, img, clubstatus, description, maincharacter, rank, role
     // if MatchInfo: title, game, homescore, awayscore, hometeam, awayteam, date, vod
     // out : error
 
