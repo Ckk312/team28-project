@@ -6,7 +6,7 @@ export async function createdocument(req: Request, res: Response, next: Function
 {
     // in : collection
     // json body changes depending on collection
-    // if All Teams: username, game, teamaffiliation
+    // if All Teams: username, game, teamaffiliation, img, clubstatus, description, maincharacter, rank, role
     // if MatchInfo: title, game, homescore, awayscore, hometeam, awayteam, date, vod
     // out : error
 
@@ -16,7 +16,7 @@ export async function createdocument(req: Request, res: Response, next: Function
     if (collection === 'All Teams')
     {
         try
-        { database.collection(collection).insertOne({ Username: req.body.username, Game: req.body.game, IsCaptain: req.body.iscaptain, Role: req.body.role, TeamAffiliation: req.body.teamaffiliation }) }
+        { database.collection(collection).insertOne({ Username: req.body.username, Game: req.body.game, TeamAffiliation: req.body.teamaffiliation, Img: req.body.img, ClubStatus: req.body.clubstatus, Description: req.body.description, MainCharacter: req.body.maincharacter, Rank: req.body.rank, Role: req.body.role }) }
         catch(err: any)
         { error = err.toString() }
     }
