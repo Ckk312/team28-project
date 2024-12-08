@@ -16,7 +16,7 @@ function TopBar() {
     <>
       <div id="top-bar">
         <button id="home-btn" onClick={() => navigate('/')}>
-          Home
+          Esports at UCF
         </button>
         <h1 id="project-name">
           {isLoggedIn
@@ -41,4 +41,3 @@ function TopBar() {
 }
 
 export default React.memo(TopBar);
-

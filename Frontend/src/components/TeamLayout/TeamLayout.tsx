@@ -4,16 +4,18 @@ import './TeamLayout.css';
 import { useUser } from "../../context/UserContext";
 import { updateName, getRoster, getMatches, getFutureMatches } from'./Helper';
 
-const CardContext = createContext<{isOpen: boolean, isEdit: boolean}>({ isOpen: false, isEdit: false });
+const CardContext = createContext<{isOpen: boolean, isEdit: boolean, captainExists: boolean}>({ isOpen: false, isEdit: false, captainExists: false });
 
 /***
  * Team Layout React Component
  * 
  */
 export default function TeamLayout() {
+    // use states
     const [roster, setRoster] = useState<any[]>([]);
     const [isError, setIsError] = useState<boolean>(false);
 
+    // get pathname for designation of teams
     let path = window.location.pathname;
     const game = path.split('/');
 
@@ -74,11 +76,11 @@ export default function TeamLayout() {
                 <div id="team-banner">
                     <h1 className = "game-title"> {game.at(-1)} </h1>
                 </div>
-                <div id="team-info-wrapper" >
+                <div id="team-info-wrapper">
                     {
                         rosters.map((team: string, index: number) => {
                             const newRoster = roster.filter((player) => {
-                                return player.item.TeamAffiliation === team && player.item.Game.replaceAll(' ', '') === game.at(-1);
+                                return (player.item.TeamAffiliation === team && player.item.Game.replaceAll(' ', '') === game.at(-1));
                             });
                             if (newRoster.length !== 0) {
                                 teamName = newRoster[0].item.Game;
@@ -93,21 +95,25 @@ export default function TeamLayout() {
 }
 
 function Roster(props: any) {
+    let captain: boolean = false;
+    const roster = props.roster;
+    for(const player in roster) {
+        if (((player as any).item.ClubStatus as string).toLowerCase() === 'captain') {
+            captain = true;
+            break;
+        }
+    }
+
     const [isOpen, setIsOpen] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
+    const [captainExists, setCaptainExists] = useState(captain);
     const { isLoggedIn } = useUser();
-
-    const roster = props.roster;
     
-
     return (
         <>
-            <CardContext.Provider value={{isOpen, isEdit}} >
-                <div className="roster-container" >
-                    <div className="roster-container-clickable" onClick={(e) => { 
-                        e.preventDefault();
-                        setIsOpen(isOpen ? false : true);
-                    }}>
+            <CardContext.Provider value={{isOpen, isEdit, captainExists}} >
+                <div className="roster-container">
+                    <div className="roster-container-clickable">
                         <h1>{props.game}</h1>
                         { isLoggedIn &&
                             <button
@@ -120,6 +126,13 @@ function Roster(props: any) {
                                 }}
                             >{isEdit ? 'Confirm' : 'Edit'}</button>
                         }
+                        <div className="roster-arrow"
+                            onClick={(e) => { 
+                            e.preventDefault();
+                            setIsOpen(isOpen ? false : true);
+                            }}>
+                            CLICK ME!!!!
+                        </div>
                     </div>
                     
                     <div className="roster-display">
@@ -143,13 +156,15 @@ function Roster(props: any) {
 
 function Player(props: any) {
     const [playerTextValue, setPlayerTextValue] = useState(props.player.Username);
+    const [roleTextValue, setRoleTextValue] = useState(props.player.Role);
+    const [isCaptain, setIsCaptain] = useState(false);
     const { isLoggedIn } = useUser();
-    const { isOpen, isEdit } = useContext(CardContext);
+    const { isEdit, captainExists } = useContext(CardContext);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(props.player.Username + " " + playerTextValue);
-        updateName(props.player.Username, playerTextValue);
+        updateName(props.player.Username, {username: playerTextValue, role: roleTextValue, });
         return;
     }
 
@@ -162,20 +177,45 @@ function Player(props: any) {
                 <div className="player-name" >
                     { (isLoggedIn === true && isEdit === true) &&
                         <form className="player-form" onSubmit={handleSubmit}>
+                            <label htmlFor="player-username">Username:</label>
                             <input
                                 className="player-input"
+                                name="player-username"
                                 type="text"
                                 value={ playerTextValue }
                                 onChange={(e) => { setPlayerTextValue(e.target.value) }}
                             />
+                            <label htmlFor="player-role">Role:</label>
+                            <input
+                                className="player-input"
+                                name="player-role"
+                                type="text"
+                                value={ roleTextValue }
+                                onChange={(e) => { setRoleTextValue(e.target.value) }}
+                            />
+                            <input
+                                name="is-captain"
+                                type="checkbox" 
+                                value="captain"
+                                checked={ isCaptain } 
+                                onChange={() => {
+                                    setIsCaptain(isCaptain ? false : true);
+                            }}/>
+                            <label htmlFor="is-captain">Set as Captain</label>
                             <input
                                 className="player-submit"
                                 type="submit"
                             />
-                        </form>   
+                        </form>
                     }
-                    <h3>
+                    { isCaptain && 
+                        <h1>**</h1>
+                    }
+                    <h2>
                         {props.player.Username}
+                    </h2>
+                    <h3>
+                        {props.player.Role}
                     </h3>
                 </div>                
             </div>

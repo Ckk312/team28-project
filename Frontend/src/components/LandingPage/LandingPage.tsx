@@ -1,6 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import './LandingPage.css';
 
 const LandingPage: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="landing-container">
       <div className="main-content">
@@ -8,7 +11,7 @@ const LandingPage: React.FC = () => {
     By fostering greater engagement and accessibility, it seeks to enhance the visibility and community participation in the growing field of competitive gaming.
         </h2>
         
-        <button className="start-btn" onClick={() => window.location.href = "/teams"}>
+        <button className="start-btn" onClick={() => navigate('/teams')}>
           Start
         </button>
       </div>
