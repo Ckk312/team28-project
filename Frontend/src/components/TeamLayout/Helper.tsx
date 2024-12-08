@@ -1,7 +1,9 @@
+import type { Player, Match } from '../../types/'
+
 // helper file
 // sorted by player functions -> team functions -> match functions
 
-export async function updateName(oldPlayer: string, newPlayer: string): Promise<boolean> {
+export async function updateName(oldPlayer: string, newPlayer: Player): Promise<boolean> {
     let result;
     try {
         const header = new Headers();
@@ -62,7 +64,7 @@ export async function getRoster(title: string): Promise<any[]> {
         });
 
         const result = await response.json();
-        return result.result;
+        return (result.result);
     } catch (e) {
         console.error(e);
         return [];
@@ -71,7 +73,7 @@ export async function getRoster(title: string): Promise<any[]> {
 
 // ----------------------------------------
 
-export async function getMatches(title: string, teamAffiliation: string): Promise<any[]> {
+export async function getMatches(title: string, teamAffiliation: string): Promise<Player[]> {
     
     try {
         const header = new Headers();
@@ -85,7 +87,7 @@ export async function getMatches(title: string, teamAffiliation: string): Promis
 
         const result = await response.json();
         //.log(result);
-        return result.result;
+        return (result.result as Player[]);
     } catch (e) {
         //console.error(e);
         return [];

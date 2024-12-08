@@ -4,7 +4,14 @@ import './TeamLayout.css';
 import { useUser } from "../../context/UserContext";
 import { updateName, getRoster, getMatches, getFutureMatches } from'./Helper';
 
-const CardContext = createContext<{isOpen: boolean, isEdit: boolean, captainExists: boolean}>({ isOpen: false, isEdit: false, captainExists: false });
+import type { Player, Match } from '../../types';
+
+const CardContext = createContext<{ 
+    isOpen: boolean, 
+    isEdit: boolean, 
+    captainExists: boolean, 
+    setCaptainExists: (status: boolean) => void
+}>({ isOpen: false, isEdit: false, captainExists: false, setCaptainExists: (status: boolean) => {} });
 
 /***
  * Team Layout React Component
@@ -12,14 +19,15 @@ const CardContext = createContext<{isOpen: boolean, isEdit: boolean, captainExis
  */
 export default function TeamLayout() {
     // use states
-    const [roster, setRoster] = useState<any[]>([]);
+    const [roster, setRoster] = useState<Player[]>([]);
     const [isError, setIsError] = useState<boolean>(false);
+    const [teamName, setTeamName] = useState<string>('');
 
     // get pathname for designation of teams
     let path = window.location.pathname;
     const game = path.split('/');
 
-    const allRosters = ['Knights', 'Knights Academy', 'Knights Rising', 'Knights Pink']
+    const allRostersNames = ['Knights', 'Knights Academy', 'Knights Rising', 'Knights Pink']
     let rosterNum = 2;
 
     if (game.at(-1) === 'Valorant') {
@@ -38,11 +46,14 @@ export default function TeamLayout() {
         rosterNum = 1;
     }
 
-    const rosters = allRosters.slice(0, rosterNum);
+    const rosters = allRostersNames.slice(0, rosterNum);
 
     const handleLoad = async () => {
         const stuff = await getRoster(game.at(-1)!);
-        setRoster(stuff);
+        setRoster((stuff.map((item) => {
+            return item.item;
+        }) as Player[]));
+
         if (stuff.length === 0) {
             setIsError(true);
             return null;
@@ -59,8 +70,6 @@ export default function TeamLayout() {
         return <Error />
     }
 
-    let teamName: string;
-
     return (
         <>
             <div id="team-layout-container">
@@ -74,18 +83,18 @@ export default function TeamLayout() {
                     }} 
                 >Teams</button>
                 <div id="team-banner">
-                    <h1 className = "game-title"> {game.at(-1)} </h1>
+                    <h1 className = "game-title"> {teamName} </h1>
                 </div>
                 <div id="team-info-wrapper">
                     {
                         rosters.map((team: string, index: number) => {
-                            const newRoster = roster.filter((player) => {
-                                return (player.item.TeamAffiliation === team && player.item.Game.replaceAll(' ', '') === game.at(-1));
+                            const newRoster: Player[] = roster.filter((player) => {
+                                return (player.TeamAffiliation === team && player.Game.replaceAll(' ', '') === game.at(-1));
                             });
                             if (newRoster.length !== 0) {
-                                teamName = newRoster[0].item.Game;
+                                setTeamName(newRoster[0].Game);
                             }
-                            return <Roster key={index} roster={newRoster} game={teamName + ' ' + team} />
+                            return <Roster key={index} roster={newRoster} game={teamName + ' ' + team + ' Roster'} />
                         })
                     }
                 </div>
@@ -96,9 +105,9 @@ export default function TeamLayout() {
 
 function Roster(props: any) {
     let captain: boolean = false;
-    const roster = props.roster;
-    for(const player in roster) {
-        if (((player as any).item.ClubStatus as string).toLowerCase() === 'captain') {
+    const roster: Player[] = props.roster;
+    for(const player of roster) {
+        if (player.ClubStatus?.toLowerCase() === 'captain') {
             captain = true;
             break;
         }
@@ -111,7 +120,7 @@ function Roster(props: any) {
     
     return (
         <>
-            <CardContext.Provider value={{isOpen, isEdit, captainExists}} >
+            <CardContext.Provider value={{isOpen, isEdit, captainExists, setCaptainExists}} >
                 <div className="roster-container">
                     <div className="roster-container-clickable">
                         <h1>{props.game}</h1>
@@ -128,8 +137,8 @@ function Roster(props: any) {
                         }
                         <div className="roster-arrow"
                             onClick={(e) => { 
-                            e.preventDefault();
-                            setIsOpen(isOpen ? false : true);
+                                e.preventDefault();
+                                setIsOpen(isOpen ? false : true);
                             }}>
                             CLICK ME!!!!
                         </div>
@@ -139,11 +148,11 @@ function Roster(props: any) {
                         { isOpen &&
                             <>
                                 {
-                                    roster.map((player: any, index: number) => {
-                                        return <Player key={index} player={player.item} edit={isEdit} />
+                                    roster.map((player: Player, index: number) => {
+                                        return <Players key={index} player={player} edit={isEdit} />
                                     })
                                 }
-                                <Match match={roster[0].item}/>
+                                <Match match={roster[0]}/>
                             </>
                         }
                     </div>
@@ -154,17 +163,22 @@ function Roster(props: any) {
     );
 }
 
-function Player(props: any) {
-    const [playerTextValue, setPlayerTextValue] = useState(props.player.Username);
-    const [roleTextValue, setRoleTextValue] = useState(props.player.Role);
-    const [isCaptain, setIsCaptain] = useState(false);
+function Players(props: any) {
+    const [playerTextValue, setPlayerTextValue] = useState<string>(props.player.Username);
+    const [roleTextValue, setRoleTextValue] = useState<string>(props.player.Role);
+    const [isCaptain, setIsCaptain] = useState<boolean>(false);
     const { isLoggedIn } = useUser();
-    const { isEdit, captainExists } = useContext(CardContext);
+    const { isEdit, captainExists, setCaptainExists } = useContext(CardContext);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(props.player.Username + " " + playerTextValue);
-        updateName(props.player.Username, {username: playerTextValue, role: roleTextValue, });
+        updateName(props.player.Username, { 
+            Username: playerTextValue, 
+            Role: roleTextValue, 
+            Game: props.player.Game, 
+            TeamAffiliation: props.player.TeamAffiliation 
+        });
         return;
     }
 
