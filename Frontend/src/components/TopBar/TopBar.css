@@ -1,3 +1,11 @@
+#page-container {
+    display: flex;
+    flex-direction: column;
+
+    min-height: 100%;
+    min-width: 100%;
+}
+
 /* Top Bar */
 #top-bar {
     position: fixed;
@@ -5,7 +13,7 @@
     left: 0;
     width: 100%; /* Ensures the top bar spans the full width */
     height: 100px; /* Fixed height for the top bar */
-    background-color: #333;
+    background-color: #000000;
     color: #fff;
     display: flex;
     justify-content: space-between;
@@ -44,22 +52,46 @@
 
 /* Main Content */
 #main-content {
-    padding-top: 10%;
+    padding-top: 100px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 /* Footer */
 #footer {
     background-color: black;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
+    color: white;
+    padding: 10px;
+    margin-top: 30px;
 }
 
-#information p, #information h1, #information a {
-    color:white;
+#information {
+    float: left;
+    margin-left: 20px;
+    color: white;
+}
+
+#information a {
+    margin-top: 30px;
+    text-align: left;
+    color: white;
+}
+
+#information p {
+    text-align: left;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+
+#links {
+    float: right;
+    margin-top: 80px;
+    margin-right: 30px;
+    text-align: center;
 }
 
 #links h3 {
+    margin: 0px;
+    padding: 0px;
     color: white;
 }

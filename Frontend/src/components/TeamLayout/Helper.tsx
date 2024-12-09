@@ -186,8 +186,8 @@ export function spaceUppercase(text: string) : string {
 
 // ----------------------------------------
 
-export function sortClubStatus(players : Player[]) {
-    players.sort((a, b) => {
+export function sortClubStatus(players : Player[]): Player[] {
+    return players.sort((a, b) => {
         if (a.ClubStatus === b.ClubStatus)
             return a.Username.localeCompare(b.Username);
         return a.ClubStatus!.localeCompare(b.ClubStatus!);

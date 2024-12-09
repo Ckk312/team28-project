@@ -5,7 +5,7 @@ import './Teams.css'
  * 
  */
 export default function Teams() {
-    const teamInfo: [string, string][] = [['Apex Legends', 'https://i.ibb.co/FBCBb7m/Apex-Banner.webp'], ['Call of Duty', 'https://i.ibb.co/gr6xvCv/COD-Logo.webp'], ['League of Legends', 'https://i.ibb.co/xzpdD55/League-Banner.webp'], ['Overwatch 2', 'https://i.ibb.co/ZSm1RLf/Overwatch-Banner.webp'], ['Smash Ultimate', 'https://i.ibb.co/tK45Tgy/SSBU-Banner.webp'], ['Splatoon 3', 'https://i.ibb.co/R04p1bb/Splatoon3-Banner.webp'], ['Tom Clancy\'s: Rainbow Six Siege', 'https://i.ibb.co/KX3PjJV/R6-Logo.webp'], ['Valorant', 'https://i.ibb.co/YDnyPpY/Valorant-Banner.webp'], ['Rocket League', ''], ['CounterStrike', '']];
+    const teamInfo: [string, string][] = [['Apex Legends', 'https://i.ibb.co/FBCBb7m/Apex-Banner.webp'], ['Call of Duty', 'https://i.ibb.co/gr6xvCv/COD-Logo.webp'], ['League of Legends', 'https://i.ibb.co/xzpdD55/League-Banner.webp'], ['Overwatch 2', 'https://i.ibb.co/ZSm1RLf/Overwatch-Banner.webp'], ['Smash Ultimate', 'https://i.ibb.co/tK45Tgy/SSBU-Banner.webp'], ['Splatoon 3', 'https://i.ibb.co/R04p1bb/Splatoon3-Banner.webp'], ['R6 Siege', 'https://i.ibb.co/4F7pwFr/R6-logo.jpg'], ['Valorant', 'https://i.ibb.co/YDnyPpY/Valorant-Banner.webp'], ['Rocket League', 'https://i.ibb.co/W3BFvxR/RL-logo.jpg'], ['CounterStrike', 'https://i.ibb.co/DRyWMwq/CS2-Logo.jpg']];
 
     return (
         <>
@@ -40,7 +40,7 @@ function TeamCard(props: any) {
                 <p>
                     {props.name}
                 </p>
-                <img src={props.image} alt={props.name}/>
+                <img src={props.image} width="100" height="100" alt={props.name}/>
             </div>
         </>
     )

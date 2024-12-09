@@ -1,15 +1,27 @@
+/*Teams*/
+#team-container h1 {
+    background-color: black;
+    color: white;
+}
+
 /* Styling for individual team cards */
 .team-cards {
-    background-color: azure; /* Light blue background for visibility */
+    background-color: #FFc904; /* Light blue background for visibility */
     border: 1px solid #ddd; /* Subtle border for separation */
     border-radius: 8px; /* Slightly rounded corners */
     padding: 10px; /* Internal spacing within each card */
     width: 150px; /* Fixed width for consistency */
+    height: 200px;
     text-align: center; /* Center text inside the card */
     margin: 10px; /* Spacing between cards */
     cursor: pointer; /* Pointer cursor for interactivity */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
     transition: transform 0.3s, box-shadow 0.3s; /* Smooth hover effect */
+}
+
+.team-cards p {
+    color: black;
+    margin-bottom: 15px;
 }
 
 /* Hover effect for team cards */
@@ -18,10 +30,17 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
 }
 
+.team-cards img {
+    padding-bottom: 20px;
+    padding-top: 10px;
+}
+
 /* Styling for the main container */
 #team-container {
     padding-top: 120px; /* Push content below the app bar */
-    padding-bottom: 20px; /* Optional spacing at the bottom */
+    padding-bottom: 10%; /* Optional spacing at the bottom */
+    padding-left: 20%;
+    padding-right: 20%;
     text-align: center; /* Center-align text */
 }
 
@@ -32,7 +51,7 @@
     justify-content: center; /* Center the cards horizontally */
     gap: 20px; /* Space between cards */
     padding: 10px;
-    width: 1000px; /* Internal padding for the container */
+    width: 100%; /* Internal padding for the container */
 }
 
 /* Image styling inside the cards */

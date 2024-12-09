@@ -2,7 +2,7 @@ import React, { useEffect, useState, createContext, useContext, memo, useRef } f
 import Error from '../Error/Error'
 import './TeamLayout.css';
 import { useUser } from "../../context/UserContext";
-import { updateName, getRoster, getMatches, getFutureMatches, spaceUppercase } from'./Helper';
+import { updateName, getRoster, getMatches, getFutureMatches, spaceUppercase, sortClubStatus } from'./Helper';
 
 import type { Player as Players, Match as Matches } from '../../types';
 
@@ -47,6 +47,11 @@ export default function TeamLayout() {
         rosterNum = 1;
     }
 
+    else if (game.at(-1) === 'CounterStrike') {
+        game.pop();
+        game.push('Counter-Strike2');
+    }
+
     const rosters = allRostersNames.slice(0, rosterNum);
 
     const handleLoad = async () => {
@@ -73,16 +78,16 @@ export default function TeamLayout() {
 
     return (
         <>
+            <button
+                id="return-to-teams-button"
+                type="button"
+                value="< Teams"
+                onClick={(e) => {
+                    e.preventDefault();
+                    window.location.pathname = '/teams'
+                }} 
+            >Teams</button>
             <div id="team-layout-container">
-                <button
-                    id="return-to-teams-button"
-                    type="button"
-                    value="< Teams"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        window.location.pathname = '/teams'
-                    }} 
-                >Teams</button>
                 <div id="team-banner">
                     <h1 className = "game-title"> {gameName} </h1>
                 </div>
@@ -111,7 +116,6 @@ function Roster(props: any) {
         }
     }
 
-    console.log(roster);
     const [isOpen, setIsOpen] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [captainExists, setCaptainExists] = useState(captain);
@@ -147,7 +151,7 @@ function Roster(props: any) {
                         { isOpen &&
                             <>
                                 {
-                                    roster.map((player: Players, index: number) => {
+                                    sortClubStatus(roster).map((player: Players, index: number) => {
                                         return <Player key={index} player={player} edit={isEdit} />
                                     })
                                 }
@@ -219,7 +223,7 @@ function Player(props: any) {
                 <div className="player-img">
                     <img className = "player-image" src={props.player.Img || "https://i.ibb.co/ncCbrRS/360-F-917122367-k-Spdp-RJ5-Hcmn0s4-WMd-Jb-SZpl7-NRzwup-U.webp"} alt={`"${props.player.Img}"`}/>
                 </div>
-                <div className="player-name" >
+                <div className="player-info" >
                     { (isLoggedIn === true && isEdit === true) &&
                         <form className="player-form" onSubmit={handleSubmit}>
                             <label htmlFor="player-username">Username:</label>
@@ -319,9 +323,9 @@ function Player(props: any) {
                     }
                     <h2>{playerForm.current.Username}</h2>
                     <h3>{playerForm.current.ClubStatus}</h3>
-                    <h3>{playerForm.current.Role}</h3>
-                    <p>{playerForm.current.Rank}</p>
-                    <p>{playerForm.current.MainCharacter}</p>
+                    <h3>{'Role: ' + playerForm.current.Role}</h3>
+                    <p>{'Rank: ' + playerForm.current.Rank}</p>
+                    <p>{'Main Character: ' + playerForm.current.MainCharacter}</p>
                     <a href={playerForm.current.Description}>{playerForm.current.Description}</a>
                 </div>                
             </div>

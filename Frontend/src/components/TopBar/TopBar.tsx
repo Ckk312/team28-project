@@ -40,7 +40,7 @@ function TopBar() {
             <div id="footer">
                 <div id="information">
                     <h1>Esports at UCF</h1>
-                    <p>4000 Central Florida Blvd</p>
+                    <p>4000 Central Florida Blvd,</p>
                     <p>Orlando, Florida 32816</p>
                     <a href="mailto:esportsatucf@gmail.com">EsportsatUCF@gmail.com</a>
                 </div>

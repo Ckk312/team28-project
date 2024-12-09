@@ -1,12 +1,11 @@
 /* Set background color to gold */
 body{
-    margin: 0; /* Remove default margin */
-    height: 100%; /* Ensure the body takes full height of the viewport */
     background-color: black; /* Set the background color to gold */
-    background-image: url('../../../public/images/ucfbackground.jpg'); /* Path from public folder */
+    background-image: url('../../../public/images/bgsilhouette.png'); /* Path from public folder */
+    background-repeat: repeat-y;
     background-size: cover; /* Make the image cover the entire viewport */
+    background-attachment: fixed;
     background-position: center; /* Center the image */
-    background-repeat: no-repeat; /* Prevent repeating the image */
     overflow-x: hidden; /* Prevent horizontal overflow */
     overflow-y: auto; /* Enable vertical scrolling */
 }
@@ -20,12 +19,19 @@ body{
     padding-top: 80px; /* Add space for top bar or header */
     padding-bottom: 20px; /* Ensure there is padding at the bottom */
     box-sizing: border-box; /* Prevent content from overflowing */
+    margin-bottom: 50px;
+}
+
+#return-to-teams-button {
+    position: fixed;
+    left: 5%;
+    top: 15%;
 }
 
 /* Team Banner Settings */
 #team-banner {
     padding-top: 50px;
-    padding-bottom: 50px;
+    padding-bottom: 20px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -47,22 +53,69 @@ body{
 
 /* Styling for the clickable roster container */
 .roster-container-clickable {
-    background-color: rgb(255, 255, 255);
+    display: flex;
+    align-items: center;
+    align-content: end;
+    flex-direction: row;
+    justify-content: start;
     padding: 10px; /* Padding for clickable container */
-    cursor: pointer; /* Change cursor to indicate it's clickable */
+    color: black;
+    background-color: #FFc904;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    text-align: left;
+}
+
+.roster-container-clickable h1 {
+    display: inline-block;
+    align-self: end;
+}
+
+.roster-arrow {
+    display: inline-block;
+    margin-left: auto;
+}
+
+.roster-display {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.player-container {
+    background-color: rgba(44, 45, 45, 0.685);
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 /* Styling for player images */
 .player-image {
     max-width: 150px;
     max-height: 150px;
-    width: auto;
-    height: auto;
-    object-fit: cover;
-    
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    float: left;
+    margin: 5px;
+    margin-right: 15px;
+}
+
+.player-info {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+}
+
+.player-info h2, h3, p {
+    margin: 0;
+}
+
+.player-info a {
+    color: #FFc904;
 }
 
 /* Game title styling */
@@ -70,8 +123,11 @@ body{
     text-align: center;
     font-size: 10rem; /* Make the font size larger */
     font-family: 'Impact', sans-serif; /* Use the Impact font */
-    color: #000000; /* Set font color to white for better contrast on dark background */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add shadow for emphasis */
+    color: #FFFFFF; /* Set font color to white for better contrast on dark background */
+    text-shadow: -2px -2px 0 black,  /* Top-left shadow */
+    2px -2px 0 black,   /* Top-right shadow */
+    -2px 2px 0 black,   /* Bottom-left shadow */
+    2px 2px 0 black; /* Add shadow for emphasis */
     margin-top: 20px; /* Add some spacing from the top */
     margin-bottom: 20px; /* Add spacing below */
 }
@@ -79,6 +135,11 @@ body{
 /* Text alignment for preformatted text */
 pre {
     text-align: center;
+}
+
+#team-info-wrapper {
+    padding-left: 20%;
+    padding-right: 20%;
 }
 
 /* Custom Dropdown Styling */
