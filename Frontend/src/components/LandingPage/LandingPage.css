@@ -8,8 +8,6 @@
   background-size: cover; /* Ensures the image covers the entire viewport */
   background-position: center; /* Centers the image */
   background-repeat: no-repeat; /* Prevents the image from repeating */
-  min-width: 100%;
-  min-height: 100%
 }
 
 /* Main Content */
