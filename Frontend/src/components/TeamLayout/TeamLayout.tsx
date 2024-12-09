@@ -2,7 +2,7 @@ import React, { useEffect, useState, createContext, useContext, memo, useRef } f
 import Error from '../Error/Error'
 import './TeamLayout.css';
 import { useUser } from "../../context/UserContext";
-import { updateName, getRoster, getMatches, getFutureMatches, spaceUppercase } from'./Helper';
+import { updateName, getRoster, getMatches, getFutureMatches, spaceUppercase, getPastMatches } from'./Helper';
 
 import type { Player as Players, Match as Matches } from '../../types';
 
@@ -330,8 +330,9 @@ function Player(props: any) {
 }
 
 function Match(props: any) {
-    const [nextMatch, setNextMatch] = useState<any | null>(null);
+    const [nextMatch, setNextMatch] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [prevMatches, setPrevMatches] = useState<any[]>([]);
     console.log("testing");
     console.log(props.match.Game);
 
@@ -344,9 +345,15 @@ function Match(props: any) {
             //console.log(allMatches);
             // Find the next match
             const nextMatch = getFutureMatches(allMatches);
+            const prevMatches = getPastMatches(allMatches);
+            console.log("List of prev matches");
+            console.log(prevMatches);
+            console.log("list of next matches");
+            console.log(nextMatch);
             //console.log(nextMatch);
             // Update the state with the next match
-            setNextMatch(nextMatch[0]);
+            setNextMatch(nextMatch);
+            setPrevMatches(prevMatches);
             setLoading(false);
         };
 
@@ -355,36 +362,72 @@ function Match(props: any) {
 
 
     // If no next match is found, display a message
-    if (!nextMatch) {
-        return <div><pre>No upcoming match found.</pre></div>;
+    if (nextMatch.length <= 0 && prevMatches.length <= 0) {
+        return (
+            <div>
+                <pre>No upcoming matches found.</pre>
+                <pre>No previous matches found.</pre>
+            </div>
+        );
     }
-
-    const matchDate = new Date(nextMatch.date);
-    const timeZone = 'America/New_York';
-
-    // Format date as month/day/year hour:minute AM/PM
-    const formatter = matchDate.toLocaleString('en-US', {
-        timeZone: timeZone,
-        month: 'numeric',
-        day: 'numeric',
-        year: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: true // 12-hour format (AM/PM)
-    });
-
-    const [datePart, timePart] = formatter.split(',');
 
 
     return (
-        <div>
-            <p>
-                Next Upcoming Match
-                <br />
-                {nextMatch.HomeTeam} VS {nextMatch.AwayTeam}
-                <br />
-                {datePart}   @  {timePart}
-            </p>
-        </div>
+        <>
+            {/* Next Upcoming Match */}
+            {nextMatch.length > 0 && (
+                <div>
+                    <p>
+                        Next Upcoming Match
+                        <br />
+                        {nextMatch[0].HomeTeam} VS {nextMatch[0].AwayTeam}
+                        <br />
+                        {new Date(nextMatch[0].date).toLocaleString("en-US", {
+                            month: "numeric",
+                            day: "numeric",
+                            year: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
+                            hour12: true,
+                        })}
+                    </p>
+                </div>
+            )}
+
+            {/* Previous Matches */}
+            {prevMatches.length > 0 && (
+                <div>
+                    <p>
+                        Previous Matches
+                        <br />
+                        <br />
+                        {prevMatches.slice(0, 3).map((match, index) => {
+                            const matchDate = new Date(match.date);
+                            const formattedDate = matchDate.toLocaleString("en-US", {
+                                month: "numeric",
+                                day: "numeric",
+                                year: "numeric",
+                                hour: "numeric",
+                                minute: "numeric",
+                                hour12: true,
+                            });
+
+                            const [datePart, timePart] = formattedDate.split(",");
+
+                            return (
+                                <span key={index}>
+                                    {match.HomeTeam} VS {match.AwayTeam}
+                                    <br />
+                                    <a href={match.VOD}> VOD </a>
+                                    <br />
+                                    <br />
+                                    <br />
+                                </span>
+                            );
+                        })}
+                    </p>
+                </div>
+            )}
+        </>
     );
 }

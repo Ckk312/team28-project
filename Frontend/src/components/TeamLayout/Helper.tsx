@@ -133,6 +133,30 @@ export function getFutureMatches(matches : Match[]) {
     return futureMatches;
 }
 
+export function getPastMatches(matches : Match[]) {
+    // Get the current time in milliseconds
+    console.log("List of Possible Future Matches");
+    console.log(matches)
+
+    // Step 1: Map the matches to include the time difference from the current date
+    const pastMatches = matches
+        .map((match: Match) => {
+            const matchDate = new Date(match.Date * 1000); // Convert Unix timestamp
+            const timeDifference = matchDate.getTime() - Date.now();
+
+            return timeDifference < 0
+                ? { ...match, date: matchDate, timeDifference }
+                : null; // Exclude past matches
+        })
+        .filter(Boolean) // Remove null values
+        .sort((a: any, b: any) => b.timeDifference - a.timeDifference); // Sort by time difference
+
+        console.log("Past Match");
+        console.log(pastMatches);
+
+    return pastMatches;
+}
+
 // ----------------------------------------
 
 export function getPastMatches(matches : Match[]) {
