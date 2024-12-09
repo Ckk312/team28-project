@@ -30,7 +30,7 @@ function TeamCard(props: any) {
     const navigate = useNavigate();
 
     let name = props.name;
-    if (props.name === 'Tom Clancy\'s: Rainbow Six Siege') {
+    if (props.name === 'R6 Siege') {
         name = 'Rainbow Six Siege';
     }
 
