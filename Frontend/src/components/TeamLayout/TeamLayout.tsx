@@ -112,12 +112,11 @@ function Roster(props: any) {
         }
     }
 
+    console.log(roster);
     const [isOpen, setIsOpen] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [captainExists, setCaptainExists] = useState(captain);
     const { isLoggedIn } = useUser();
-
-    console.log('hello');
     
     return (
         <>
@@ -165,6 +164,7 @@ function Roster(props: any) {
 }
 
 function Player(props: any) {
+    console.log(props);
     const [playerTextValue, setPlayerTextValue] = useState<string>(props.player.Username);
     const [roleTextValue, setRoleTextValue] = useState<string | undefined>(props.player.Role);
     const [rankTextValue, setRankTextValue] = useState<string | undefined>(props.player.Rank);
@@ -291,12 +291,15 @@ function Player(props: any) {
 function Match(props: any) {
     const [nextMatch, setNextMatch] = useState<any | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
-    //console.log(props);
+    console.log("testing");
+    console.log(props.match.Game);
 
     useEffect(() => {
         const fetchMatches = async () => {
             // Fetch matches based on game and team affiliation
-            const allMatches = await getMatches(props.match.Game, props.match.TeamAffiliation);
+            const allMatches = await getMatches(`${props.match.Game}`, `UCF ${props.match.TeamAffiliation}`);
+            console.log("Returned Matches");
+            console.log(allMatches);
             //console.log(allMatches);
             // Find the next match
             const nextMatch = getFutureMatches(allMatches);
