@@ -1,11 +1,12 @@
 /* Set background color to gold */
 body{
+    margin: 0; /* Remove default margin */
+    height: 100%; /* Ensure the body takes full height of the viewport */
     background-color: black; /* Set the background color to gold */
-    background-image: url('../../../public/images/bgsilhouette.png'); /* Path from public folder */
-    background-repeat: repeat-y;
+    background-image: url('../../../public/images/ucfbackground.jpg'); /* Path from public folder */
     background-size: cover; /* Make the image cover the entire viewport */
-    background-attachment: fixed;
     background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Prevent repeating the image */
     overflow-x: hidden; /* Prevent horizontal overflow */
     overflow-y: auto; /* Enable vertical scrolling */
 }
@@ -19,22 +20,20 @@ body{
     padding-top: 80px; /* Add space for top bar or header */
     padding-bottom: 20px; /* Ensure there is padding at the bottom */
     box-sizing: border-box; /* Prevent content from overflowing */
-    margin-bottom: 50px;
-}
-
-#return-to-teams-button {
-    position: fixed;
-    left: 5%;
-    top: 15%;
 }
 
 /* Team Banner Settings */
 #team-banner {
     padding-top: 50px;
-    padding-bottom: 20px;
+    padding-bottom: 50px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    text-align: center;
+    max-width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 /* Roster container settings */
@@ -53,169 +52,45 @@ body{
 
 /* Styling for the clickable roster container */
 .roster-container-clickable {
-    display: flex;
-    align-items: center;
-    align-content: end;
-    flex-direction: row;
-    justify-content: start;
+    background-color: rgb(255, 255, 255);
     padding: 10px; /* Padding for clickable container */
-    color: black;
-    background-color: #FFc904;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    text-align: left;
-}
-
-.roster-container-clickable h1 {
-    display: inline-block;
-    align-self: end;
-}
-
-.roster-arrow {
-    width: 0;
-    height: 0;
-    rotate: rotate(0deg);
-    border-top: 25px solid transparent;
-    border-left: 50px solid #555;
-    border-bottom: 25px solid transparent;
-    display: inline-block;
-    margin-left: auto;
-    transition: .5s;
-}
-
-.roster-arrow:hover {
-    transform: rotate(90deg);
-    cursor: pointer;
-}
-
-.roster-arrow:focus {
-    transform: rotate(90deg);
-}
-
-.roster-display {
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-}
-
-.player-container {
-    background-color: rgba(44, 45, 45, 0.685);
-    padding: 5px;
-    display: flex;
-    flex-direction: row;
-    justify-content: start;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-radius: 3px;
-}
-
-.player-form > label {
-    color: white;
+    cursor: pointer; /* Change cursor to indicate it's clickable */
 }
 
 /* Styling for player images */
 .player-image {
     max-width: 150px;
     max-height: 150px;
-    float: left;
-    margin: 5px;
-    margin-right: 15px;
-}
-
-.player-info {
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: start;
-}
-
-.player-info h2, h3, p {
-    margin: 0;
-}
-
-.player-info a {
-    color: #FFc904;
+    width: auto;
+    height: auto;
+    object-fit: cover;
+    
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Game title styling */
 .game-title {
+    display: flex;
+    background-color: rgba(255, 204, 00, 0.2);
+    border: 3px solid #ffcc00;
     text-align: center;
-    font-size: 10rem; /* Make the font size larger */
-    font-family: 'Impact', sans-serif; /* Use the Impact font */
-    color: #FFFFFF; /* Set font color to white for better contrast on dark background */
-    text-shadow: -2px -2px 0 black,  /* Top-left shadow */
-    2px -2px 0 black,   /* Top-right shadow */
-    -2px 2px 0 black,   /* Bottom-left shadow */
-    2px 2px 0 black; /* Add shadow for emphasis */
-    margin-top: 20px; /* Add some spacing from the top */
-    margin-bottom: 20px; /* Add spacing below */
+    font-size: 5rem; 
+    font-family: 'Impact', sans-serif; 
+    color: #000000; /* Set font color to white for better contrast on dark background */
+    padding: 16px;
+    display: inline-block;
+    margin: 0 auto;
+    /*max-width: 80%;*/
+    line-height: 1.2;
+    width: fit-content;
+    /* max-width: 80%; /* Limit width to prevent overflow */
 }
 
 /* Text alignment for preformatted text */
 pre {
     text-align: center;
-}
-
-#team-info-wrapper {
-    padding-left: 20%;
-    padding-right: 20%;
-}
-
-#match-info {
-    justify-content: center;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-}
-
-#match-info h1 {
-    text-align: center;
-    margin: auto;
-}
-
-.match-container {
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    align-content: center;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    height: 125px;
-    background-color: rgba(255, 201, 5, 0.673);
-}
-
-.match-up {
-    display: flex;
-    flex: 1 0 100%;
-    justify-content: center;
-    flex-direction: row;
-    align-items: center;
-    align-content: center;
-    order: -1;
-}
-
-.match-up h2 {
-    margin-left: 20px;
-    margin-right: 20px;
-    margin-top: 30px;
-    margin-bottom: 15px;
-}
-
-.match-up h3 {
-    width: 30%;
-    margin: 0;
-}
-
-.match-container p, a {
-    margin-right: 10px;
-    margin-left: 5px;
-    display: inline-block;
-    align-self: flex-end;
-    order: 1;
 }
 
 /* Custom Dropdown Styling */
@@ -260,4 +135,149 @@ pre {
     text-decoration: none;
     display: block;
     color: black;
+}
+
+
+.expand-button {
+    background-color: #000;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.expand-button:hover {
+    background-color: #333;
+}
+
+.expand-button:active {
+    background-color: #444;
+}
+
+
+.roster-edit-button {
+    background-color: #000;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.roster-edit-button:hover {
+    background-color: #333; 
+}
+
+.roster-edit-button:active {
+    background-color: #444; 
+}
+
+
+/* Player Card Container */
+.player-card {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    margin: 12px 0;
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
+    border: 2px solid #ffcc00; /* Yellow border to match theme */
+    border-radius: 8px;
+    color: #ffffff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+/* Hover Effect */
+.player-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Player Image Container */
+.player-card-img-container {
+    flex: 0 0 80px;
+    height: 80px;
+    overflow: hidden;
+    border-radius: 50%; /* Circular Image */
+    margin-right: 16px;
+}
+
+/* Player Image */
+.player-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Player Info Section */
+.player-card-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Form Group Styling */
+.form-group {
+    margin-bottom: 12px;
+}
+
+.player-form label {
+    font-weight: bold;
+    margin-right: 8px;
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+.player-input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ffcc00;
+    background-color: #fff;
+    color: #000;
+}
+
+.player-submit {
+    background-color: #ffcc00;
+    color: #000;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.player-submit:hover {
+    background-color: #ffe680;
+}
+
+/* Player Name and Role */
+.player-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 4px 0;
+}
+
+.player-role {
+    font-size: 1.2rem;
+    font-style: italic;
+    margin: 4px 0;
+}
+
+/* Captain Badge */
+.captain-badge {
+    background-color: #ffcc00;
+    color: #000;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
 }

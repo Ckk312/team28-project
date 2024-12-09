@@ -9,6 +9,7 @@ import Teams from './components/Teams/Teams';
 import TeamLayout from './components/TeamLayout/TeamLayout';
 import Error from './components/Error/Error';
 import { UserProvider } from './context/UserContext';
+import UserPage from './components/UserPage/UserPage';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
               <Route index element={<Teams />} />
               <Route path="*" element={<TeamLayout />} />
             </Route>
+            <Route path="user/:name" element={<UserPage />} />
             <Route path="*" element={<Error />} />
             {/* Add ResetPassword route */}
           </Route>
