@@ -135,6 +135,7 @@ export function getFutureMatches(matches: Match[]) {
 }
 
 // ----------------------------------------
+
 export function spaceUppercase(text: string) : string {
     if (text.length === 0 || !text) {
         return "";
@@ -156,4 +157,14 @@ export function spaceUppercase(text: string) : string {
     }
 
     return res;
+}
+
+// ----------------------------------------
+
+export function sortClubStatus(players : Player[]) {
+    players.sort((a, b) => {
+        if (a.ClubStatus === b.ClubStatus)
+            return a.Username.localeCompare(b.Username);
+        return a.ClubStatus!.localeCompare(b.ClubStatus!);
+    })
 }
