@@ -73,7 +73,7 @@ export async function getRoster(title: string): Promise<any[]> {
 
 // ----------------------------------------
 
-export async function getMatches(title: string, teamAffiliation: string): Promise<Player[]> {
+export async function getMatches(game: string, teamAffiliation: string): Promise<Match[]> {
     
     try {
         const header = new Headers();
@@ -81,26 +81,31 @@ export async function getMatches(title: string, teamAffiliation: string): Promis
 
         const response = await fetch('http://www.ckk312.xyz:5000/api/searchdocuments', {
             method: 'POST',
-            body: JSON.stringify({ collection: 'MatchInfo', query: title + teamAffiliation}),
+            body: JSON.stringify({ collection: 'MatchInfo', query: game }),
             headers: header
         });
 
-        const result = await response.json();
+        const searchres = await response.json();
+        const result = searchres.map((match : Match) => {
+            if (match.HomeTeam === teamAffiliation)
+                return match;
+        });
+
         //.log(result);
-        return (result.result as Player[]);
+        return (result as Match[]);
     } catch (e) {
         //console.error(e);
         return [];
     }
 }
 
-export function getFutureMatches(matches: any[]) {
+export function getFutureMatches(matches: Match[]) {
     // Get the current time in milliseconds
 
     // Step 1: Map the matches to include the time difference from the current date
     const matchesWithTimeDifference = matches
-        .map((match: any) => {
-            const matchDate = new Date(match.item.Date*1000); // Convert Unix timestamp to Date object
+        .map((match: Match) => {
+            const matchDate = new Date(match.Date*1000); // Convert Unix timestamp to Date object
             const timeDifference = (matchDate.getTime() - Date.now());
 
             //console.log("Current Time:", Date.now()); // Log the current time
@@ -109,7 +114,7 @@ export function getFutureMatches(matches: any[]) {
 
             // Only return matches that are in the future
             if (timeDifference > 0) {
-                return { ...match.item, date: matchDate, timeDifference }; // Return match with time difference
+                return { ...match, date: matchDate, timeDifference }; // Return match with time difference
             } else {
                 return null; // Exclude past matches
             }
