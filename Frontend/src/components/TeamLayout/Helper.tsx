@@ -122,3 +122,27 @@ export function getFutureMatches(matches: any[]) {
     // Step 3: Return all future matches
     return sortedFutureMatches;
 }
+
+// ----------------------------------------
+export function spaceUppercase(text: string) : string {
+    if (text.length === 0 || !text) {
+        return "";
+    }
+
+    let res = text;
+    let offset = 0;
+    for (let i = 1; i < (text.length); i++) {
+        if (!/[A-Zo\d]/.test(text.charAt(i))) {
+            continue;
+        }
+
+        if (text.charAt(i) === 'o' && (i < (text.length - 1) && text.charAt(i + 1) !== 'f')) {
+            continue;
+        }
+
+        res = res.slice(0, i + offset) + ' ' + res.slice(i + offset);
+        offset++;
+    }
+
+    return res;
+}
