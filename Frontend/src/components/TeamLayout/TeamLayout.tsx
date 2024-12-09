@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createContext, useContext, memo } from "react";
+import React, { useEffect, useState, createContext, useContext, memo, useRef } from "react";
 import Error from '../Error/Error'
 import './TeamLayout.css';
 import { useUser } from "../../context/UserContext";
@@ -166,19 +166,41 @@ function Roster(props: any) {
 
 function Player(props: any) {
     const [playerTextValue, setPlayerTextValue] = useState<string>(props.player.Username);
-    const [roleTextValue, setRoleTextValue] = useState<string>(props.player.Role);
+    const [roleTextValue, setRoleTextValue] = useState<string | undefined>(props.player.Role);
+    const [rankTextValue, setRankTextValue] = useState<string | undefined>(props.player.Rank);
+    const [clubStatusTextValue, setClubStatusTextValue] = useState<string>(props.player.ClubStatus);
+    const [mainCharTextValue, setMainCharTextValue] = useState<string | undefined>(props.player.MainCharacter);
     const [errorText, setErrorText] = useState<string>('');
+    const clubStatusRef = useRef(props.player.ClubStatus);
     const { isLoggedIn } = useUser();
     const { isEdit, captainExists, setCaptainExists } = useContext(CardContext);
 
+    console.log('urmom');
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(props.player.Username + " " + playerTextValue);
+
+        if (clubStatusRef.current !== 'Captain' && clubStatusTextValue === 'Captain' && captainExists) {
+            setErrorText('Cannot Submit. Only one captain per team.');
+            return;
+        }
+
+        if (clubStatusRef.current === 'Captain' && clubStatusRef.current !== clubStatusTextValue) {
+            setCaptainExists(false);
+        }
+
+        if (!captainExists && clubStatusTextValue === 'Captain') {
+            setCaptainExists(true);
+        }
+
         updateName(props.player.Username, { 
             Username: playerTextValue, 
             Role: roleTextValue, 
             Game: props.player.Game, 
-            TeamAffiliation: props.player.TeamAffiliation 
+            TeamAffiliation: props.player.TeamAffiliation ,
+            Rank: rankTextValue,
+            MainCharacter: mainCharTextValue,
+            ClubStatus: clubStatusTextValue
         });
         return;
     }
@@ -208,28 +230,51 @@ function Player(props: any) {
                                 value={ roleTextValue }
                                 onChange={(e) => { setRoleTextValue(e.target.value) }}
                             />
+                            <label htmlFor="player-rank">Rank:</label>
+                            <input
+                                className="player-input"
+                                name="player-rank"
+                                type="text"
+                                value={ rankTextValue }
+                                onChange={(e) => { setRankTextValue(e.target.value) }}
+                            />
+                            <label htmlFor="player-rank">Main Character:</label>
+                            <input
+                                className="player-input"
+                                name="player-rank"
+                                type="text"
+                                value={ mainCharTextValue }
+                                onChange={(e) => { setMainCharTextValue(e.target.value) }}
+                            />
                             <input
                                 name="club-status"
                                 type="radio" 
                                 value="Captain"
+                                checked={ clubStatusTextValue === 'Captain' }
+                                onChange={(e) => { setClubStatusTextValue(e.target.value) }}
                             />
-                            <label htmlFor="club-status">Captain</label>
+                            <label htmlFor="club-status-captain">Captain</label>
                             <input
-                                name="club-status"
+                                name="club-status-captain"
                                 type="radio" 
                                 value="Co-Captain"
+                                checked={ clubStatusTextValue === 'Co-Captain' }
+                                onChange={(e) => { setClubStatusTextValue(e.target.value) }}
                             />
-                            <label htmlFor="club-status">Co-Captain</label>
+                            <label htmlFor="club-status-co-captain">Co-Captain</label>
                             <input
-                                name="club-status"
+                                name="club-status-member"
                                 type="radio" 
                                 value="Member"
+                                checked={ clubStatusTextValue === 'Member' }
+                                onChange={(e) => { setClubStatusTextValue(e.target.value) }}
                             />
-                            <label htmlFor="club-status">Member</label>
+                            <label htmlFor="club-status-member">Member</label>
                             <input
                                 className="player-submit"
                                 type="submit"
                             />
+                            <p>{ errorText }</p>
                         </form>
                     }
                     <h2>{props.player.Username}</h2>

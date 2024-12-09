@@ -30,9 +30,15 @@ export async function updateName(oldPlayer: string, newPlayer: Player): Promise<
             body: JSON.stringify({
                 collection: 'All Teams', 
                 _id: result.result._id, 
-                username: newPlayer,
+                username: newPlayer.Username,
                 game: result.result.Game,
-                teamaffiliation: result.result.TeamAffiliation
+                teamaffiliation: result.result.TeamAffiliation,
+                img: result.result.Img || '',
+                clubstatus: newPlayer.ClubStatus,
+                description: newPlayer.Description || '',
+                maincharacter: newPlayer.MainCharacter || '',
+                rank: newPlayer.Rank || '',
+                role: newPlayer.Role || ''
             }),
             headers: header
         });
