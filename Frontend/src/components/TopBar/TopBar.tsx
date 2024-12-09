@@ -1,16 +1,20 @@
 import React from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/UserContext';
 import './TopBar.css';
 
 function TopBar() {
   const { isLoggedIn, firstName, lastName, setIsLoggedIn } = useUser();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSignOut = () => {
     setIsLoggedIn(false);
     navigate('/login');
   };
+
+  const isGameView = location.pathname.includes('/teams/');
+  const isUserView = location.pathname.includes('/user/');
 
   return (
     <>
@@ -19,6 +23,22 @@ function TopBar() {
                 <button id="home-btn" onClick={() => navigate('/')}>
                     Esports at UCF
                 </button>
+                {isGameView && (
+                    <button
+                        id="go-back-btn"
+                        onClick={() => navigate('/teams')} // Navigate back to the previous page
+                    >
+                        Go Back
+                    </button>
+                    )}
+                {isUserView && (
+                    <button
+                        id="go-back-btn"
+                        onClick={() => navigate('/teams')} // Navigate back to the previous page
+                    >
+                        Go Back
+                    </button>
+                )}
                 <h1 id="project-name">
                     {isLoggedIn
                         ? `Welcome ${firstName} ${lastName}`

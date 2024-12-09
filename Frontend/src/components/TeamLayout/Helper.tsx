@@ -58,6 +58,40 @@ export async function updateName(oldPlayer: string, newPlayer: Player): Promise<
 
 // ----------------------------------------
 
+export async function getAllUsers(allGames: string[]): Promise<any[]> {
+    const header = new Headers();
+    header.append('Content-Type', 'application/json');
+
+    const allTeams: any[] = [];
+
+    try {
+        for (const game of allGames) {
+            const response = await fetch('http://www.ckk312.xyz:5000/api/searchdocuments', {
+                method: 'POST',
+                headers: header,
+                body: JSON.stringify({
+                    collection: 'All Teams',
+                    query: `${game} Knights`,
+                    searchKeys: ['Game'],
+                })
+            });
+
+            const result = await response.json();
+
+            if (result?.result?.length > 0) {
+                allTeams.push(...result.result);
+            } else {
+                console.warn('No results found for game: ' + game);
+            }
+        }
+
+        return allTeams;
+    } catch (e) {
+        console.error('Error fetching team data:', e);
+        return [];
+    }
+}
+
 export async function getRoster(title: string): Promise<any[]> {
     try {
         const header = new Headers();
@@ -190,4 +224,27 @@ export function sortClubStatus(players : Player[]): Player[] {
             return a.Username.localeCompare(b.Username);
         return a.ClubStatus!.localeCompare(b.ClubStatus!);
     })
+}
+
+export async function getUserTeams(username : string): Promise<any[]> {
+    console.log('Beginning getUserTeams...');
+    const response = await fetch('http://www.ckk312.xyz:5000/api/searchdocuments', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            collection: 'All Teams',
+            query: username,
+            searchKeys: ['Username'],
+        }),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch user games');
+    }
+
+    const data = await response.json();
+    console.log('API Response:', data);
+    return data.result || [];
 }

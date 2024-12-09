@@ -70,6 +70,7 @@ body{
 .roster-container-clickable h1 {
     display: inline-block;
     align-self: end;
+    color: black;
 }
 
 .roster-arrow {
