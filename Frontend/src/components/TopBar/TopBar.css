@@ -41,3 +41,25 @@
     text-align: center;
     margin: 0 auto;
 }
+
+/* Main Content */
+#main-content {
+    padding-top: 10%;
+}
+
+/* Footer */
+#footer {
+    background-color: black;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+#information p, #information h1, #information a {
+    color:white;
+}
+
+#links h3 {
+    color: white;
+}

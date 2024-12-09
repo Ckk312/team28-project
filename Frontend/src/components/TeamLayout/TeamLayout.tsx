@@ -169,6 +169,7 @@ function Player(props: any) {
     const [rankTextValue, setRankTextValue] = useState<string | undefined>(props.player.Rank);
     const [clubStatusTextValue, setClubStatusTextValue] = useState<string>(props.player.ClubStatus);
     const [mainCharTextValue, setMainCharTextValue] = useState<string | undefined>(props.player.MainCharacter);
+    const [descTextValue, setDescTextValue] = useState<string | undefined>(props.player.Description);
     const [errorText, setErrorText] = useState<string>('');
     const clubStatusRef = useRef(props.player.ClubStatus);
     const playerForm = useRef(props.player);
@@ -198,7 +199,8 @@ function Player(props: any) {
             TeamAffiliation: props.player.TeamAffiliation ,
             Rank: rankTextValue,
             MainCharacter: mainCharTextValue,
-            ClubStatus: clubStatusTextValue
+            ClubStatus: clubStatusTextValue,
+            Description: descTextValue
         }
 
         if (!(await updateName(props.player.Username, newPlayer))) {
@@ -264,6 +266,17 @@ function Player(props: any) {
                                     setErrorText('');
                                 }}
                             />
+                            <label htmlFor="player-desc">Description:</label>
+                            <input
+                                className="player-input"
+                                name="player-desc"
+                                type="text"
+                                value={ descTextValue }
+                                onChange={(e) => {
+                                    setDescTextValue(e.target.value);
+                                    setErrorText('');
+                                }}
+                            />
                             <input
                                 name="club-status"
                                 type="radio" 
@@ -309,6 +322,7 @@ function Player(props: any) {
                     <h3>{playerForm.current.Role}</h3>
                     <p>{playerForm.current.Rank}</p>
                     <p>{playerForm.current.MainCharacter}</p>
+                    <a href={playerForm.current.Description}>{playerForm.current.Description}</a>
                 </div>                
             </div>
         </>
