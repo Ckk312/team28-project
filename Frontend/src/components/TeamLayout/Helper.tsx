@@ -1,10 +1,10 @@
+import type { Player, Match } from '../../types/'
+
 // helper file
 // sorted by player functions -> team functions -> match functions
 
-export async function updateName(oldPlayer: string, newPlayer: {username: string; role: string} ): Promise<boolean> {
+export async function updateName(oldPlayer: string, newPlayer: Player): Promise<boolean> {
     let result;
-    // Log that the API request has started
-    console.log('Beginning updateName...');
     try {
         const header = new Headers();
         header.append('Content-Type', 'application/json');
@@ -16,9 +16,6 @@ export async function updateName(oldPlayer: string, newPlayer: {username: string
         });
 
         result = await response.json();
-
-        // Log the result for debugging
-        console.log('API Response:', result);
     } catch (e) {
         console.error(e);
         return false;
@@ -33,10 +30,15 @@ export async function updateName(oldPlayer: string, newPlayer: {username: string
             body: JSON.stringify({
                 collection: 'All Teams', 
                 _id: result.result._id, 
-                username: newPlayer.username,
-                role: newPlayer.role,
+                username: newPlayer.Username,
                 game: result.result.Game,
-                teamaffiliation: result.result.TeamAffiliation
+                teamaffiliation: result.result.TeamAffiliation,
+                img: result.result.Img || '',
+                clubstatus: newPlayer.ClubStatus,
+                description: newPlayer.Description || '',
+                maincharacter: newPlayer.MainCharacter || '',
+                rank: newPlayer.Rank || '',
+                role: newPlayer.Role || ''
             }),
             headers: header
         });
@@ -61,18 +63,14 @@ export async function getRoster(title: string): Promise<any[]> {
         const header = new Headers();
         header.append('Content-Type', 'application/json');
 
-        const query = JSON.stringify({ collection: 'All Teams' , query: title + ' Knights', searchKeys: ['Game'] });
-
-        console.log('Query:', query);
-
         const response = await fetch('http://www.ckk312.xyz:5000/api/searchdocuments', {
             method: 'POST',
-            body: query,
+            body: JSON.stringify({ collection: 'All Teams' , query: title + ' Knights', searchKeys: ['Game'] }),
             headers: header
         });
 
         const result = await response.json();
-        return result.result;
+        return (result.result);
     } catch (e) {
         console.error(e);
         return [];
@@ -81,132 +79,115 @@ export async function getRoster(title: string): Promise<any[]> {
 
 // ----------------------------------------
 
-export async function getMatches(title: string, teamAffiliation: string): Promise<any[]> {
+export async function getMatches(game: string, teamAffiliation: string): Promise<Match[]> {
 
-    // Log that the query used
-    console.log('Query:', title + teamAffiliation);
-
+    console.log("Reaches Here");
+    
     try {
         const header = new Headers();
         header.append('Content-Type', 'application/json');
 
         const response = await fetch('http://www.ckk312.xyz:5000/api/searchdocuments', {
             method: 'POST',
-            body: JSON.stringify({ collection: 'MatchInfo', query: title + teamAffiliation}),
+            body: JSON.stringify({ collection: 'MatchInfo', query: game}),
             headers: header
         });
 
-        const result = await response.json();
-        //.log(result);
-        return result.result;
+        const searchres = await response.json();
+        console.log("list of matches");
+        console.log(searchres);
+        console.log("list of matches 2");
+        console.log(searchres.result);
+        console.log(teamAffiliation);
+        const result: Match[] = searchres.result.filter((match : Match) => (match.HomeTeam === teamAffiliation) && (match.Game === game));
+        console.log("Returned Matches");
+        console.log(result);
+        return (result);
     } catch (e) {
         //console.error(e);
         return [];
     }
 }
 
-export function getFutureMatches(matches: any[]) {
-    // Log that the function has started
-    //console.log('Beginning getFutureMatches...');
-
+export function getFutureMatches(matches : Match[]) {
     // Get the current time in milliseconds
+    console.log("List of Possible Future Matches");
+    console.log(matches)
 
     // Step 1: Map the matches to include the time difference from the current date
-    const matchesWithTimeDifference = matches
-        .map((match: any) => {
-            //console.log(match);
+    const futureMatches = matches
+        .map((match: Match) => {
+            const matchDate = new Date(match.Date * 1000); // Convert Unix timestamp
+            const timeDifference = matchDate.getTime() - Date.now();
 
-            // Validate the match object and date
-            if (!match || typeof match !== 'object') {
-                console.warn('Invalid match type:', match);
-                return null; // Exclude any invalid matches
-            }
-            if (!match.Date || typeof match.Date !== 'number') {
-                console.warn('Invalid match date:', match.Date);
-                return null; // Exclude any matches with invalid dates
-            }
-
-            // Get the date4 of the match and calculate the time difference
-            const matchDate = new Date(match.Date*1000);
-            const timeDifference = (matchDate.getTime() - Date.now());
-
-            // Only return matches that are in the future
-            if (timeDifference > 0) {
-                // Log the match with time difference for debugging
-                //console.log('Match with Time Difference:', match, timeDifference);
-                return { ...match, date: matchDate, timeDifference }; // Return match with time difference
-            } else {
-                //console.log('Match is in the past:', match, timeDifference);
-                return null; // Exclude past matches
-            }
+            return timeDifference > 0
+                ? { ...match, date: matchDate, timeDifference }
+                : null; // Exclude past matches
         })
-        .filter((match: any) => match !== null); // Filter out any null (past matches)
+        .filter(Boolean) // Remove null values
+        .sort((a: any, b: any) => a.timeDifference - b.timeDifference); // Sort by time difference
 
-    // Log the matches with time difference for debugging
-    //console.log('Matches with Time Difference:', matchesWithTimeDifference);
+        console.log("Future Match");
+        console.log(futureMatches);
 
-    // Step 2: Sort the future matches by the smallest time difference (ascending order)
-    const sortedFutureMatches = matchesWithTimeDifference.sort((a: any, b: any) => a.timeDifference - b.timeDifference);
-
-    // Step 3: Return all future matches
-    return sortedFutureMatches;
+    return futureMatches;
 }
-export async function getAllUsers(allGames: string[]): Promise<any[]> {
-    const header = new Headers();
-    header.append('Content-Type', 'application/json');
 
-    // Container for all team results
-    const allTeams: any[] = [];
+export function getPastMatches(matches : Match[]) {
+    // Get the current time in milliseconds
+    console.log("List of Possible Future Matches");
+    console.log(matches)
 
-    try {
-        // Fetch data for each game in allGames
-        for (const game of allGames) {
-            const response = await fetch('http://www.ckk312.xyz:5000/api/searchdocuments', {
-                method: 'POST',
-                headers: header,
-                body: JSON.stringify({
-                    collection: 'All Teams',
-                    query: `${game} Knights`, // Assuming the query format includes 'Knights'
-                    searchKeys: ['Game'], // Adjust as needed based on the backend implementation
-                }),
-            });
+    // Step 1: Map the matches to include the time difference from the current date
+    const pastMatches = matches
+        .map((match: Match) => {
+            const matchDate = new Date(match.Date * 1000); // Convert Unix timestamp
+            const timeDifference = matchDate.getTime() - Date.now();
 
-            const result = await response.json();
+            return timeDifference < 0
+                ? { ...match, date: matchDate, timeDifference }
+                : null; // Exclude past matches
+        })
+        .filter(Boolean) // Remove null values
+        .sort((a: any, b: any) => b.timeDifference - a.timeDifference); // Sort by time difference
 
-            if (result?.result?.length > 0) {
-                // Add the results for the current game to the allTeams array
-                allTeams.push(...result.result);
-            } else {
-                console.warn(`No results found for game: ${game}`);
-            }
+        console.log("Past Match");
+        console.log(pastMatches);
+
+    return pastMatches;
+}
+
+// ----------------------------------------
+
+export function spaceUppercase(text: string) : string {
+    if (text.length === 0 || !text) {
+        return "";
+    }
+
+    let res = text;
+    let offset = 0;
+    for (let i = 1; i < (text.length); i++) {
+        if (!/[A-Zo\d]/.test(text.charAt(i))) {
+            continue;
         }
 
-        return allTeams;
-    } catch (e) {
-        console.error("Error fetching team data:", e);
-        return [];
+        if (text.charAt(i) === 'o' && (i < (text.length - 1) && text.charAt(i + 1) !== 'f')) {
+            continue;
+        }
+
+        res = res.slice(0, i + offset) + ' ' + res.slice(i + offset);
+        offset++;
     }
+
+    return res;
 }
 
-export async function getUserTeams(username : string): Promise<any[]> {
-    console.log('Beginning getUserTeams...');
-    const response = await fetch('http://www.ckk312.xyz:5000/api/searchdocuments', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            collection: 'All Teams',
-            query: username,
-            searchKeys: ['Username'],
-        }),
-    });
+// ----------------------------------------
 
-    if (!response.ok) {
-        throw new Error('Failed to fetch user games');
-    }
-
-    const data = await response.json();
-    console.log('API Response:', data);
-    return data.result || [];
+export function sortClubStatus(players : Player[]): Player[] {
+    return players.sort((a, b) => {
+        if (a.ClubStatus === b.ClubStatus)
+            return a.Username.localeCompare(b.Username);
+        return a.ClubStatus!.localeCompare(b.ClubStatus!);
+    })
 }
