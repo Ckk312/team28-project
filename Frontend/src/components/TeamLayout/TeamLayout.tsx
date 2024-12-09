@@ -452,7 +452,16 @@ function Match(props: any) {
                                 </div>
                                 <br />
                                 <p>{formattedDate}</p>
-                                <a href={match.VOD}> VOD </a>
+                                {match.VOD && 
+                                    <a href={match.VOD}> 
+                                        VOD
+                                    </a>
+                                }
+                                {!match.VOD && 
+                                    <p>
+                                        No VOD available
+                                    </p>
+                                }
                             </div>
                         );
                     })}
