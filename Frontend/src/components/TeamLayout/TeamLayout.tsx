@@ -14,7 +14,6 @@ const CardContext = createContext<{
 }>({ isOpen: false, isEdit: false, captainExists: false, setCaptainExists: (status: boolean) => {} });
 
 memo(Roster);
-memo(Player);
 
 /***
  * Team Layout React Component
@@ -106,18 +105,17 @@ function Roster(props: any) {
     let captain: boolean = false;
     const roster: Players[] = props.roster;
     for(const player of roster) {
-        if (player.ClubStatus?.toLowerCase() === 'captain') {
+        if (player.ClubStatus === 'Captain') {
             captain = true;
             break;
         }
     }
 
+    console.log(roster);
     const [isOpen, setIsOpen] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [captainExists, setCaptainExists] = useState(captain);
     const { isLoggedIn } = useUser();
-
-    console.log('hello');
     
     return (
         <>
@@ -165,6 +163,7 @@ function Roster(props: any) {
 }
 
 function Player(props: any) {
+    console.log(props);
     const [playerTextValue, setPlayerTextValue] = useState<string>(props.player.Username);
     const [roleTextValue, setRoleTextValue] = useState<string | undefined>(props.player.Role);
     const [rankTextValue, setRankTextValue] = useState<string | undefined>(props.player.Rank);
@@ -172,12 +171,11 @@ function Player(props: any) {
     const [mainCharTextValue, setMainCharTextValue] = useState<string | undefined>(props.player.MainCharacter);
     const [errorText, setErrorText] = useState<string>('');
     const clubStatusRef = useRef(props.player.ClubStatus);
+    const playerForm = useRef(props.player);
     const { isLoggedIn } = useUser();
     const { isEdit, captainExists, setCaptainExists } = useContext(CardContext);
 
-    console.log('urmom');
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (clubStatusRef.current !== 'Captain' && clubStatusTextValue === 'Captain' && captainExists) {
@@ -193,7 +191,7 @@ function Player(props: any) {
             setCaptainExists(true);
         }
 
-        updateName(props.player.Username, { 
+        const newPlayer: Players = { 
             Username: playerTextValue, 
             Role: roleTextValue, 
             Game: props.player.Game, 
@@ -201,7 +199,15 @@ function Player(props: any) {
             Rank: rankTextValue,
             MainCharacter: mainCharTextValue,
             ClubStatus: clubStatusTextValue
-        });
+        }
+
+        if (!(await updateName(props.player.Username, newPlayer))) {
+            setErrorText('Could not upload changes.');
+            return;
+        };
+
+        playerForm.current = newPlayer;
+        setErrorText('Player updated');
         return;
     }
 
@@ -220,7 +226,10 @@ function Player(props: any) {
                                 name="player-username"
                                 type="text"
                                 value={ playerTextValue }
-                                onChange={(e) => { setPlayerTextValue(e.target.value) }}
+                                onChange={(e) => { 
+                                    setPlayerTextValue(e.target.value);
+                                    setErrorText('');
+                                }}
                             />
                             <label htmlFor="player-role">Role:</label>
                             <input
@@ -228,7 +237,10 @@ function Player(props: any) {
                                 name="player-role"
                                 type="text"
                                 value={ roleTextValue }
-                                onChange={(e) => { setRoleTextValue(e.target.value) }}
+                                onChange={(e) => { 
+                                    setRoleTextValue(e.target.value)
+                                    setErrorText('');
+                                }}
                             />
                             <label htmlFor="player-rank">Rank:</label>
                             <input
@@ -236,7 +248,10 @@ function Player(props: any) {
                                 name="player-rank"
                                 type="text"
                                 value={ rankTextValue }
-                                onChange={(e) => { setRankTextValue(e.target.value) }}
+                                onChange={(e) => {
+                                    setRankTextValue(e.target.value)
+                                    setErrorText('');
+                                }}
                             />
                             <label htmlFor="player-rank">Main Character:</label>
                             <input
@@ -244,14 +259,20 @@ function Player(props: any) {
                                 name="player-rank"
                                 type="text"
                                 value={ mainCharTextValue }
-                                onChange={(e) => { setMainCharTextValue(e.target.value) }}
+                                onChange={(e) => {
+                                    setMainCharTextValue(e.target.value)
+                                    setErrorText('');
+                                }}
                             />
                             <input
                                 name="club-status"
                                 type="radio" 
                                 value="Captain"
                                 checked={ clubStatusTextValue === 'Captain' }
-                                onChange={(e) => { setClubStatusTextValue(e.target.value) }}
+                                onChange={(e) => {
+                                    setClubStatusTextValue(e.target.value);
+                                    setErrorText('');
+                                }}
                             />
                             <label htmlFor="club-status-captain">Captain</label>
                             <input
@@ -259,7 +280,10 @@ function Player(props: any) {
                                 type="radio" 
                                 value="Co-Captain"
                                 checked={ clubStatusTextValue === 'Co-Captain' }
-                                onChange={(e) => { setClubStatusTextValue(e.target.value) }}
+                                onChange={(e) => {
+                                    setClubStatusTextValue(e.target.value);
+                                    setErrorText('');
+                                }}
                             />
                             <label htmlFor="club-status-co-captain">Co-Captain</label>
                             <input
@@ -267,7 +291,10 @@ function Player(props: any) {
                                 type="radio" 
                                 value="Member"
                                 checked={ clubStatusTextValue === 'Member' }
-                                onChange={(e) => { setClubStatusTextValue(e.target.value) }}
+                                onChange={(e) => {
+                                    setClubStatusTextValue(e.target.value);
+                                    setErrorText('');
+                                }}
                             />
                             <label htmlFor="club-status-member">Member</label>
                             <input
@@ -277,11 +304,11 @@ function Player(props: any) {
                             <p>{ errorText }</p>
                         </form>
                     }
-                    <h2>{props.player.Username}</h2>
-                    <h3>{props.player.ClubStatus}</h3>
-                    <h3>{props.player.Role}</h3>
-                    <p>{props.player.Rank}</p>
-                    <p>{props.player.MainCharacter}</p>
+                    <h2>{playerForm.current.Username}</h2>
+                    <h3>{playerForm.current.ClubStatus}</h3>
+                    <h3>{playerForm.current.Role}</h3>
+                    <p>{playerForm.current.Rank}</p>
+                    <p>{playerForm.current.MainCharacter}</p>
                 </div>                
             </div>
         </>
@@ -291,12 +318,15 @@ function Player(props: any) {
 function Match(props: any) {
     const [nextMatch, setNextMatch] = useState<any | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
-    //console.log(props);
+    console.log("testing");
+    console.log(props.match.Game);
 
     useEffect(() => {
         const fetchMatches = async () => {
             // Fetch matches based on game and team affiliation
-            const allMatches = await getMatches(props.match.Game, props.match.TeamAffiliation);
+            const allMatches = await getMatches(`${props.match.Game}`, `UCF ${props.match.TeamAffiliation}`);
+            console.log("Returned Matches");
+            console.log(allMatches);
             //console.log(allMatches);
             // Find the next match
             const nextMatch = getFutureMatches(allMatches);

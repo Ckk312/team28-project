@@ -80,6 +80,8 @@ export async function getRoster(title: string): Promise<any[]> {
 // ----------------------------------------
 
 export async function getMatches(game: string, teamAffiliation: string): Promise<Match[]> {
+
+    console.log("Reaches Here");
     
     try {
         const header = new Headers();
@@ -87,51 +89,74 @@ export async function getMatches(game: string, teamAffiliation: string): Promise
 
         const response = await fetch('http://www.ckk312.xyz:5000/api/searchdocuments', {
             method: 'POST',
-            body: JSON.stringify({ collection: 'MatchInfo', query: game }),
+            body: JSON.stringify({ collection: 'MatchInfo', query: game}),
             headers: header
         });
 
         const searchres = await response.json();
-        const result = searchres.map((match : Match) => {
-            if (match.HomeTeam === teamAffiliation)
-                return match;
-        });
-
-        //.log(result);
-        return (result as Match[]);
+        console.log("list of matches");
+        console.log(searchres);
+        console.log("list of matches 2");
+        console.log(searchres.result);
+        console.log(teamAffiliation);
+        const result: Match[] = searchres.result.filter((match : Match) => (match.HomeTeam === teamAffiliation) && (match.Game === game));
+        console.log("Returned Matches");
+        console.log(result);
+        return (result);
     } catch (e) {
         //console.error(e);
         return [];
     }
 }
 
-export function getFutureMatches(matches: Match[]) {
+export function getFutureMatches(matches : Match[]) {
     // Get the current time in milliseconds
+    console.log("List of Possible Future Matches");
+    console.log(matches)
 
     // Step 1: Map the matches to include the time difference from the current date
-    const matchesWithTimeDifference = matches
+    const futureMatches = matches
         .map((match: Match) => {
-            const matchDate = new Date(match.Date*1000); // Convert Unix timestamp to Date object
-            const timeDifference = (matchDate.getTime() - Date.now());
+            const matchDate = new Date(match.Date * 1000); // Convert Unix timestamp
+            const timeDifference = matchDate.getTime() - Date.now();
 
-            //console.log("Current Time:", Date.now()); // Log the current time
-            //console.log("Match Date:", matchDate); // Log the match date
-            //console.log("Time Difference:", timeDifference); // Log the time difference
-
-            // Only return matches that are in the future
-            if (timeDifference > 0) {
-                return { ...match, date: matchDate, timeDifference }; // Return match with time difference
-            } else {
-                return null; // Exclude past matches
-            }
+            return timeDifference > 0
+                ? { ...match, date: matchDate, timeDifference }
+                : null; // Exclude past matches
         })
-        .filter((match: any) => match !== null); // Filter out any null (past matches)
+        .filter(Boolean) // Remove null values
+        .sort((a: any, b: any) => a.timeDifference - b.timeDifference); // Sort by time difference
 
-    // Step 2: Sort the future matches by the smallest time difference (ascending order)
-    const sortedFutureMatches = matchesWithTimeDifference.sort((a: any, b: any) => a.timeDifference - b.timeDifference);
+        console.log("Future Match");
+        console.log(futureMatches);
 
-    // Step 3: Return all future matches
-    return sortedFutureMatches;
+    return futureMatches;
+}
+
+// ----------------------------------------
+
+export function getPastMatches(matches : Match[]) {
+    // Get the current time in milliseconds
+    console.log("List of Possible Old Matches");
+    console.log(matches)
+
+    // Step 1: Map the matches to include the time difference from the current date
+    const pastMatches = matches
+        .map((match: Match) => {
+            const matchDate = new Date(match.Date * 1000); // Convert Unix timestamp
+            const timeDifference = matchDate.getTime() - Date.now();
+
+            return timeDifference <= 0
+                ? { ...match, date: matchDate, timeDifference }
+                : null; // Exclude past matches
+        })
+        .filter(Boolean) // Remove null values
+        .sort((a: any, b: any) => a.timeDifference - b.timeDifference); // Sort by time difference
+
+        console.log("Old Matches");
+        console.log(pastMatches);
+
+    return pastMatches;
 }
 
 // ----------------------------------------
