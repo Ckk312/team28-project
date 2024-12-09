@@ -5,6 +5,7 @@ import { useUser } from "../../context/UserContext";
 import { updateName, getRoster, getMatches, getFutureMatches, spaceUppercase, getPastMatches, sortClubStatus } from'./Helper';
 
 import type { Player as Players, Match as Matches } from '../../types';
+import { useNavigate } from "react-router-dom";
 
 const CardContext = createContext<{ 
     isOpen: boolean, 
@@ -20,6 +21,7 @@ memo(Roster);
  * 
  */
 export default function TeamLayout() {
+    const navigate = useNavigate();
     // use states
     const [roster, setRoster] = useState<Players[]>([]);
     const [isError, setIsError] = useState<boolean>(false);
@@ -78,16 +80,16 @@ export default function TeamLayout() {
 
     return (
         <>
-            <button
-                id="return-to-teams-button"
-                type="button"
-                value="< Teams"
-                onClick={(e) => {
-                    e.preventDefault();
-                    window.location.pathname = '/teams'
-                }} 
-            >Teams</button>
             <div id="team-layout-container">
+                <button
+                    id="return-to-teams-button"
+                    type="button"
+                    value="< Teams"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        navigate('/teams');
+                    }} 
+                >Teams</button>
                 <div id="team-banner">
                     <h1 className = "game-title"> {gameName} </h1>
                 </div>
@@ -143,7 +145,6 @@ function Roster(props: any) {
                                 e.preventDefault();
                                 setIsOpen(isOpen ? false : true);
                             }}>
-                            CLICK ME!!!!
                         </div>
                     </div>
                     
@@ -155,7 +156,9 @@ function Roster(props: any) {
                                         return <Player key={index} player={player} edit={isEdit} />
                                     })
                                 }
-                                <Match match={roster[0]}/>
+                                <div id="match-info">
+                                    <Match match={roster[0]}/>
+                                </div>
                             </>
                         }
                     </div>
@@ -281,8 +284,9 @@ function Player(props: any) {
                                     setErrorText('');
                                 }}
                             />
+                            <label htmlFor="club-status-captain" className="radio-label">Captain</label>
                             <input
-                                name="club-status"
+                                name="club-status-captain"
                                 type="radio" 
                                 value="Captain"
                                 checked={ clubStatusTextValue === 'Captain' }
@@ -291,9 +295,9 @@ function Player(props: any) {
                                     setErrorText('');
                                 }}
                             />
-                            <label htmlFor="club-status-captain">Captain</label>
+                            <label htmlFor="club-status-co-captain">Co-Captain</label>
                             <input
-                                name="club-status-captain"
+                                name="club-status-co-captain"
                                 type="radio" 
                                 value="Co-Captain"
                                 checked={ clubStatusTextValue === 'Co-Captain' }
@@ -302,7 +306,7 @@ function Player(props: any) {
                                     setErrorText('');
                                 }}
                             />
-                            <label htmlFor="club-status-co-captain">Co-Captain</label>
+                            <label htmlFor="club-status-member">Member</label>
                             <input
                                 name="club-status-member"
                                 type="radio" 
@@ -313,7 +317,6 @@ function Player(props: any) {
                                     setErrorText('');
                                 }}
                             />
-                            <label htmlFor="club-status-member">Member</label>
                             <input
                                 className="player-submit"
                                 type="submit"
@@ -324,9 +327,9 @@ function Player(props: any) {
                     <h2>{playerForm.current.Username}</h2>
                     <h3>{playerForm.current.ClubStatus}</h3>
                     <h3>{'Role: ' + playerForm.current.Role}</h3>
-                    <p>{'Rank: ' + playerForm.current.Rank}</p>
-                    <p>{'Main Character: ' + playerForm.current.MainCharacter}</p>
-                    <a href={playerForm.current.Description}>{playerForm.current.Description}</a>
+                    { playerForm.current.Rank && <p>{'Rank: ' + playerForm.current.Rank}</p> }
+                    { playerForm.current.MainCharacter && <p>{'Main Character: ' + playerForm.current.MainCharacter}</p> }
+                    { playerForm.current.Description && <a href={playerForm.current.Description}>{playerForm.current.Description}</a> }
                 </div>                
             </div>
         </>
@@ -375,62 +378,85 @@ function Match(props: any) {
         );
     }
 
+    const decideColor = (score1: number, score2: number) : {backgroundColor: string} => {
+        if (score1 > score2) {
+            return {
+                backgroundColor: 'rgba(5, 255, 80, 0.673)',
+            };
+        }
+        else if (score1 < score2) {
+            return {
+                backgroundColor: 'rgba(255, 59, 5, 0.673)'
+            };
+        }
+        else {
+            return {
+                backgroundColor: 'rgba(255, 201, 5, 0.673)'
+            };
+        }
+    }
 
     return (
         <>
             {/* Next Upcoming Match */}
             {nextMatch.length > 0 && (
-                <div>
-                    <p>
-                        Next Upcoming Match
-                        <br />
-                        {nextMatch[0].HomeTeam} VS {nextMatch[0].AwayTeam}
-                        <br />
-                        {new Date(nextMatch[0].date).toLocaleString("en-US", {
-                            month: "numeric",
-                            day: "numeric",
-                            year: "numeric",
-                            hour: "numeric",
-                            minute: "numeric",
-                            hour12: true,
-                        })}
-                    </p>
-                </div>
-            )}
-
-            {/* Previous Matches */}
-            {prevMatches.length > 0 && (
-                <div>
-                    <p>
-                        Previous Matches
-                        <br />
-                        <br />
-                        {prevMatches.slice(0, 3).map((match, index) => {
-                            const matchDate = new Date(match.date);
-                            const formattedDate = matchDate.toLocaleString("en-US", {
+                <>
+                    <h2>
+                    Next Upcoming Match
+                    </h2>
+                    <div className="match-container">
+                        <div className="match-up">
+                            <h3 className="home">{nextMatch[0].HomeTeam}</h3>
+                            <h2>VS</h2>
+                            <h3>{nextMatch[0].AwayTeam}</h3>
+                        </div>
+                        <p>
+                            {new Date(nextMatch[0].date).toLocaleString("en-US", {
                                 month: "numeric",
                                 day: "numeric",
                                 year: "numeric",
                                 hour: "numeric",
                                 minute: "numeric",
                                 hour12: true,
-                            });
+                            })}
+                        </p>
+                    </div>
+                </>
+            )}
 
-                            const [datePart, timePart] = formattedDate.split(",");
+            {/* Previous Matches */}
+            {prevMatches.length > 0 && (
+                <>
+                    <h2>Previous Matches</h2>
+                    {prevMatches.slice(0, 3).map((match, index) => {
+                        const matchDate = new Date(match.date);
+                        const formattedDate = matchDate.toLocaleString("en-US", {
+                            month: "numeric",
+                            day: "numeric",
+                            year: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
+                            hour12: true,
+                        });
 
-                            return (
-                                <span key={index}>
-                                    {match.HomeTeam} VS {match.AwayTeam}
-                                    <br />
-                                    <a href={match.VOD}> VOD </a>
-                                    <br />
-                                    <br />
-                                    <br />
-                                </span>
-                            );
-                        })}
-                    </p>
-                </div>
+                        const [datePart, timePart] = formattedDate.split(",");
+
+                        return (
+                            <div className="match-container" key={index} style={decideColor(match.HomeScore, match.AwayScore)}>
+                                <div className="match-up">
+                                    <h3>{match.HomeScore + ' - '}</h3>
+                                    <h3>{match.HomeTeam}</h3>
+                                    <h2>VS</h2>
+                                    <h3>{match.AwayTeam}</h3>
+                                    <h3>{' - ' + match.AwayScore}</h3>
+                                </div>
+                                <br />
+                                <p>{formattedDate}</p>
+                                <a href={match.VOD}> VOD </a>
+                            </div>
+                        );
+                    })}
+                </>
             )}
         </>
     );

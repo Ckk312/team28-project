@@ -73,8 +73,24 @@ body{
 }
 
 .roster-arrow {
+    width: 0;
+    height: 0;
+    rotate: rotate(0deg);
+    border-top: 25px solid transparent;
+    border-left: 50px solid #555;
+    border-bottom: 25px solid transparent;
     display: inline-block;
     margin-left: auto;
+    transition: .5s;
+}
+
+.roster-arrow:hover {
+    transform: rotate(90deg);
+    cursor: pointer;
+}
+
+.roster-arrow:focus {
+    transform: rotate(90deg);
 }
 
 .roster-display {
@@ -91,6 +107,11 @@ body{
     justify-content: start;
     margin-top: 10px;
     margin-bottom: 10px;
+    border-radius: 3px;
+}
+
+.player-form > label {
+    color: white;
 }
 
 /* Styling for player images */
@@ -140,6 +161,61 @@ pre {
 #team-info-wrapper {
     padding-left: 20%;
     padding-right: 20%;
+}
+
+#match-info {
+    justify-content: center;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+#match-info h1 {
+    text-align: center;
+    margin: auto;
+}
+
+.match-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    height: 125px;
+    background-color: rgba(255, 201, 5, 0.673);
+}
+
+.match-up {
+    display: flex;
+    flex: 1 0 100%;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    order: -1;
+}
+
+.match-up h2 {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.match-up h3 {
+    width: 30%;
+    margin: 0;
+}
+
+.match-container p, a {
+    margin-right: 10px;
+    margin-left: 5px;
+    display: inline-block;
+    align-self: flex-end;
+    order: 1;
 }
 
 /* Custom Dropdown Styling */
